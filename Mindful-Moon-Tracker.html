@@ -354,6 +354,14 @@
             <label for="selAscSign">Your Ascendant (Lagna)</label>
             <select id="selAscSign"></select>
         </div>
+        <div class="settings-row">
+            <label for="selGender">Your Gender</label>
+            <select id="selGender">
+                <option value="female">Female</option>
+                <option value="male">Male</option>
+            </select>
+        </div>
+        <div class="settings-hint">Shows the 🩸 Period activity button only for Female</div>
         <div class="settings-actions">
             <button class="footer-btn" id="btnSaveChart">Save</button>
             <button class="footer-btn" id="btnCloseSettings">Close</button>
@@ -519,7 +527,7 @@
         </div>
     </div>
 
-    <div class="section-title">Log an activity</div>
+    <div class="section-title">Daily check-ins</div>
     <div class="mood-row" id="activityRow">
         <button class="mood-btn" data-mood="walk" data-emoji="🚶" data-label="Walk">
             <span class="emoji">🚶</span><span class="label">Walk</span>
@@ -530,8 +538,8 @@
         <button class="mood-btn" data-mood="meditation" data-emoji="🧘" data-label="Meditation">
             <span class="emoji">🧘</span><span class="label">Meditation</span>
         </button>
-        <button class="mood-btn" data-mood="sleep" data-emoji="😴" data-label="Sleep">
-            <span class="emoji">😴</span><span class="label">Sleep</span>
+        <button class="mood-btn" data-mood="hungry" data-emoji="🤤" data-label="Hungry">
+            <span class="emoji">🤤</span><span class="label">Hungry</span>
         </button>
         <button class="mood-btn" data-mood="period" data-emoji="🩸" data-label="Period">
             <span class="emoji">🩸</span><span class="label">Period</span>
@@ -860,6 +868,29 @@ function saveUserChart(chart) {
     localStorage.setItem(USER_CHART_KEY, JSON.stringify(chart));
 }
 
+// ---------------------------------------------------------------------------
+// Gender preference — only used to decide whether the 🩸 Period activity
+// button is shown (female-only). Defaults to 'female' so existing users who
+// were already using the Period button keep seeing it until they change it.
+// ---------------------------------------------------------------------------
+var GENDER_KEY = 'mindfulMoonGender.v1';
+
+function loadGender() {
+    try {
+        return localStorage.getItem(GENDER_KEY) || 'female';
+    } catch (e) { return 'female'; }
+}
+
+function saveGender(g) {
+    try { localStorage.setItem(GENDER_KEY, g); } catch (e) { /* ignore */ }
+}
+
+function applyGenderVisibility() {
+    var periodBtn = document.querySelector('.mood-btn[data-mood="period"]');
+    if (!periodBtn) return;
+    periodBtn.style.display = (loadGender() === 'female') ? '' : 'none';
+}
+
 function ordinal(n) {
     var s = ['th', 'st', 'nd', 'rd'], v = n % 100;
     return n + (s[(v - 20) % 10] || s[v] || s[0]);
@@ -936,6 +967,15 @@ function initSettingsPanel() {
         selMoon.value = chart.moonSignIndex;
         selAsc.value = chart.ascSignIndex;
     }
+
+    var selGender = document.getElementById('selGender');
+    selGender.value = loadGender();
+    applyGenderVisibility();
+    selGender.addEventListener('change', function () {
+        saveGender(selGender.value);
+        applyGenderVisibility();
+    });
+
     var inpLocation = document.getElementById('inpLocation');
     var locationStatus = document.getElementById('locationStatus');
     inpLocation.value = getActiveLocation().name;
