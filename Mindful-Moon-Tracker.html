@@ -111,6 +111,33 @@
         text-transform: uppercase;
         letter-spacing: .02em;
     }
+    .insight-subtitle.toggle {
+        cursor: pointer;
+        user-select: none;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    .insight-caret { transition: transform .15s; font-size: 10px; }
+    .insight-caret.collapsed { transform: rotate(-90deg); }
+    .insight-body.collapsed { display: none; }
+    .insight-range-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+        font-size: 12px;
+        color: #6b7280;
+        margin-top: 4px;
+    }
+    .insight-range-row select {
+        font-size: 12px;
+        padding: 3px 6px;
+        border-radius: 6px;
+        border: 1px solid #d1d5db;
+        background: #fff;
+        color: #1f2937;
+    }
     .insight-bar-row { display: flex; align-items: center; gap: 6px; font-size: 12px; margin-bottom: 4px; color: #374151; }
     .insight-bar-row .bar { height: 8px; min-width: 4px; background: #8a63d2; border-radius: 4px; }
     .insight-bar-label { width: 96px; flex-shrink: 0; }
@@ -336,6 +363,16 @@
         </div>
 
         <div class="settings-title">Insights</div>
+        <div class="insight-range-row">
+            <label for="selInsightRange">Patterns range</label>
+            <select id="selInsightRange">
+                <option value="30">Last 30 days</option>
+                <option value="90">Last 3 months</option>
+                <option value="180">Last 6 months</option>
+                <option value="365">Last 12 months</option>
+                <option value="all">All time</option>
+            </select>
+        </div>
         <div class="insight-block">
             <div class="insight-badge" id="insightDominant">—</div>
             <div class="insight-subtitle">This week's mood breakdown</div>
@@ -354,16 +391,20 @@
             <div class="insight-calendar" id="insightCalendar"></div>
         </div>
         <div class="insight-block">
-            <div class="insight-subtitle">Mood patterns by house</div>
-            <div class="settings-hint">Based on all moods logged so far (needs at least 3
-                entries with the same house position to show a pattern).</div>
-            <div id="housePatterns"></div>
+            <div class="insight-subtitle toggle" data-toggle="housePatternsBody">Mood patterns by house <span class="insight-caret collapsed">&#9660;</span></div>
+            <div class="insight-body collapsed" id="housePatternsBody">
+                <div class="settings-hint">Based on moods logged within the selected range above
+                    (needs at least 3 entries with the same house position to show a pattern).</div>
+                <div id="housePatterns"></div>
+            </div>
         </div>
         <div class="insight-block">
-            <div class="insight-subtitle">Mood patterns by Tithi</div>
-            <div class="settings-hint">Based on all moods logged so far (needs at least 3
-                entries on the same Tithi to show a pattern).</div>
-            <div id="tithiPatterns"></div>
+            <div class="insight-subtitle toggle" data-toggle="tithiPatternsBody">Mood patterns by Tithi <span class="insight-caret collapsed">&#9660;</span></div>
+            <div class="insight-body collapsed" id="tithiPatternsBody">
+                <div class="settings-hint">Based on moods logged within the selected range above
+                    (needs at least 3 entries on the same Tithi to show a pattern).</div>
+                <div id="tithiPatterns"></div>
+            </div>
         </div>
     </div>
 
@@ -492,8 +533,8 @@
         <button class="mood-btn" data-mood="sleep" data-emoji="😴" data-label="Sleep">
             <span class="emoji">😴</span><span class="label">Sleep</span>
         </button>
-        <button class="mood-btn" data-mood="food" data-emoji="🍽️" data-label="Food">
-            <span class="emoji">🍽️</span><span class="label">Food</span>
+        <button class="mood-btn" data-mood="period" data-emoji="🩸" data-label="Period">
+            <span class="emoji">🩸</span><span class="label">Period</span>
         </button>
     </div>
 
@@ -899,6 +940,23 @@ function initSettingsPanel() {
     var locationStatus = document.getElementById('locationStatus');
     inpLocation.value = getActiveLocation().name;
 
+    var selRange = document.getElementById('selInsightRange');
+    selRange.value = loadInsightRangeDays();
+    selRange.addEventListener('change', function () {
+        saveInsightRangeDays(selRange.value);
+        renderHousePatterns();
+        renderTithiPatterns();
+    });
+
+    document.querySelectorAll('.insight-subtitle.toggle').forEach(function (header) {
+        header.addEventListener('click', function () {
+            var body = document.getElementById(header.getAttribute('data-toggle'));
+            var caret = header.querySelector('.insight-caret');
+            body.classList.toggle('collapsed');
+            caret.classList.toggle('collapsed');
+        });
+    });
+
     document.getElementById('btnSettings').addEventListener('click', function () {
         document.getElementById('settingsPanel').classList.toggle('open');
         renderInsights();
@@ -1278,6 +1336,33 @@ var SENTIMENT_COLOR = { positive: '#86efac', neutral: '#d1d5db', negative: '#fca
 var MIN_HOUSE_ENTRIES = 3;
 var insightMonthOffset = 0; // 0 = current calendar month, for the mini heatmap calendar
 
+// ---------------------------------------------------------------------------
+// Analysis date range for the House/Tithi pattern blocks — these two grow
+// toward their natural caps (24 and 30 rows respectively) the longer the app
+// is used, so letting the user narrow to a recent window keeps the pattern
+// lists meaningful/manageable instead of always being "since day one".
+// ---------------------------------------------------------------------------
+var INSIGHT_RANGE_KEY = 'mindfulMoonInsightRange.v1';
+
+function loadInsightRangeDays() {
+    try {
+        var v = localStorage.getItem(INSIGHT_RANGE_KEY);
+        return v || '90';
+    } catch (e) { return '90'; }
+}
+
+function saveInsightRangeDays(v) {
+    try { localStorage.setItem(INSIGHT_RANGE_KEY, v); } catch (e) { /* ignore */ }
+}
+
+function filterLogsByInsightRange(logs) {
+    var rangeVal = loadInsightRangeDays();
+    if (rangeVal === 'all') { return logs; }
+    var days = parseInt(rangeVal, 10);
+    var cutoff = Date.now() - days * 24 * 60 * 60 * 1000;
+    return logs.filter(function (e) { return new Date(e.ts).getTime() >= cutoff; });
+}
+
 function capitalize(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
 function isMoodEntry(e) { return MOOD_SENTIMENT.hasOwnProperty(e.mood); }
 
@@ -1463,7 +1548,7 @@ document.getElementById('btnInsightMonthNext').addEventListener('click', functio
 
 function computeHousePatterns(field) {
     var groups = {};
-    loadLogs().forEach(function (e) {
+    filterLogsByInsightRange(loadLogs()).forEach(function (e) {
         var h = e[field];
         if (!h) { return; }
         if (!groups[h]) { groups[h] = { moodCounts: {}, total: 0 }; }
@@ -1492,7 +1577,7 @@ function renderHousePatterns() {
     var html = '';
     if (!moonResults.length && !ascResults.length) {
         html = '<div class="settings-hint">Log at least ' + MIN_HOUSE_ENTRIES +
-            ' moods with your chart saved to see patterns here.</div>';
+            ' moods with your chart saved, within the selected range, to see patterns here.</div>';
     } else {
         if (moonResults.length) {
             html += '<div class="house-pattern-group"><strong>From Moon sign</strong>';
@@ -1516,7 +1601,7 @@ function renderHousePatterns() {
 
 function computeTithiPatterns() {
     var groups = {};
-    loadLogs().forEach(function (e) {
+    filterLogsByInsightRange(loadLogs()).forEach(function (e) {
         var code = e.tithiCode;
         if (!code) { return; }
         if (!groups[code]) { groups[code] = { moodCounts: {}, total: 0 }; }
@@ -1550,7 +1635,7 @@ function renderTithiPatterns() {
     var html = '';
     if (!results.length) {
         html = '<div class="settings-hint">Log at least ' + MIN_HOUSE_ENTRIES +
-            ' moods on the same Tithi to see patterns here.</div>';
+            ' moods on the same Tithi, within the selected range, to see patterns here.</div>';
     } else {
         html += '<div class="house-pattern-group">';
         results.forEach(function (r) {
