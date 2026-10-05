@@ -359,12 +359,19 @@
                 entries with the same house position to show a pattern).</div>
             <div id="housePatterns"></div>
         </div>
+        <div class="insight-block">
+            <div class="insight-subtitle">Mood patterns by Tithi</div>
+            <div class="settings-hint">Based on all moods logged so far (needs at least 3
+                entries on the same Tithi to show a pattern).</div>
+            <div id="tithiPatterns"></div>
+        </div>
     </div>
 
     <div class="now-panel" id="nowPanel">
         <div class="now-time" id="nowTime">—</div>
         <div class="now-moon" id="nowMoon">Loading moon position…</div>
         <div class="now-sub" id="nowSub"></div>
+        <div class="now-sub" id="nowTithi"></div>
         <div class="now-houses" id="nowHouses"></div>
     </div>
 
@@ -668,6 +675,82 @@ function moonTropicalLongitude(jd) {
     return fix360(l);
 }
 
+function kepler(m, ex, err) {
+    m *= D2R;
+    var u0 = m;
+    err *= D2R;
+    var delta = 1;
+    while (Math.abs(delta) >= err) {
+        delta = (m + ex * Math.sin(u0) - u0) / (1 - ex * Math.cos(u0));
+        u0 += delta;
+    }
+    return u0;
+}
+
+function sunTropicalLongitude(jd) {
+    var tdays = jd - 2415020;
+    var t = tdays / 36525, t2 = t * t, t3 = t * t * t;
+    var ls = 279.696678 + 0.9856473354 * tdays + 1.089 * t2 / 3600;
+    var pes = 101.220833 + 6189.03 * t / 3600 + 1.63 * t2 / 3600 + 0.012 * t3 / 3600;
+    var ms = fix360(ls - pes + 180);
+    var g = ms + (0.266 * Math.sin((31.8 + 119.0 * t) * D2R) +
+        6.4 * Math.sin((231.19 + 20.2 * t) * D2R) +
+        (1.882 - 0.016 * t) * Math.sin((57.24 + 150.27 * t) * D2R)) / 3600.0;
+    var ex = 0.01675104 - 0.0000418 * t - 0.000000126 * t2;
+    var u = kepler(g, ex, 0.0000003);
+    var truanom;
+    var b = Math.sqrt((1 + ex) / (1 - ex));
+    if (Math.abs(Math.PI - u) < 1.0e-10) truanom = u;
+    else truanom = 2.0 * Math.atan(b * Math.tan(u / 2));
+    truanom = fix360(truanom * (180 / Math.PI));
+
+    var u1 = (153.23 + 22518.7541 * t) * D2R;
+    var u2 = (216.57 + 45037.5082 * t) * D2R;
+    var u3 = (312.69 + 32964.3577 * t) * D2R;
+    var u4 = (350.74 + 445267.1142 * t - 0.00144 * t2) * D2R;
+    var u6 = (353.4 + 65928.7155 * t) * D2R;
+    var u5 = (315.6 + 893.3 * t) * D2R;
+
+    var dl = 0.00134 * Math.cos(u1);
+    dl += 0.00154 * Math.cos(u2);
+    dl += 0.002 * Math.cos(u3);
+    dl += 0.00179 * Math.sin(u4);
+    dl += 0.202 * Math.sin(u5) / 3600;
+
+    var dr = 0.00000543 * Math.sin(u1);
+    dr += 0.00001575 * Math.sin(u2);
+    dr += 0.00001627 * Math.sin(u3);
+    dr += 0.00003076 * Math.cos(u4);
+    dr += 9.26999999e-6 * Math.sin(u6);
+
+    var il = ls + dl + truanom - ms;
+    var r1 = 1.0000002 * (1 - ex * ex) / (1 + ex * Math.cos(truanom * D2R));
+    var rs = r1 + dr;
+    var ab = 20.496 * (1 - ex * ex) / rs / 3600;
+    ls = il + nutation(jd) - ab;
+    return fix360(ls);
+}
+
+var TITHI_NAMES = ['Pratipada','Dwitiya','Tritiya','Chaturthi','Panchami','Shashthi','Saptami','Ashtami','Navami','Dashami','Ekadashi','Dwadashi','Trayodashi','Chaturdashi'];
+
+// Tithi (lunar day) = angle between Moon and Sun, split into 30 segments of
+// 12°. Computed from tropical longitudes directly — ayanamsa cancels out in
+// the Moon-minus-Sun difference, so this is geocentric/instantaneous just
+// like Nakshatra and Rashi, with no location dependency.
+function getTithiInfo(moonLon, sunLon) {
+    var elong = moonLon - sunLon;
+    if (elong < 0) elong += 360;
+    var tithiNum = Math.floor(elong / 12) + 1; // 1-30
+    var isShukla = tithiNum <= 15;
+    var dayInPaksha = isShukla ? tithiNum : tithiNum - 15;
+    var name = dayInPaksha === 15 ? (isShukla ? 'Purnima' : 'Amavasya') : TITHI_NAMES[dayInPaksha - 1];
+    return {
+        paksha: isShukla ? 'Shukla' : 'Krishna',
+        dayInPaksha: dayInPaksha,
+        name: name
+    };
+}
+
 function toJulianDay(date) {
     var Y = date.getUTCFullYear();
     var M = date.getUTCMonth() + 1;
@@ -681,6 +764,16 @@ function toJulianDay(date) {
 var NAKSHATRA_NAMES = ['Ashwini','Bharani','Krittika','Rohini','Mrigashira','Ardra','Punarvasu','Pushya','Ashlesha','Magha','Purva Phalguni','Uttara Phalguni','Hasta','Chitra','Swati','Vishakha','Anuradha','Jyeshtha','Mula','Purva Ashadha','Uttara Ashadha','Shravana','Dhanishta','Shatabhisha','Purva Bhadrapada','Uttara Bhadrapada','Revati'];
 var RASHI_NAMES = ['Mesha (Aries)','Vrishabha (Taurus)','Mithuna (Gemini)','Karka (Cancer)','Simha (Leo)','Kanya (Virgo)','Tula (Libra)','Vrischika (Scorpio)','Dhanu (Sagittarius)','Makara (Capricorn)','Kumbha (Aquarius)','Meena (Pisces)'];
 
+// Display helper: drop the "(English)" translation, keeping just the
+// Sanskrit name (e.g. "Karka (Cancer)" -> "Karka") for the "right now"
+// panel/History/toast, where the user wants the short Sanskrit name only.
+// The full "Sanskrit (English)" form is still used in the chart-sign
+// dropdown (populateSignSelect) since English helps there when picking
+// a sign from a list.
+function rashiShort(name) {
+    return name ? name.split(' (')[0] : name;
+}
+
 function getMoonPanchang(date) {
     var jd = toJulianDay(date);
     var moonLon = moonTropicalLongitude(jd);
@@ -691,12 +784,15 @@ function getMoonPanchang(date) {
     var padaWidth = nakWidth / 4;
     var pada = Math.floor((sidereal % nakWidth) / padaWidth) + 1;
     var rashiIndex = Math.min(11, Math.floor(sidereal / 30));
+    var sunLon = sunTropicalLongitude(jd);
+    var tithi = getTithiInfo(moonLon, sunLon);
     return {
         nakshatra: NAKSHATRA_NAMES[nakIndex],
         nakshatraIndex: nakIndex,
         pada: pada,
         rashi: RASHI_NAMES[rashiIndex],
-        rashiIndex: rashiIndex
+        rashiIndex: rashiIndex,
+        tithi: tithi
     };
 }
 
@@ -882,8 +978,9 @@ function updateNowPanel() {
     var p = getMoonPanchang(now);
     var loc = getActiveLocation();
     document.getElementById('nowTime').textContent = now.toLocaleString(undefined, { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit', timeZone: loc.timezone }) + ' (' + loc.name + ')';
-    document.getElementById('nowMoon').textContent = 'Moon in ' + p.rashi;
+    document.getElementById('nowMoon').textContent = 'Moon in ' + rashiShort(p.rashi);
     document.getElementById('nowSub').textContent = p.nakshatra + ' nakshatra · Pada ' + p.pada;
+    document.getElementById('nowTithi').textContent = p.tithi.paksha + ' Paksha, ' + p.tithi.name + ' (Tithi ' + p.tithi.dayInPaksha + ')';
     renderHouseLines(p.rashiIndex);
 }
 
@@ -970,8 +1067,11 @@ function renderHistory() {
     } else {
         dayLogs.forEach(function (entry) {
             var d = new Date(entry.ts);
-            var line = entry.emoji + ' ' + capitalize(entry.mood) + ' — Moon in ' + entry.rashi +
+            var line = entry.emoji + ' ' + capitalize(entry.mood) + ' — Moon in ' + rashiShort(entry.rashi) +
                 ', ' + entry.nakshatra + ' P' + entry.pada;
+            if (entry.tithiCode) {
+                line += ', ' + entry.tithiCode;
+            }
             if (entry.houseFromMoon && entry.houseFromAsc) {
                 line += ', Moon(' + entry.houseFromMoon + 'H), Asc(' + entry.houseFromAsc + 'H)';
             }
@@ -1118,12 +1218,13 @@ function logMood(mood, emoji, label) {
         nakshatraIndex: p.nakshatraIndex,
         pada: p.pada,
         houseFromMoon: chart ? houseFromReference(p.rashiIndex, chart.moonSignIndex) : null,
-        houseFromAsc: chart ? houseFromReference(p.rashiIndex, chart.ascSignIndex) : null
+        houseFromAsc: chart ? houseFromReference(p.rashiIndex, chart.ascSignIndex) : null,
+        tithiCode: (p.tithi.paksha === 'Shukla' ? 'S' : 'K') + p.tithi.dayInPaksha
     };
     var logs = loadLogs();
     logs.push(entry);
     saveLogs(logs);
-    showToast('Logged ' + emoji + ' ' + label + ' at ' + formatTime(now) + ' — Moon in ' + p.rashi + ', ' + p.nakshatra + ' nakshatra (Pada ' + p.pada + ')');
+    showToast('Logged ' + emoji + ' ' + label + ' at ' + formatTime(now) + ' — Moon in ' + rashiShort(p.rashi) + ', ' + p.nakshatra + ' nakshatra (Pada ' + p.pada + ')');
     selectedHistoryDate = startOfDay(now);
     weekOffset = 0;
     renderHistory();
@@ -1413,11 +1514,60 @@ function renderHousePatterns() {
     document.getElementById('housePatterns').innerHTML = html;
 }
 
+function computeTithiPatterns() {
+    var groups = {};
+    loadLogs().forEach(function (e) {
+        var code = e.tithiCode;
+        if (!code) { return; }
+        if (!groups[code]) { groups[code] = { moodCounts: {}, total: 0 }; }
+        groups[code].total++;
+        var key = e.mood + '|' + e.emoji;
+        groups[code].moodCounts[key] = (groups[code].moodCounts[key] || 0) + 1;
+    });
+    var results = [];
+    Object.keys(groups).forEach(function (code) {
+        var g = groups[code];
+        if (g.total < MIN_HOUSE_ENTRIES) { return; }
+        var bestKey = null, bestCount = 0;
+        Object.keys(g.moodCounts).forEach(function (k) {
+            if (g.moodCounts[k] > bestCount) { bestCount = g.moodCounts[k]; bestKey = k; }
+        });
+        var parts = bestKey.split('|');
+        var paksha = code.charAt(0) === 'S' ? 'Shukla' : 'Krishna';
+        var dayInPaksha = parseInt(code.slice(1), 10);
+        var name = dayInPaksha === 15 ? (paksha === 'Shukla' ? 'Purnima' : 'Amavasya') : TITHI_NAMES[dayInPaksha - 1];
+        results.push({ code: code, paksha: paksha, name: name, mood: parts[0], emoji: parts[1], count: bestCount, total: g.total });
+    });
+    results.sort(function (a, b) {
+        if (a.paksha !== b.paksha) { return a.paksha === 'Shukla' ? -1 : 1; }
+        return parseInt(a.code.slice(1), 10) - parseInt(b.code.slice(1), 10);
+    });
+    return results;
+}
+
+function renderTithiPatterns() {
+    var results = computeTithiPatterns();
+    var html = '';
+    if (!results.length) {
+        html = '<div class="settings-hint">Log at least ' + MIN_HOUSE_ENTRIES +
+            ' moods on the same Tithi to see patterns here.</div>';
+    } else {
+        html += '<div class="house-pattern-group">';
+        results.forEach(function (r) {
+            html += '<div class="house-pattern-row">' + r.paksha + ' ' + r.name + ' (' + r.code + ') — mostly ' +
+                r.emoji + ' ' + capitalize(r.mood) + ' (' + r.count + '/' + r.total + ')</div>';
+        });
+        html += '</div>';
+    }
+    document.getElementById('tithiPatterns').innerHTML = html;
+}
+
 function renderInsights() {
     renderWeekInsight();
     renderStreaksBlock();
     renderInsightCalendar();
     renderHousePatterns();
+    renderTithiPatterns();
 }
 
 updateNowPanel();
@@ -1426,6 +1576,18 @@ initSettingsPanel();
 renderHistory();
 renderWeekView();
 setInterval(updateNowPanel, 60000);
+
+// Android/browsers pause JS timers while the app/tab is backgrounded, so the
+// 60s interval above can't be relied on to refresh things while hidden.
+// Force an immediate refresh the moment the app becomes visible again (e.g.
+// user switches back to it) so Moon/Nakshatra/Tithi and weather are always
+// current the instant it's actually looked at — no manual refresh needed.
+document.addEventListener('visibilitychange', function () {
+    if (!document.hidden) {
+        updateNowPanel();
+        updateWeather();
+    }
+});
 
 // Register the service worker so this page can be installed as a
 // standalone PWA (Android "Add to Home Screen" / Chrome install prompt).
