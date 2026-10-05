@@ -1,0 +1,31 @@
+{
+  "name": "Stay Mindful",
+  "short_name": "StayMindful",
+  "description": "Log your mood with one tap and see the Moon's Vedic sign and nakshatra at that exact moment.",
+  "start_url": "./Mindful-Moon-Tracker.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#ede6fb",
+  "theme_color": "#5b3a9e",
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

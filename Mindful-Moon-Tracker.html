@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Stay Mindful</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#5b3a9e">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Stay Mindful">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<link rel="icon" href="icons/icon-192.png">
+<style>
+    * { box-sizing: border-box; }
+    body {
+        font-family: "Segoe UI", Arial, sans-serif;
+        background: linear-gradient(160deg, #ede6fb 0%, #f4f6f8 45%);
+        margin: 0;
+        padding: 20px 14px 40px;
+        min-height: 100vh;
+    }
+    .card {
+        max-width: 480px;
+        margin: 0 auto;
+        background: #fff;
+        border-radius: 16px;
+        box-shadow: 0 6px 24px rgba(20, 30, 60, 0.08);
+        padding: 22px 20px 26px;
+    }
+    .header { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+    .header .icon {
+        font-size: 26px;
+        line-height: 1;
+        width: 40px; height: 40px;
+        display: flex; align-items: center; justify-content: center;
+        background: #ede6fb;
+        border-radius: 10px;
+        flex-shrink: 0;
+    }
+    .header h1 { flex: 1; }
+    h1 { font-size: 18px; margin: 0; color: #1f2937; }
+    .weather-badge {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1px;
+        padding: 4px 9px;
+        border-radius: 10px;
+        background: #ede6fb;
+        flex-shrink: 0;
+        min-width: 44px;
+    }
+    .weather-badge .weather-icon { font-size: 19px; line-height: 1; }
+    .weather-badge .weather-label { font-size: 9.5px; color: #5b3a9e; font-weight: 700; text-transform: uppercase; letter-spacing: .02em; }
+    .settings-btn {
+        width: 32px; height: 32px;
+        border-radius: 10px;
+        border: 1.5px solid #e2e5eb;
+        background: #fafbfc;
+        font-size: 16px;
+        cursor: pointer;
+        flex-shrink: 0;
+        display: flex; align-items: center; justify-content: center;
+    }
+    .settings-btn:active { background: #f0ecfb; }
+    .settings-panel {
+        display: none;
+        background: #f7f5fc;
+        border: 1.5px solid #e2e5eb;
+        border-radius: 12px;
+        padding: 12px 14px;
+        margin-bottom: 16px;
+    }
+    .settings-panel.open { display: block; }
+    .settings-panel .settings-title { font-size: 12.5px; font-weight: 700; color: #374151; margin-bottom: 8px; }
+    .settings-row { margin-bottom: 10px; }
+    .settings-row label { display: block; font-size: 11.5px; color: #6b7280; margin-bottom: 4px; font-weight: 600; }
+    .settings-row input[type="text"] {
+        width: 100%;
+        padding: 8px 9px;
+        border-radius: 8px;
+        border: 1.5px solid #e2e5eb;
+        font-size: 13px;
+        font-family: inherit;
+        background: #fff;
+        color: #1f2937;
+    }
+    .settings-hint { font-size: 11px; color: #6b7280; margin: -4px 0 10px; min-height: 14px; }
+    .settings-hint.error { color: #b91c1c; }
+    .settings-hint.ok { color: #15803d; }
+    .settings-row select {
+        width: 100%;
+        padding: 8px 9px;
+        border-radius: 8px;
+        border: 1.5px solid #e2e5eb;
+        font-size: 13px;
+        font-family: inherit;
+        background: #fff;
+        color: #1f2937;
+    }
+    .settings-actions { display: flex; gap: 8px; margin-top: 4px; }
+    .now-panel {
+        background: linear-gradient(135deg, #5b3a9e, #8a63d2);
+        color: #fff;
+        border-radius: 14px;
+        padding: 16px 18px;
+        margin-bottom: 18px;
+    }
+    .now-panel .now-time { font-size: 13px; opacity: 0.85; margin-bottom: 4px; }
+    .now-panel .now-moon { font-size: 16px; font-weight: 600; }
+    .now-panel .now-sub { font-size: 12.5px; opacity: 0.9; margin-top: 2px; }
+    .now-panel .now-houses { font-size: 12px; opacity: 0.95; margin-top: 8px; line-height: 1.5; border-top: 1px solid rgba(255,255,255,0.25); padding-top: 8px; }
+    .now-panel .now-houses .hint { opacity: 0.85; font-size: 11.5px; }
+    .section-title {
+        font-size: 12.5px;
+        font-weight: 700;
+        color: #374151;
+        text-transform: uppercase;
+        letter-spacing: .02em;
+        margin: 0 0 10px;
+    }
+    .mood-row {
+        display: flex;
+        justify-content: space-between;
+        gap: 8px;
+        margin-bottom: 18px;
+        flex-wrap: wrap;
+    }
+    .mood-btn {
+        flex: 1 1 18%;
+        min-width: 58px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 4px;
+        padding: 12px 4px 10px;
+        border-radius: 14px;
+        border: 1.5px solid #e2e5eb;
+        background: #fafbfc;
+        cursor: pointer;
+        font-family: inherit;
+    }
+    .mood-btn:active { transform: scale(0.95); background: #f0ecfb; }
+    .mood-btn .emoji { font-size: 28px; line-height: 1; }
+    .mood-btn .label { font-size: 10.5px; color: #4b5563; font-weight: 600; }
+    .toast {
+        display: none;
+        background: #ecfdf3;
+        border: 1px solid #a7e3c1;
+        color: #15803d;
+        border-radius: 10px;
+        padding: 10px 12px;
+        font-size: 13px;
+        margin-bottom: 16px;
+        line-height: 1.4;
+    }
+    .week-nav {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 10px;
+    }
+    .week-nav .week-range { font-size: 12px; color: #6b7280; }
+    .week-nav-btn {
+        border: 1.5px solid #e2e5eb;
+        background: #fafbfc;
+        color: #374151;
+        border-radius: 8px;
+        padding: 4px 9px;
+        font-size: 12px;
+        cursor: pointer;
+        font-family: inherit;
+    }
+    .week-nav-btn:active { background: #f0ecfb; }
+    .week-nav-btn:disabled { color: #d1d5db; cursor: default; }
+    .week-grid {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 4px;
+        margin-bottom: 18px;
+    }
+    .week-day {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        border-radius: 10px;
+        border: 1.5px solid #e2e5eb;
+        background: #fafbfc;
+        padding: 6px 2px 8px;
+        min-height: 90px;
+        cursor: pointer;
+    }
+    .week-day:active { background: #f0ecfb; }
+    .week-day.is-today { border-color: #8a63d2; background: #f3eefc; }
+    .week-day.is-selected { border-color: #5b3a9e; box-shadow: 0 0 0 1.5px #5b3a9e inset; }
+    .week-day .wd-label { font-size: 10px; font-weight: 700; color: #6b7280; text-transform: uppercase; }
+    .week-day .wd-date { font-size: 12px; font-weight: 700; color: #1f2937; margin-bottom: 4px; }
+    .history-group { margin-bottom: 14px; }
+    .history-date {
+        font-size: 12px;
+        font-weight: 700;
+        color: #6b7280;
+        margin: 14px 0 6px;
+    }
+    .history-entry {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 8px 6px;
+        border-bottom: 1px solid #f1f2f4;
+        font-size: 13px;
+    }
+    .history-entry .emoji { font-size: 20px; flex-shrink: 0; }
+    .history-entry .details { flex: 1; min-width: 0; }
+    .history-entry .time { color: #9ca3af; font-size: 11.5px; }
+    .history-entry .moon-info { color: #374151; }
+    .history-entry .house-info { color: #8a63d2; font-size: 11.5px; margin-top: 1px; }
+    .history-entry .del-btn {
+        border: none;
+        background: none;
+        color: #d1d5db;
+        font-size: 16px;
+        cursor: pointer;
+        padding: 2px 6px;
+        flex-shrink: 0;
+    }
+    .history-entry .del-btn:active { color: #ef4444; }
+    .empty-hint { color: #9ca3af; font-size: 13px; text-align: center; padding: 18px 0; }
+    .footer-btn {
+        flex: 1;
+        padding: 10px;
+        border-radius: 10px;
+        border: 1.5px solid #e2e5eb;
+        background: #fafbfc;
+        color: #374151;
+        font-size: 12.5px;
+        font-weight: 600;
+        cursor: pointer;
+        font-family: inherit;
+    }
+    .footer-btn:active { background: #f3f4f6; }
+    .footer-btn.danger { color: #b91c1c; }
+    .journal-textarea {
+        width: 100%;
+        min-height: 72px;
+        padding: 10px 11px;
+        border-radius: 10px;
+        border: 1.5px solid #e2e5eb;
+        font-size: 13px;
+        font-family: inherit;
+        color: #1f2937;
+        resize: vertical;
+        margin-bottom: 8px;
+    }
+    .journal-actions { display: flex; align-items: center; gap: 10px; margin-bottom: 18px; }
+    .journal-actions .footer-btn { flex: 0 0 auto; padding: 8px 16px; }
+    .journal-actions .settings-hint { margin: 0; }
+</style>
+</head>
+<body>
+<div class="card">
+    <div class="header">
+        <div class="icon">🌙</div>
+        <h1>Stay Mindful</h1>
+        <div class="weather-badge" id="weatherBadge" title="Mount Hope, Hamilton, ON">
+            <div class="weather-icon" id="weatherIcon">⏳</div>
+            <div class="weather-label" id="weatherLabel">—</div>
+        </div>
+        <button class="settings-btn" id="btnSettings" title="Your chart settings">⚙️</button>
+    </div>
+
+    <div class="settings-panel" id="settingsPanel">
+        <div class="settings-title">Your Location (for weather &amp; local time)</div>
+        <div class="settings-row">
+            <label for="inpLocation">City, Region, Country</label>
+            <input type="text" id="inpLocation" placeholder="e.g. Mount Hope, Hamilton, ON, Canada">
+        </div>
+        <div class="settings-hint" id="locationStatus"></div>
+
+        <div class="settings-title">Your Birth Chart (for house positions)</div>
+        <div class="settings-row">
+            <label for="selMoonSign">Your Moon Sign (Rashi)</label>
+            <select id="selMoonSign"></select>
+        </div>
+        <div class="settings-row">
+            <label for="selAscSign">Your Ascendant (Lagna)</label>
+            <select id="selAscSign"></select>
+        </div>
+        <div class="settings-actions">
+            <button class="footer-btn" id="btnSaveChart">Save</button>
+            <button class="footer-btn" id="btnCloseSettings">Close</button>
+        </div>
+        <div class="settings-actions">
+            <button class="footer-btn" id="btnExport">⬇ Export JSON</button>
+        </div>
+    </div>
+
+    <div class="now-panel" id="nowPanel">
+        <div class="now-time" id="nowTime">—</div>
+        <div class="now-moon" id="nowMoon">Loading moon position…</div>
+        <div class="now-sub" id="nowSub"></div>
+        <div class="now-houses" id="nowHouses"></div>
+    </div>
+
+    <div class="section-title">How are you feeling right now?</div>
+    <div class="mood-row" id="moodRow">
+        <button class="mood-btn" data-mood="great" data-emoji="😄" data-label="Great">
+            <span class="emoji">😄</span><span class="label">Great</span>
+        </button>
+        <button class="mood-btn" data-mood="good" data-emoji="🙂" data-label="Good">
+            <span class="emoji">🙂</span><span class="label">Good</span>
+        </button>
+        <button class="mood-btn" data-mood="neutral" data-emoji="😐" data-label="Neutral">
+            <span class="emoji">😐</span><span class="label">Neutral</span>
+        </button>
+        <button class="mood-btn" data-mood="low" data-emoji="😔" data-label="Low">
+            <span class="emoji">😔</span><span class="label">Low</span>
+        </button>
+        <button class="mood-btn" data-mood="angry" data-emoji="😠" data-label="Angry">
+            <span class="emoji">😠</span><span class="label">Angry</span>
+        </button>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <div class="week-nav">
+        <button class="week-nav-btn" id="btnWeekPrev">&larr; Prev</button>
+        <span class="week-range" id="weekRange"></span>
+        <button class="week-nav-btn" id="btnWeekNext">Next &rarr;</button>
+    </div>
+    <div class="week-grid" id="weekGrid"></div>
+
+    <div class="section-title" id="historyTitle">Today</div>
+    <div id="historyContainer">
+        <div class="empty-hint" id="emptyHint">No moods logged yet. Tap an emoji above to start.</div>
+    </div>
+
+    <div class="section-title" id="journalTitle">Notes</div>
+    <textarea class="journal-textarea" id="journalNote" placeholder="Write a note for this day…"></textarea>
+    <div class="journal-actions">
+        <button class="footer-btn" id="btnSaveNote">Save Note</button>
+        <span class="settings-hint ok" id="journalStatus"></span>
+    </div>
+</div>
+
+<script>
+// ---------------------------------------------------------------------------
+// Moon sidereal position engine (Lahiri ayanamsa), ported from the published
+// mhah-panchang algorithm and cross-validated against it for multiple dates.
+// Needs no backend/API/location — geocentric Moon position is the same
+// everywhere on Earth at a given instant.
+// ---------------------------------------------------------------------------
+var D2R = Math.PI / 180;
+
+function fix360(v) {
+    while (v < 0) v += 360;
+    while (v > 360) v -= 360;
+    return v;
+}
+
+var corrMoon = [
+    [0,0,0,4,13.902],[0,0,0,2,2369.912],[1,0,0,4,1.979],[1,0,0,2,191.953],[1,0,0,0,22639.5],
+    [1,0,0,-2,-4586.465],[1,0,0,-4,-38.428],[1,0,0,-6,-0.393],[0,1,0,4,-0.289],[0,1,0,2,-24.42],
+    [0,1,0,0,-668.146],[0,1,0,-2,-165.145],[0,1,0,-4,-1.877],[0,0,0,3,0.403],[0,0,0,1,-125.154],
+    [2,0,0,4,0.213],[2,0,0,2,14.387],[2,0,0,0,769.016],[2,0,0,-2,-211.656],[2,0,0,-4,-30.773],
+    [2,0,0,-6,-0.57],[1,1,0,2,-2.921],[1,1,0,0,-109.673],[1,1,0,-2,-205.962],[1,1,0,-4,-4.391],
+    [1,-1,0,4,0.283],[1,-1,0,2,14.577],[1,-1,0,0,147.687],[1,-1,0,-2,28.475],[1,-1,0,-4,0.636],
+    [0,2,0,2,-0.189],[0,2,0,0,-7.486],[0,2,0,-2,-8.096],[0,0,2,2,-5.741],[0,0,2,0,-411.608],
+    [0,0,2,-2,-55.173],[0,0,2,-4,0.025],[1,0,0,1,-8.466],[1,0,0,-1,18.609],[1,0,0,-3,3.215],
+    [0,1,0,1,18.023],[0,1,0,-1,0.56],[3,0,0,2,1.06],[3,0,0,0,36.124],[3,0,0,-2,-13.193],
+    [3,0,0,-4,-1.187],[3,0,0,-6,-0.293],[2,1,0,2,-0.29],[2,1,0,0,-7.649],[2,1,0,-2,-8.627],
+    [2,1,0,-4,-2.74],[2,-1,0,2,1.181],[2,-1,0,0,9.703],[2,-1,0,-2,-2.494],[2,-1,0,-4,0.36],
+    [1,2,0,0,-1.167],[1,2,0,-2,-7.412],[1,2,0,-4,-0.311],[1,-2,0,2,0.757],[1,-2,0,0,2.58],
+    [1,-2,0,-2,2.533],[0,3,0,-2,-0.344],[1,0,2,2,-0.992],[1,0,2,0,-45.099],[1,0,2,-2,-0.179],
+    [1,0,-2,2,-6.382],[1,0,-2,0,39.528],[1,0,-2,-2,9.366],[0,1,2,0,0.415],[0,1,2,-2,-2.152],
+    [0,1,-2,2,-1.44],[0,1,-2,-2,0.384],[2,0,0,1,-0.586],[2,0,0,-1,1.75],[2,0,0,-3,1.225],
+    [1,1,0,1,1.267],[1,-1,0,-1,-1.089],[0,0,2,-1,0.584],[4,0,0,0,1.938],[4,0,0,-2,-0.952],
+    [3,1,0,0,-0.551],[3,1,0,-2,-0.482],[3,-1,0,0,0.681],[2,0,2,0,-3.996],[2,0,2,-2,0.557],
+    [2,0,-2,2,-0.459],[2,0,-2,0,-1.298],[2,0,-2,-2,0.538],[1,1,-2,-2,0.426],[1,-1,2,0,-0.304],
+    [1,-1,-2,2,-0.372],[0,0,4,0,0.418],[2,-1,0,-1,-0.352]
+];
+
+var corrMoon2 = [
+    [0.127,0,0,0,6],[-0.151,0,2,0,-4],[-0.085,0,0,2,4],[0.15,0,1,0,3],[-0.091,2,1,0,-6],
+    [-0.103,0,3,0,0],[-0.301,1,0,2,-4],[0.202,1,0,-2,-4],[0.137,1,1,0,-1],[0.233,1,1,0,-3],
+    [-0.122,1,-1,0,1],[-0.276,1,-1,0,-3],[0.255,0,0,2,1],[0.254,0,0,2,-3],[-0.1,3,1,0,-4],
+    [-0.183,3,-1,0,-2],[-0.297,2,2,0,-2],[-0.161,2,2,0,-4],[0.197,2,-2,0,0],[0.254,2,-2,0,-2],
+    [-0.25,1,3,0,-2],[-0.123,2,0,2,2],[0.173,2,0,-2,-4],[0.263,1,1,2,0],[0.13,3,0,0,-1],
+    [0.113,5,0,0,0],[0.092,3,0,2,-2]
+];
+
+function nutation(jd) {
+    var t = (jd - 2415020) / 36525;
+    var t2 = t * t;
+    var ls = 279.6967 + 36000.7689 * t + 0.000303 * t2;
+    var l = 270.4341639 + 481267.8831417 * t - 0.0011333333 * t2;
+    var ms = 358.4758333333334 + 35999.04974999958 * t - t2 * 1.500000059604645e-4;
+    var ml = 296.1046083333757 + 477198.8491083336 * t + 0.0091916667090522 * t2;
+    var d = 350.7374861110581 + 445267.1142166667 * t - t2 * 1.436111132303874e-3;
+    var om = 259.1832750002543 - 1934.142008333206 * t + 0.0020777778 * t2;
+    ls *= D2R; l *= D2R; ms *= D2R; ml *= D2R; d *= D2R; om *= D2R;
+    var d2 = d * d, l2 = l * l, ls2 = ls * ls;
+    var nut = (-17.2327 - 0.01737 * t) * Math.sin(om);
+    nut += 0.2088 * Math.sin(2.0 * om);
+    nut += 0.0675 * Math.sin(ml);
+    nut -= 0.0149 * Math.sin(ml - d2);
+    nut -= 0.0342 * Math.sin(l2 - om);
+    nut += 0.0114 * Math.sin(l2 - ml);
+    nut -= 0.2037 * Math.sin(l2);
+    nut -= 0.0261 * Math.sin(l2 + ml);
+    nut += 0.0124 * Math.sin(ls2 - om);
+    nut += 0.0214 * Math.sin(ls2 - ms);
+    nut -= 1.2729 * Math.sin(ls2);
+    nut -= 0.0497 * Math.sin(ls2 + ms);
+    nut += 0.1261 * Math.sin(ms);
+    return nut / 3600.0;
+}
+
+function calcAyanamsaLahiri(jd) {
+    var t = (jd - 2415020) / 36525;
+    var om = 259.183275 - 1934.142008333206 * t + 0.0020777778 * t * t + 0.0000022222222 * t * t * t;
+    var ls = 279.696678 + 36000.76892 * t + 0.0003025 * t * t;
+    var aya = 17.23 * Math.sin(D2R * om) + 1.27 * Math.sin(D2R * ls * 2) - (5025.64 + 1.11 * t) * t;
+    aya = (aya - 80861.27) / 3600.0;
+    return aya;
+}
+
+function moonTropicalLongitude(jd) {
+    var tdays = jd - 2415020;
+    var t = tdays / 36525, t2 = t * t, t3 = t * t * t;
+    var l = 270.4337361 + 13.176396544528099 * tdays - 5.86 * t2 / 3600 + 0.0068 * t3 / 3600;
+    var d = 350.7374861110581 + 445267.1142166667 * t - t2 * 1.436111132303874e-3 + 0.0000018888889 * t3;
+    var pe = 334.329556 + 14648522.52 * t / 3600 - 37.17 * t2 / 3600 - 0.045 * t3 / 3600;
+    var ms = 358.4758333333334 + 35999.04974999958 * t - t2 * 1.500000059604645e-4 - t3 * 3.3333333623078e-6;
+    var ml = fix360(l - pe);
+    var om = 259.183275 - 6962911.23 * t / 3600 + 7.48 * t2 / 3600 + 0.008 * t3 / 3600;
+    var f = fix360(l - om);
+
+    var r2rad = 360.0 * D2R;
+    var tb = tdays * 1e-12;
+    var t2c = tdays * tdays * 1e-16;
+    var a1 = Math.sin(r2rad * (0.53733431 - 10104982 * tb + 191 * t2c));
+    var a2 = Math.sin(r2rad * (0.71995354 - 147094228 * tb + 43 * t2c));
+    var c2 = Math.cos(r2rad * (0.71995354 - 147094228 * tb + 43 * t2c));
+    var a3 = Math.sin(r2rad * (0.14222222 + 1536238 * tb));
+    var a4 = Math.sin(r2rad * (0.48398132 - 147269147 * tb + 43 * t2c));
+    var c4 = Math.cos(r2rad * (0.48398132 - 147269147 * tb + 43 * t2c));
+    var a5 = Math.sin(r2rad * (0.52453688 - 147162675 * tb + 43 * t2c));
+    var a6 = Math.sin(r2rad * (0.84536324 - 11459387 * tb));
+    var a7 = Math.sin(r2rad * (0.23363774 + 1232723 * tb + 191 * t2c));
+    var a8 = Math.sin(r2rad * (0.5875 + 9050118 * tb));
+    var a9 = Math.sin(r2rad * (0.61043085 - 67718733 * tb));
+    var dlm = 0.84 * a3 + 0.31 * a7 + 14.27 * a1 + 7.261 * a2 + 0.282 * a4 + 0.237 * a6;
+    var dpm = -2.1 * a3 - 2.076 * a2 - 0.84 * a4 - 0.593 * a6;
+    var dkm = 0.63 * a3 + 95.96 * a2 + 15.58 * a4 + 1.86 * a5;
+    var dls = -6.4 * a3 - 0.27 * a8 - 1.89 * a6 + 0.2 * a9;
+    var dgc = (-4.318 * c2 - 0.698 * c4) / 3600.0 / 360.0;
+    dgc = 1.000002708 + 139.978 * dgc;
+
+    ml = D2R * (ml + (dlm - dpm) / 3600.0);
+    ms = D2R * (ms + dls / 3600.0);
+    f = D2R * (f + (dlm - dkm) / 3600.0);
+    d = D2R * (d + (dlm - dls) / 3600.0);
+
+    var lk = 0, lk1 = 0;
+    var i1corr = 1.0 - 6.832e-8 * tdays;
+    var i2corr = dgc * dgc;
+    var i;
+
+    for (i = 0; i < corrMoon.length; i++) {
+        var c = corrMoon[i];
+        var mlcor = c[0], mscor = c[1], fcor = c[2], dcor = c[3], lcor = c[4];
+        var arg = mlcor * ml + mscor * ms + fcor * f + dcor * d;
+        var sinarg = Math.sin(arg);
+        if (mscor !== 0) {
+            sinarg *= i1corr;
+            if (mscor === 2 || mscor === -2) sinarg *= i1corr;
+        }
+        if (fcor !== 0) sinarg *= i2corr;
+        lk += lcor * sinarg;
+    }
+
+    for (i = 0; i < corrMoon2.length; i++) {
+        var c2v = corrMoon2[i];
+        var arg2 = c2v[1] * ml + c2v[2] * ms + c2v[3] * f + c2v[4] * d;
+        lk1 += c2v[0] * Math.sin(arg2);
+    }
+
+    var dlid = 0.822 * Math.sin(r2rad * (0.3248 - 0.0017125594 * tdays));
+    dlid += 0.307 * Math.sin(r2rad * (0.14905 - 0.0034251187 * tdays));
+    dlid += 0.348 * Math.sin(r2rad * (0.68266 - 0.0006873156 * tdays));
+    dlid += 0.662 * Math.sin(r2rad * (0.65162 + 0.0365724168 * tdays));
+    dlid += 0.643 * Math.sin(r2rad * (0.88098 - 0.0025069941 * tdays));
+    dlid += 1.137 * Math.sin(r2rad * (0.85823 + 0.036448727 * tdays));
+    dlid += 0.436 * Math.sin(r2rad * (0.71892 + 0.036217918 * tdays));
+    dlid += 0.327 * Math.sin(r2rad * (0.97639 + 0.000173491 * tdays));
+
+    l = l + nutation(jd) + (dlm + lk + lk1 + dlid) / 3600.0;
+    return fix360(l);
+}
+
+function toJulianDay(date) {
+    var Y = date.getUTCFullYear();
+    var M = date.getUTCMonth() + 1;
+    var D = date.getUTCDate() + (date.getUTCHours() + date.getUTCMinutes() / 60 + (date.getUTCSeconds() + date.getUTCMilliseconds() / 1000) / 3600) / 24;
+    if (M <= 2) { Y -= 1; M += 12; }
+    var A = Math.floor(Y / 100);
+    var B = 2 - A + Math.floor(A / 4);
+    return Math.floor(365.25 * (Y + 4716)) + Math.floor(30.6001 * (M + 1)) + D + B - 1524.5;
+}
+
+var NAKSHATRA_NAMES = ['Ashwini','Bharani','Krittika','Rohini','Mrigashira','Ardra','Punarvasu','Pushya','Ashlesha','Magha','Purva Phalguni','Uttara Phalguni','Hasta','Chitra','Swati','Vishakha','Anuradha','Jyeshtha','Mula','Purva Ashadha','Uttara Ashadha','Shravana','Dhanishta','Shatabhisha','Purva Bhadrapada','Uttara Bhadrapada','Revati'];
+var RASHI_NAMES = ['Mesha (Aries)','Vrishabha (Taurus)','Mithuna (Gemini)','Karka (Cancer)','Simha (Leo)','Kanya (Virgo)','Tula (Libra)','Vrischika (Scorpio)','Dhanu (Sagittarius)','Makara (Capricorn)','Kumbha (Aquarius)','Meena (Pisces)'];
+
+function getMoonPanchang(date) {
+    var jd = toJulianDay(date);
+    var moonLon = moonTropicalLongitude(jd);
+    var ayanamsa = calcAyanamsaLahiri(jd);
+    var sidereal = fix360(moonLon + ayanamsa);
+    var nakWidth = 360 / 27;
+    var nakIndex = Math.min(26, Math.floor(sidereal / nakWidth));
+    var padaWidth = nakWidth / 4;
+    var pada = Math.floor((sidereal % nakWidth) / padaWidth) + 1;
+    var rashiIndex = Math.min(11, Math.floor(sidereal / 30));
+    return {
+        nakshatra: NAKSHATRA_NAMES[nakIndex],
+        nakshatraIndex: nakIndex,
+        pada: pada,
+        rashi: RASHI_NAMES[rashiIndex],
+        rashiIndex: rashiIndex
+    };
+}
+
+// ---------------------------------------------------------------------------
+// App logic
+// ---------------------------------------------------------------------------
+var STORAGE_KEY = 'mindfulMoonLogs.v1';
+
+// ---------------------------------------------------------------------------
+// User's birth chart (Moon sign + Ascendant) — used to show which house the
+// current transiting Moon falls in, counted North-Indian-diamond-kundli
+// style from each reference sign. Purely a user input, no calculation.
+// ---------------------------------------------------------------------------
+var USER_CHART_KEY = 'mindfulMoonUserChart.v1';
+
+function loadUserChart() {
+    try {
+        var raw = localStorage.getItem(USER_CHART_KEY);
+        return raw ? JSON.parse(raw) : null;
+    } catch (e) { return null; }
+}
+
+function saveUserChart(chart) {
+    localStorage.setItem(USER_CHART_KEY, JSON.stringify(chart));
+}
+
+function ordinal(n) {
+    var s = ['th', 'st', 'nd', 'rd'], v = n % 100;
+    return n + (s[(v - 20) % 10] || s[v] || s[0]);
+}
+
+// House number (1-12) that the given sign falls in, counted from refIndex
+// acting as the 1st house (standard whole-sign/Rashi house counting).
+function houseFromReference(signIndex, refIndex) {
+    return ((signIndex - refIndex + 12) % 12) + 1;
+}
+
+function populateSignSelect(selectEl) {
+    selectEl.innerHTML = '';
+    RASHI_NAMES.forEach(function (name, idx) {
+        var opt = document.createElement('option');
+        opt.value = idx;
+        opt.textContent = name;
+        selectEl.appendChild(opt);
+    });
+}
+
+// ---------------------------------------------------------------------------
+// User's location — used for weather and for showing "right now" in the
+// user's local time. Geocoded (free, no API key) via Open-Meteo's geocoding
+// API from a plain city/region/country text the user types in Settings.
+// Note: the Moon's Rashi/Nakshatra itself does NOT depend on location (it's
+// geocentric — identical everywhere at a given instant), so location only
+// affects weather + displayed local time, not the Panchang values.
+// ---------------------------------------------------------------------------
+var USER_LOCATION_KEY = 'mindfulMoonUserLocation.v1';
+var DEFAULT_LOCATION = { name: 'Mount Hope, Hamilton, ON, Canada', lat: 43.1727, lon: -79.9358, timezone: 'America/Toronto' };
+
+function loadUserLocation() {
+    try {
+        var raw = localStorage.getItem(USER_LOCATION_KEY);
+        return raw ? JSON.parse(raw) : null;
+    } catch (e) { return null; }
+}
+
+function saveUserLocation(loc) {
+    localStorage.setItem(USER_LOCATION_KEY, JSON.stringify(loc));
+}
+
+function getActiveLocation() {
+    return loadUserLocation() || DEFAULT_LOCATION;
+}
+
+function geocodeLocation(query) {
+    var url = 'https://geocoding-api.open-meteo.com/v1/search?name=' + encodeURIComponent(query) + '&count=1&language=en&format=json';
+    return fetch(url).then(function (res) { return res.json(); }).then(function (data) {
+        if (!data || !data.results || !data.results.length) {
+            throw new Error('Location not found');
+        }
+        var r = data.results[0];
+        var parts = [r.name];
+        if (r.admin1) parts.push(r.admin1);
+        if (r.country) parts.push(r.country);
+        return {
+            name: parts.join(', '),
+            lat: r.latitude,
+            lon: r.longitude,
+            timezone: r.timezone || 'UTC'
+        };
+    });
+}
+
+function initSettingsPanel() {
+    var selMoon = document.getElementById('selMoonSign');
+    var selAsc = document.getElementById('selAscSign');
+    populateSignSelect(selMoon);
+    populateSignSelect(selAsc);
+    var chart = loadUserChart();
+    if (chart) {
+        selMoon.value = chart.moonSignIndex;
+        selAsc.value = chart.ascSignIndex;
+    }
+    var inpLocation = document.getElementById('inpLocation');
+    var locationStatus = document.getElementById('locationStatus');
+    inpLocation.value = getActiveLocation().name;
+
+    document.getElementById('btnSettings').addEventListener('click', function () {
+        document.getElementById('settingsPanel').classList.toggle('open');
+    });
+    document.getElementById('btnCloseSettings').addEventListener('click', function () {
+        document.getElementById('settingsPanel').classList.remove('open');
+    });
+    document.getElementById('btnSaveChart').addEventListener('click', function () {
+        saveUserChart({ moonSignIndex: Number(selMoon.value), ascSignIndex: Number(selAsc.value) });
+
+        var query = inpLocation.value.trim();
+        var finish = function () {
+            document.getElementById('settingsPanel').classList.remove('open');
+            updateNowPanel();
+        };
+        if (!query) { finish(); return; }
+
+        locationStatus.textContent = 'Finding location…';
+        locationStatus.className = 'settings-hint';
+        geocodeLocation(query).then(function (loc) {
+            saveUserLocation(loc);
+            locationStatus.textContent = 'Saved: ' + loc.name;
+            locationStatus.className = 'settings-hint ok';
+            localStorage.removeItem(WEATHER_CACHE_KEY);
+            updateWeather();
+            finish();
+        }).catch(function () {
+            locationStatus.textContent = 'Could not find that location — kept previous setting.';
+            locationStatus.className = 'settings-hint error';
+            finish();
+        });
+    });
+}
+
+function renderHouseLines(rashiIndex) {
+    var el = document.getElementById('nowHouses');
+    var chart = loadUserChart();
+    if (!chart) {
+        el.innerHTML = '<div class="hint">Set your Moon sign &amp; Ascendant in ⚙️ Settings to see which house the Moon is transiting for you.</div>';
+        return;
+    }
+    var houseFromMoon = houseFromReference(rashiIndex, chart.moonSignIndex);
+    var houseFromAsc = houseFromReference(rashiIndex, chart.ascSignIndex);
+    el.innerHTML =
+        'From Moon sign - ' + ordinal(houseFromMoon) + ' house<br>' +
+        'From Asc - ' + ordinal(houseFromAsc) + ' house';
+}
+
+function loadLogs() {
+    try {
+        var raw = localStorage.getItem(STORAGE_KEY);
+        return raw ? JSON.parse(raw) : [];
+    } catch (e) { return []; }
+}
+
+function saveLogs(logs) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(logs));
+}
+
+function formatTime(d) {
+    return d.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' });
+}
+
+function formatDateHeader(d) {
+    var today = new Date();
+    var yest = new Date(); yest.setDate(today.getDate() - 1);
+    var tmrw = new Date(); tmrw.setDate(today.getDate() + 1);
+    var sameDay = function (a, b) { return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate(); };
+    if (sameDay(d, today)) return 'Today';
+    if (sameDay(d, yest)) return 'Yesterday';
+    if (sameDay(d, tmrw)) return 'Tomorrow';
+    return d.toLocaleDateString(undefined, { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' });
+}
+
+function updateNowPanel() {
+    var now = new Date();
+    var p = getMoonPanchang(now);
+    var loc = getActiveLocation();
+    document.getElementById('nowTime').textContent = now.toLocaleString(undefined, { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit', timeZone: loc.timezone }) + ' (' + loc.name + ')';
+    document.getElementById('nowMoon').textContent = 'Moon in ' + p.rashi;
+    document.getElementById('nowSub').textContent = p.nakshatra + ' nakshatra · Pada ' + p.pada;
+    renderHouseLines(p.rashiIndex);
+}
+
+// ---------------------------------------------------------------------------
+// Weather (top-right badge) — free Open-Meteo API, no key required.
+// Uses the user's saved location (Settings), falling back to Mount Hope,
+// Hamilton, Ontario, Canada if none has been set yet.
+// ---------------------------------------------------------------------------
+var WEATHER_CACHE_KEY = 'mindfulMoonWeatherCache.v1';
+var WEATHER_TTL_MS = 20 * 60 * 1000; // 20 minutes
+
+function weatherCodeToDisplay(code) {
+    if (code === 0 || code === 1) return { icon: '☀️', label: 'Sunny' };
+    if (code === 2) return { icon: '⛅', label: 'Partly Sunny' };
+    if (code === 3 || code === 45 || code === 48) return { icon: '☁️', label: 'Cloudy' };
+    if ([51, 53, 55, 56, 57, 61, 63, 65, 66, 67, 80, 81, 82, 95, 96, 99].indexOf(code) !== -1) return { icon: '🌧️', label: 'Rain' };
+    if ([71, 73, 75, 77, 85, 86].indexOf(code) !== -1) return { icon: '❄️', label: 'Snow' };
+    return { icon: '⛅', label: 'Partly Sunny' };
+}
+
+function renderWeather(display) {
+    var iconEl = document.getElementById('weatherIcon');
+    var labelEl = document.getElementById('weatherLabel');
+    if (!iconEl || !labelEl) return;
+    iconEl.textContent = display.icon;
+    labelEl.textContent = display.label;
+    var badge = document.getElementById('weatherBadge');
+    if (badge) badge.title = getActiveLocation().name;
+}
+
+function updateWeather() {
+    try {
+        var cached = JSON.parse(localStorage.getItem(WEATHER_CACHE_KEY) || 'null');
+        if (cached && (Date.now() - cached.ts) < WEATHER_TTL_MS) {
+            renderWeather(cached.display);
+            return;
+        }
+    } catch (e) { /* ignore, fetch fresh */ }
+
+    var loc = getActiveLocation();
+    var url = 'https://api.open-meteo.com/v1/forecast?latitude=' + loc.lat +
+        '&longitude=' + loc.lon + '&current_weather=true';
+    fetch(url).then(function (res) { return res.json(); }).then(function (data) {
+        var code = data && data.current_weather ? data.current_weather.weathercode : null;
+        var display = weatherCodeToDisplay(code);
+        renderWeather(display);
+        try {
+            localStorage.setItem(WEATHER_CACHE_KEY, JSON.stringify({ ts: Date.now(), display: display }));
+        } catch (e) { /* ignore storage errors */ }
+    }).catch(function () {
+        try {
+            var cached = JSON.parse(localStorage.getItem(WEATHER_CACHE_KEY) || 'null');
+            if (cached) { renderWeather(cached.display); return; }
+        } catch (e) { /* ignore */ }
+        renderWeather({ icon: '⛅', label: '—' });
+    });
+}
+
+var DAY_LABELS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+var weekOffset = 0; // 0 = week containing today, -1 = previous week, etc.
+
+function startOfDay(d) {
+    var r = new Date(d);
+    r.setHours(0, 0, 0, 0);
+    return r;
+}
+
+var selectedHistoryDate = startOfDay(new Date()); // which day's History + Journal are shown below
+
+function renderHistory() {
+    var logs = loadLogs();
+    var container = document.getElementById('historyContainer');
+    var titleEl = document.getElementById('historyTitle');
+    container.innerHTML = '';
+
+    var dayKey = selectedHistoryDate.toDateString();
+    titleEl.textContent = formatDateHeader(selectedHistoryDate);
+
+    var dayLogs = logs.filter(function (e) { return new Date(e.ts).toDateString() === dayKey; })
+        .sort(function (a, b) { return new Date(b.ts) - new Date(a.ts); });
+
+    if (dayLogs.length === 0) {
+        container.innerHTML = '<div class="empty-hint">No moods logged for this day.</div>';
+    } else {
+        dayLogs.forEach(function (entry) {
+            var d = new Date(entry.ts);
+            var houseLine = '';
+            if (entry.houseFromMoon && entry.houseFromAsc) {
+                houseLine = '<div class="house-info">Moon(' + entry.houseFromMoon + 'H), Asc(' + entry.houseFromAsc + 'H)</div>';
+            }
+            var row = document.createElement('div');
+            row.className = 'history-entry';
+            row.innerHTML =
+                '<span class="emoji">' + entry.emoji + '</span>' +
+                '<div class="details">' +
+                    '<div class="time">' + formatTime(d) + '</div>' +
+                    '<div class="moon-info">Moon in ' + entry.rashi + ' &middot; ' + entry.nakshatra + ' (Pada ' + entry.pada + ')</div>' +
+                    houseLine +
+                '</div>' +
+                '<button class="del-btn" data-id="' + entry.id + '" title="Delete entry">&times;</button>';
+            container.appendChild(row);
+        });
+
+        container.querySelectorAll('.del-btn').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                var id = btn.getAttribute('data-id');
+                var remaining = loadLogs().filter(function (e) { return String(e.id) !== id; });
+                saveLogs(remaining);
+                renderHistory();
+                renderWeekView();
+            });
+        });
+    }
+
+    renderJournal();
+}
+
+// ---------------------------------------------------------------------------
+// Daily journal notes — one free-text note per calendar day, shown below
+// the (day-filtered) History section for the currently selected day.
+// ---------------------------------------------------------------------------
+var NOTES_KEY = 'mindfulMoonNotes.v1';
+
+function loadNotes() {
+    try {
+        var raw = localStorage.getItem(NOTES_KEY);
+        return raw ? JSON.parse(raw) : {};
+    } catch (e) { return {}; }
+}
+
+function saveNotes(notes) {
+    localStorage.setItem(NOTES_KEY, JSON.stringify(notes));
+}
+
+function renderJournal() {
+    var dayKey = selectedHistoryDate.toDateString();
+    document.getElementById('journalTitle').textContent = 'Notes';
+    var notes = loadNotes();
+    document.getElementById('journalNote').value = notes[dayKey] || '';
+    document.getElementById('journalStatus').textContent = '';
+}
+
+document.getElementById('btnSaveNote').addEventListener('click', function () {
+    var dayKey = selectedHistoryDate.toDateString();
+    var text = document.getElementById('journalNote').value.trim();
+    var notes = loadNotes();
+    if (text) { notes[dayKey] = text; } else { delete notes[dayKey]; }
+    saveNotes(notes);
+    var status = document.getElementById('journalStatus');
+    status.textContent = 'Saved';
+    status.className = 'settings-hint ok';
+    clearTimeout(renderJournal._t);
+    renderJournal._t = setTimeout(function () { status.textContent = ''; }, 2500);
+});
+
+function getWeekStart(offset) {
+    var today = startOfDay(new Date());
+    var sunday = new Date(today);
+    sunday.setDate(today.getDate() - today.getDay() + (offset * 7));
+    return sunday;
+}
+
+function renderWeekView() {
+    var weekStart = getWeekStart(weekOffset);
+    var today = startOfDay(new Date());
+    var grid = document.getElementById('weekGrid');
+    grid.innerHTML = '';
+
+    var weekEnd = new Date(weekStart);
+    weekEnd.setDate(weekStart.getDate() + 6);
+    document.getElementById('weekRange').textContent =
+        weekStart.toLocaleDateString(undefined, { month: 'short', day: 'numeric' }) + ' – ' +
+        weekEnd.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' });
+
+    var _loop = function (i) {
+        var dayDate = new Date(weekStart);
+        dayDate.setDate(weekStart.getDate() + i);
+
+        var col = document.createElement('div');
+        col.className = 'week-day' +
+            (dayDate.getTime() === today.getTime() ? ' is-today' : '') +
+            (dayDate.getTime() === selectedHistoryDate.getTime() ? ' is-selected' : '');
+        col.addEventListener('click', function () {
+            selectedHistoryDate = dayDate;
+            renderHistory();
+            renderWeekView();
+        });
+
+        var label = document.createElement('div');
+        label.className = 'wd-label';
+        label.textContent = DAY_LABELS[i];
+        col.appendChild(label);
+
+        var dateEl = document.createElement('div');
+        dateEl.className = 'wd-date';
+        dateEl.textContent = dayDate.getDate();
+        col.appendChild(dateEl);
+
+        grid.appendChild(col);
+    };
+    for (var i = 0; i < 7; i++) { _loop(i); }
+}
+
+document.getElementById('btnWeekPrev').addEventListener('click', function () {
+    weekOffset -= 1;
+    renderWeekView();
+});
+document.getElementById('btnWeekNext').addEventListener('click', function () {
+    weekOffset += 1;
+    renderWeekView();
+});
+
+function showToast(msg) {
+    var toast = document.getElementById('toast');
+    toast.textContent = msg;
+    toast.style.display = 'block';
+    clearTimeout(showToast._t);
+    showToast._t = setTimeout(function () { toast.style.display = 'none'; }, 4000);
+}
+
+function logMood(mood, emoji, label) {
+    var now = new Date();
+    var p = getMoonPanchang(now);
+    var chart = loadUserChart();
+    var entry = {
+        id: Date.now() + '-' + Math.floor(Math.random() * 1000),
+        ts: now.toISOString(),
+        mood: mood,
+        emoji: emoji,
+        rashi: p.rashi,
+        rashiIndex: p.rashiIndex,
+        nakshatra: p.nakshatra,
+        nakshatraIndex: p.nakshatraIndex,
+        pada: p.pada,
+        houseFromMoon: chart ? houseFromReference(p.rashiIndex, chart.moonSignIndex) : null,
+        houseFromAsc: chart ? houseFromReference(p.rashiIndex, chart.ascSignIndex) : null
+    };
+    var logs = loadLogs();
+    logs.push(entry);
+    saveLogs(logs);
+    showToast('Logged ' + emoji + ' ' + label + ' at ' + formatTime(now) + ' — Moon in ' + p.rashi + ', ' + p.nakshatra + ' nakshatra (Pada ' + p.pada + ')');
+    selectedHistoryDate = startOfDay(now);
+    weekOffset = 0;
+    renderHistory();
+    renderWeekView();
+}
+
+document.querySelectorAll('.mood-btn').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+        logMood(btn.getAttribute('data-mood'), btn.getAttribute('data-emoji'), btn.getAttribute('data-label'));
+    });
+});
+
+document.getElementById('btnExport').addEventListener('click', function () {
+    var logs = loadLogs();
+    var blob = new Blob([JSON.stringify(logs, null, 2)], { type: 'application/json' });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = 'mindful-moon-logs.json';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+});
+
+updateNowPanel();
+updateWeather();
+initSettingsPanel();
+renderHistory();
+renderWeekView();
+setInterval(updateNowPanel, 60000);
+
+// Register the service worker so this page can be installed as a
+// standalone PWA (Android "Add to Home Screen" / Chrome install prompt).
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function () {
+        navigator.serviceWorker.register('service-worker.js').catch(function () {});
+    });
+}
+</script>
+</body>
+</html>
