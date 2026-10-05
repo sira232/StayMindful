@@ -101,6 +101,47 @@
         color: #1f2937;
     }
     .settings-actions { display: flex; gap: 8px; margin-top: 4px; }
+    .insight-block { margin-top: 14px; padding-top: 12px; border-top: 1px dashed #e2e5eb; }
+    .insight-badge { font-size: 13px; font-weight: 700; color: #374151; margin-bottom: 6px; }
+    .insight-subtitle {
+        font-size: 11.5px;
+        font-weight: 700;
+        color: #6b7280;
+        margin-bottom: 6px;
+        text-transform: uppercase;
+        letter-spacing: .02em;
+    }
+    .insight-bar-row { display: flex; align-items: center; gap: 6px; font-size: 12px; margin-bottom: 4px; color: #374151; }
+    .insight-bar-row .bar { height: 8px; min-width: 4px; background: #8a63d2; border-radius: 4px; }
+    .insight-bar-label { width: 96px; flex-shrink: 0; }
+    .insight-month-nav {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 8px;
+        font-size: 12px;
+        font-weight: 700;
+        color: #374151;
+    }
+    .insight-calendar { display: grid; grid-template-columns: repeat(7, 1fr); gap: 3px; }
+    .cal-head { font-size: 9.5px; font-weight: 700; color: #9ca3af; text-align: center; }
+    .cal-cell {
+        aspect-ratio: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 10px;
+        border-radius: 4px;
+        background: #f3f4f6;
+        color: #374151;
+        cursor: pointer;
+    }
+    .cal-cell.cal-blank { visibility: hidden; cursor: default; }
+    .cal-cell.cal-empty { background: #f3f4f6; color: #c7cbd1; }
+    .cal-cell.cal-today { box-shadow: 0 0 0 1.5px #5b3a9e inset; font-weight: 700; }
+    .house-pattern-group { margin-bottom: 8px; }
+    .house-pattern-group strong { font-size: 11.5px; color: #374151; }
+    .house-pattern-row { font-size: 12px; color: #4b5563; margin-top: 2px; }
     .now-panel {
         background: linear-gradient(135deg, #5b3a9e, #8a63d2);
         color: #fff;
@@ -212,11 +253,9 @@
         border-bottom: 1px solid #f1f2f4;
         font-size: 13px;
     }
-    .history-entry .emoji { font-size: 20px; flex-shrink: 0; }
     .history-entry .details { flex: 1; min-width: 0; }
     .history-entry .time { color: #9ca3af; font-size: 11.5px; }
     .history-entry .moon-info { color: #374151; }
-    .history-entry .house-info { color: #8a63d2; font-size: 11.5px; margin-top: 1px; }
     .history-entry .del-btn {
         border: none;
         background: none;
@@ -295,6 +334,31 @@
         <div class="settings-actions">
             <button class="footer-btn" id="btnExport">⬇ Export JSON</button>
         </div>
+
+        <div class="settings-title">Insights</div>
+        <div class="insight-block">
+            <div class="insight-badge" id="insightDominant">—</div>
+            <div class="insight-subtitle">This week's mood breakdown</div>
+            <div id="insightWeekBars"></div>
+        </div>
+        <div class="insight-block">
+            <div id="insightStreaks"></div>
+        </div>
+        <div class="insight-block">
+            <div class="insight-subtitle">Mood calendar</div>
+            <div class="insight-month-nav">
+                <button class="week-nav-btn" id="btnInsightMonthPrev">&larr;</button>
+                <span id="insightMonthLabel"></span>
+                <button class="week-nav-btn" id="btnInsightMonthNext">&rarr;</button>
+            </div>
+            <div class="insight-calendar" id="insightCalendar"></div>
+        </div>
+        <div class="insight-block">
+            <div class="insight-subtitle">Mood patterns by house</div>
+            <div class="settings-hint">Based on all moods logged so far (needs at least 3
+                entries with the same house position to show a pattern).</div>
+            <div id="housePatterns"></div>
+        </div>
     </div>
 
     <div class="now-panel" id="nowPanel">
@@ -309,17 +373,120 @@
         <button class="mood-btn" data-mood="great" data-emoji="😄" data-label="Great">
             <span class="emoji">😄</span><span class="label">Great</span>
         </button>
-        <button class="mood-btn" data-mood="good" data-emoji="🙂" data-label="Good">
-            <span class="emoji">🙂</span><span class="label">Good</span>
+        <button class="mood-btn" data-mood="happy" data-emoji="😊" data-label="Happy">
+            <span class="emoji">😊</span><span class="label">Happy</span>
         </button>
         <button class="mood-btn" data-mood="neutral" data-emoji="😐" data-label="Neutral">
             <span class="emoji">😐</span><span class="label">Neutral</span>
         </button>
-        <button class="mood-btn" data-mood="low" data-emoji="😔" data-label="Low">
-            <span class="emoji">😔</span><span class="label">Low</span>
+        <button class="mood-btn" data-mood="sad" data-emoji="😢" data-label="Sad">
+            <span class="emoji">😢</span><span class="label">Sad</span>
         </button>
         <button class="mood-btn" data-mood="angry" data-emoji="😠" data-label="Angry">
             <span class="emoji">😠</span><span class="label">Angry</span>
+        </button>
+        <button class="mood-btn" data-mood="annoyed" data-emoji="😒" data-label="Annoyed">
+            <span class="emoji">😒</span><span class="label">Annoyed</span>
+        </button>
+        <button class="mood-btn" data-mood="frustrated" data-emoji="😤" data-label="Frustrated">
+            <span class="emoji">😤</span><span class="label">Frustrated</span>
+        </button>
+        <button class="mood-btn" data-mood="tired" data-emoji="🥱" data-label="Tired">
+            <span class="emoji">🥱</span><span class="label">Tired</span>
+        </button>
+        <button class="mood-btn" id="btnMoreMoods" type="button">
+            <span class="emoji">➕</span><span class="label">More</span>
+        </button>
+    </div>
+
+    <div class="settings-panel" id="moreMoodsPanel">
+        <div class="settings-title">More moods</div>
+        <div class="mood-row">
+            <button class="mood-btn" data-mood="calm" data-emoji="😌" data-label="Calm">
+                <span class="emoji">😌</span><span class="label">Calm</span>
+            </button>
+            <button class="mood-btn" data-mood="grateful" data-emoji="🙏" data-label="Grateful">
+                <span class="emoji">🙏</span><span class="label">Grateful</span>
+            </button>
+            <button class="mood-btn" data-mood="excited" data-emoji="🤩" data-label="Excited">
+                <span class="emoji">🤩</span><span class="label">Excited</span>
+            </button>
+            <button class="mood-btn" data-mood="content" data-emoji="😇" data-label="Content">
+                <span class="emoji">😇</span><span class="label">Content</span>
+            </button>
+            <button class="mood-btn" data-mood="relaxed" data-emoji="😎" data-label="Relaxed">
+                <span class="emoji">😎</span><span class="label">Relaxed</span>
+            </button>
+            <button class="mood-btn" data-mood="loved" data-emoji="🥰" data-label="Loved">
+                <span class="emoji">🥰</span><span class="label">Loved</span>
+            </button>
+            <button class="mood-btn" data-mood="motivated" data-emoji="💪" data-label="Motivated">
+                <span class="emoji">💪</span><span class="label">Motivated</span>
+            </button>
+            <button class="mood-btn" data-mood="proud" data-emoji="🫡" data-label="Proud">
+                <span class="emoji">🫡</span><span class="label">Proud</span>
+            </button>
+            <button class="mood-btn" data-mood="anxious" data-emoji="😰" data-label="Anxious">
+                <span class="emoji">😰</span><span class="label">Anxious</span>
+            </button>
+            <button class="mood-btn" data-mood="stressed" data-emoji="😖" data-label="Stressed">
+                <span class="emoji">😖</span><span class="label">Stressed</span>
+            </button>
+            <button class="mood-btn" data-mood="overwhelmed" data-emoji="🥵" data-label="Overwhelmed">
+                <span class="emoji">🥵</span><span class="label">Overwhelmed</span>
+            </button>
+            <button class="mood-btn" data-mood="lonely" data-emoji="😞" data-label="Lonely">
+                <span class="emoji">😞</span><span class="label">Lonely</span>
+            </button>
+            <button class="mood-btn" data-mood="insecure" data-emoji="😬" data-label="Insecure">
+                <span class="emoji">😬</span><span class="label">Insecure</span>
+            </button>
+            <button class="mood-btn" data-mood="guilty" data-emoji="😣" data-label="Guilty">
+                <span class="emoji">😣</span><span class="label">Guilty</span>
+            </button>
+            <button class="mood-btn" data-mood="numb" data-emoji="😶" data-label="Numb">
+                <span class="emoji">😶</span><span class="label">Numb</span>
+            </button>
+            <button class="mood-btn" data-mood="irritated" data-emoji="😑" data-label="Irritated">
+                <span class="emoji">😑</span><span class="label">Irritated</span>
+            </button>
+            <button class="mood-btn" data-mood="restless" data-emoji="😩" data-label="Restless">
+                <span class="emoji">😩</span><span class="label">Restless</span>
+            </button>
+            <button class="mood-btn" data-mood="overstimulated" data-emoji="🤯" data-label="Overstimulated">
+                <span class="emoji">🤯</span><span class="label">Overstimulated</span>
+            </button>
+            <button class="mood-btn" data-mood="confused" data-emoji="😕" data-label="Confused">
+                <span class="emoji">😕</span><span class="label">Confused</span>
+            </button>
+            <button class="mood-btn" data-mood="nostalgic" data-emoji="🥹" data-label="Nostalgic">
+                <span class="emoji">🥹</span><span class="label">Nostalgic</span>
+            </button>
+            <button class="mood-btn" data-mood="curious" data-emoji="🤔" data-label="Curious">
+                <span class="emoji">🤔</span><span class="label">Curious</span>
+            </button>
+            <button class="mood-btn" data-mood="indifferent" data-emoji="🫤" data-label="Indifferent">
+                <span class="emoji">🫤</span><span class="label">Indifferent</span>
+            </button>
+        </div>
+    </div>
+
+    <div class="section-title">Log an activity</div>
+    <div class="mood-row" id="activityRow">
+        <button class="mood-btn" data-mood="walk" data-emoji="🚶" data-label="Walk">
+            <span class="emoji">🚶</span><span class="label">Walk</span>
+        </button>
+        <button class="mood-btn" data-mood="exercise" data-emoji="🏋️" data-label="Exercise">
+            <span class="emoji">🏋️</span><span class="label">Exercise</span>
+        </button>
+        <button class="mood-btn" data-mood="meditation" data-emoji="🧘" data-label="Meditation">
+            <span class="emoji">🧘</span><span class="label">Meditation</span>
+        </button>
+        <button class="mood-btn" data-mood="sleep" data-emoji="😴" data-label="Sleep">
+            <span class="emoji">😴</span><span class="label">Sleep</span>
+        </button>
+        <button class="mood-btn" data-mood="food" data-emoji="🍽️" data-label="Food">
+            <span class="emoji">🍽️</span><span class="label">Food</span>
         </button>
     </div>
 
@@ -638,6 +805,7 @@ function initSettingsPanel() {
 
     document.getElementById('btnSettings').addEventListener('click', function () {
         document.getElementById('settingsPanel').classList.toggle('open');
+        renderInsights();
     });
     document.getElementById('btnCloseSettings').addEventListener('click', function () {
         document.getElementById('settingsPanel').classList.remove('open');
@@ -802,18 +970,17 @@ function renderHistory() {
     } else {
         dayLogs.forEach(function (entry) {
             var d = new Date(entry.ts);
-            var houseLine = '';
+            var line = entry.emoji + ' ' + capitalize(entry.mood) + ' — Moon in ' + entry.rashi +
+                ', ' + entry.nakshatra + ' P' + entry.pada;
             if (entry.houseFromMoon && entry.houseFromAsc) {
-                houseLine = '<div class="house-info">Moon(' + entry.houseFromMoon + 'H), Asc(' + entry.houseFromAsc + 'H)</div>';
+                line += ', Moon(' + entry.houseFromMoon + 'H), Asc(' + entry.houseFromAsc + 'H)';
             }
             var row = document.createElement('div');
             row.className = 'history-entry';
             row.innerHTML =
-                '<span class="emoji">' + entry.emoji + '</span>' +
                 '<div class="details">' +
                     '<div class="time">' + formatTime(d) + '</div>' +
-                    '<div class="moon-info">Moon in ' + entry.rashi + ' &middot; ' + entry.nakshatra + ' (Pada ' + entry.pada + ')</div>' +
-                    houseLine +
+                    '<div class="moon-info">' + line + '</div>' +
                 '</div>' +
                 '<button class="del-btn" data-id="' + entry.id + '" title="Delete entry">&times;</button>';
             container.appendChild(row);
@@ -964,9 +1131,15 @@ function logMood(mood, emoji, label) {
 }
 
 document.querySelectorAll('.mood-btn').forEach(function (btn) {
+    if (!btn.hasAttribute('data-mood')) { return; }
     btn.addEventListener('click', function () {
         logMood(btn.getAttribute('data-mood'), btn.getAttribute('data-emoji'), btn.getAttribute('data-label'));
+        document.getElementById('moreMoodsPanel').classList.remove('open');
     });
+});
+
+document.getElementById('btnMoreMoods').addEventListener('click', function () {
+    document.getElementById('moreMoodsPanel').classList.toggle('open');
 });
 
 document.getElementById('btnExport').addEventListener('click', function () {
@@ -981,6 +1154,271 @@ document.getElementById('btnExport').addEventListener('click', function () {
     document.body.removeChild(a);
     setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
 });
+
+// ---------------------------------------------------------------------------
+// Insights (Settings panel): mood distribution, dominant-mood badge,
+// logging/mood streaks, a monthly mood-sentiment calendar heatmap, and
+// Moon-sign/Asc house correlation patterns. All computed from existing
+// localStorage logs, read-only, recomputed each time the Settings panel is
+// opened (see btnSettings click handler above).
+// ---------------------------------------------------------------------------
+var MOOD_SENTIMENT = {
+    great: 'positive', happy: 'positive', calm: 'positive', grateful: 'positive',
+    excited: 'positive', content: 'positive', relaxed: 'positive', loved: 'positive',
+    motivated: 'positive', proud: 'positive',
+    neutral: 'neutral', confused: 'neutral', nostalgic: 'neutral', curious: 'neutral',
+    indifferent: 'neutral', numb: 'neutral',
+    sad: 'negative', angry: 'negative', annoyed: 'negative', frustrated: 'negative',
+    tired: 'negative', anxious: 'negative', stressed: 'negative', overwhelmed: 'negative',
+    lonely: 'negative', insecure: 'negative', guilty: 'negative', irritated: 'negative',
+    restless: 'negative', overstimulated: 'negative'
+};
+var SENTIMENT_COLOR = { positive: '#86efac', neutral: '#d1d5db', negative: '#fca5a5' };
+var MIN_HOUSE_ENTRIES = 3;
+var insightMonthOffset = 0; // 0 = current calendar month, for the mini heatmap calendar
+
+function capitalize(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
+function isMoodEntry(e) { return MOOD_SENTIMENT.hasOwnProperty(e.mood); }
+
+function getWeekStartForDate(date) {
+    var d = startOfDay(date);
+    var sunday = new Date(d);
+    sunday.setDate(d.getDate() - d.getDay());
+    return sunday;
+}
+
+function computeWeekMoodStats(weekStart) {
+    var weekEnd = new Date(weekStart);
+    weekEnd.setDate(weekStart.getDate() + 7);
+    var counts = {};
+    loadLogs().forEach(function (e) {
+        if (!isMoodEntry(e)) { return; }
+        var t = new Date(e.ts);
+        if (t < weekStart || t >= weekEnd) { return; }
+        if (!counts[e.mood]) { counts[e.mood] = { count: 0, emoji: e.emoji }; }
+        counts[e.mood].count++;
+    });
+    var arr = Object.keys(counts).map(function (k) {
+        return { mood: k, emoji: counts[k].emoji, count: counts[k].count };
+    });
+    arr.sort(function (a, b) { return b.count - a.count; });
+    return arr;
+}
+
+function renderWeekInsight() {
+    var stats = computeWeekMoodStats(getWeekStart(0));
+    var badge = document.getElementById('insightDominant');
+    var bars = document.getElementById('insightWeekBars');
+    if (!stats.length) {
+        badge.textContent = 'No moods logged yet this week.';
+        bars.innerHTML = '';
+        return;
+    }
+    badge.textContent = 'Most common this week: ' + stats[0].emoji + ' ' + capitalize(stats[0].mood) + ' (x' + stats[0].count + ')';
+    var maxCount = stats[0].count;
+    var html = '';
+    stats.forEach(function (s) {
+        var pct = Math.max(10, Math.round((s.count / maxCount) * 100));
+        html += '<div class="insight-bar-row"><span class="insight-bar-label">' + s.emoji + ' ' + capitalize(s.mood) + '</span>' +
+            '<span class="bar" style="width:' + pct + '%"></span><span>' + s.count + '</span></div>';
+    });
+    bars.innerHTML = html;
+}
+
+function computeStreaks() {
+    var logs = loadLogs();
+    var daySet = {};
+    logs.forEach(function (e) {
+        var key = startOfDay(new Date(e.ts)).toDateString();
+        if (!daySet[key]) { daySet[key] = {}; }
+        daySet[key][e.mood] = true;
+    });
+    function hasDay(d) { return !!daySet[startOfDay(d).toDateString()]; }
+    function hasMoodOnDay(d, mood) { var s = daySet[startOfDay(d).toDateString()]; return !!(s && s[mood]); }
+
+    var today = startOfDay(new Date());
+    var cursor = new Date(today);
+    if (!hasDay(cursor)) { cursor.setDate(cursor.getDate() - 1); }
+    var overall = 0;
+    while (hasDay(cursor)) { overall++; cursor.setDate(cursor.getDate() - 1); }
+
+    var allMoods = {};
+    logs.forEach(function (e) { allMoods[e.mood] = true; });
+    var best = { mood: null, count: 0 };
+    Object.keys(allMoods).forEach(function (mood) {
+        var c = new Date(today);
+        if (!hasMoodOnDay(c, mood)) { c.setDate(c.getDate() - 1); }
+        var streak = 0;
+        while (hasMoodOnDay(c, mood)) { streak++; c.setDate(c.getDate() - 1); }
+        if (streak > best.count) { best = { mood: mood, count: streak }; }
+    });
+    return { overall: overall, bestMood: best };
+}
+
+function renderStreaksBlock() {
+    var s = computeStreaks();
+    var lines = [];
+    lines.push(s.overall > 0
+        ? '🔥 ' + s.overall + '-day logging streak'
+        : 'No current logging streak — log something today to start one!');
+    if (s.bestMood.mood && s.bestMood.count >= 2) {
+        lines.push(s.bestMood.count + '-day ' + capitalize(s.bestMood.mood) + ' streak');
+    }
+    document.getElementById('insightStreaks').innerHTML = lines.map(function (l) {
+        return '<div class="insight-bar-row">' + l + '</div>';
+    }).join('');
+}
+
+function getMonthStart(offset) {
+    var now = new Date();
+    return new Date(now.getFullYear(), now.getMonth() + offset, 1);
+}
+
+function computeDayDominantSentiment(date) {
+    var dayLogs = loadLogs().filter(function (e) {
+        return isMoodEntry(e) && startOfDay(new Date(e.ts)).getTime() === date.getTime();
+    });
+    if (!dayLogs.length) { return null; }
+    var sentimentCounts = {};
+    var moodCounts = {};
+    var moodEmoji = {};
+    dayLogs.forEach(function (e) {
+        var sentiment = MOOD_SENTIMENT[e.mood];
+        sentimentCounts[sentiment] = (sentimentCounts[sentiment] || 0) + 1;
+        moodCounts[e.mood] = (moodCounts[e.mood] || 0) + 1;
+        moodEmoji[e.mood] = e.emoji;
+    });
+    var bestSentiment = null, bestSentimentCount = 0;
+    Object.keys(sentimentCounts).forEach(function (s) {
+        if (sentimentCounts[s] > bestSentimentCount) { bestSentimentCount = sentimentCounts[s]; bestSentiment = s; }
+    });
+    var topMood = null, topMoodCount = 0;
+    Object.keys(moodCounts).forEach(function (m) {
+        if (moodCounts[m] > topMoodCount) { topMoodCount = moodCounts[m]; topMood = m; }
+    });
+    return { sentiment: bestSentiment, topMood: topMood, topEmoji: moodEmoji[topMood], count: dayLogs.length };
+}
+
+function renderInsightCalendar() {
+    var monthStart = getMonthStart(insightMonthOffset);
+    var year = monthStart.getFullYear(), month = monthStart.getMonth();
+    document.getElementById('insightMonthLabel').textContent =
+        monthStart.toLocaleDateString(undefined, { month: 'long', year: 'numeric' });
+
+    var daysInMonth = new Date(year, month + 1, 0).getDate();
+    var startWeekday = monthStart.getDay();
+    var today = startOfDay(new Date());
+    var grid = document.getElementById('insightCalendar');
+    grid.innerHTML = '';
+
+    DAY_LABELS.forEach(function (l) {
+        var h = document.createElement('div');
+        h.className = 'cal-head';
+        h.textContent = l;
+        grid.appendChild(h);
+    });
+    for (var b = 0; b < startWeekday; b++) {
+        var blank = document.createElement('div');
+        blank.className = 'cal-cell cal-blank';
+        grid.appendChild(blank);
+    }
+
+    var _loopDay = function (d) {
+        var date = new Date(year, month, d);
+        var info = computeDayDominantSentiment(date);
+        var cell = document.createElement('div');
+        cell.className = 'cal-cell';
+        cell.textContent = d;
+        if (info) {
+            cell.style.background = SENTIMENT_COLOR[info.sentiment];
+            cell.title = info.topEmoji + ' ' + capitalize(info.topMood) + ' (' + info.count + ' logged)';
+        } else {
+            cell.className += ' cal-empty';
+        }
+        if (date.getTime() === today.getTime()) { cell.className += ' cal-today'; }
+        cell.addEventListener('click', function () {
+            selectedHistoryDate = startOfDay(date);
+            var wsToday = getWeekStart(0);
+            var wsTarget = getWeekStartForDate(date);
+            weekOffset = Math.round((wsTarget - wsToday) / (7 * 24 * 3600 * 1000));
+            document.getElementById('settingsPanel').classList.remove('open');
+            renderWeekView();
+            renderHistory();
+            renderJournal();
+        });
+        grid.appendChild(cell);
+    };
+    for (var d = 1; d <= daysInMonth; d++) { _loopDay(d); }
+}
+
+document.getElementById('btnInsightMonthPrev').addEventListener('click', function () {
+    insightMonthOffset -= 1;
+    renderInsightCalendar();
+});
+document.getElementById('btnInsightMonthNext').addEventListener('click', function () {
+    insightMonthOffset += 1;
+    renderInsightCalendar();
+});
+
+function computeHousePatterns(field) {
+    var groups = {};
+    loadLogs().forEach(function (e) {
+        var h = e[field];
+        if (!h) { return; }
+        if (!groups[h]) { groups[h] = { moodCounts: {}, total: 0 }; }
+        groups[h].total++;
+        var key = e.mood + '|' + e.emoji;
+        groups[h].moodCounts[key] = (groups[h].moodCounts[key] || 0) + 1;
+    });
+    var results = [];
+    Object.keys(groups).forEach(function (h) {
+        var g = groups[h];
+        if (g.total < MIN_HOUSE_ENTRIES) { return; }
+        var bestKey = null, bestCount = 0;
+        Object.keys(g.moodCounts).forEach(function (k) {
+            if (g.moodCounts[k] > bestCount) { bestCount = g.moodCounts[k]; bestKey = k; }
+        });
+        var parts = bestKey.split('|');
+        results.push({ house: parseInt(h, 10), mood: parts[0], emoji: parts[1], count: bestCount, total: g.total });
+    });
+    results.sort(function (a, b) { return a.house - b.house; });
+    return results;
+}
+
+function renderHousePatterns() {
+    var moonResults = computeHousePatterns('houseFromMoon');
+    var ascResults = computeHousePatterns('houseFromAsc');
+    var html = '';
+    if (!moonResults.length && !ascResults.length) {
+        html = '<div class="settings-hint">Log at least ' + MIN_HOUSE_ENTRIES +
+            ' moods with your chart saved to see patterns here.</div>';
+    } else {
+        if (moonResults.length) {
+            html += '<div class="house-pattern-group"><strong>From Moon sign</strong>';
+            moonResults.forEach(function (r) {
+                html += '<div class="house-pattern-row">' + ordinal(r.house) + ' house — mostly ' +
+                    r.emoji + ' ' + capitalize(r.mood) + ' (' + r.count + '/' + r.total + ')</div>';
+            });
+            html += '</div>';
+        }
+        if (ascResults.length) {
+            html += '<div class="house-pattern-group"><strong>From Asc</strong>';
+            ascResults.forEach(function (r) {
+                html += '<div class="house-pattern-row">' + ordinal(r.house) + ' house — mostly ' +
+                    r.emoji + ' ' + capitalize(r.mood) + ' (' + r.count + '/' + r.total + ')</div>';
+            });
+            html += '</div>';
+        }
+    }
+    document.getElementById('housePatterns').innerHTML = html;
+}
+
+function renderInsights() {
+    renderWeekInsight();
+    renderStreaksBlock();
+    renderInsightCalendar();
+    renderHousePatterns();
+}
 
 updateNowPanel();
 updateWeather();

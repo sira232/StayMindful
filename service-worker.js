@@ -1,6 +1,6 @@
 // Minimal service worker so the app installs as a standalone PWA and keeps
 // working offline once it has been opened at least once.
-const CACHE_NAME = 'mindful-moon-tracker-v13';
+const CACHE_NAME = 'mindful-moon-tracker-v18';
 const ASSETS = [
     './Mindful-Moon-Tracker.html',
     './manifest.json',
