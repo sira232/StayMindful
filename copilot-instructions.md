@@ -112,12 +112,39 @@ or apply that file's conventions here (e.g. `%USERPROFILE%\<Name>.ps1` external 
     Settings when that entry was logged) — captured per-entry rather than recomputed later,
     so history stays accurate even if the user's saved chart changes afterward. Scoped to
     one browser + origin/device only, same limitation as TimeZync's settings — no sync, no
-    cloud backup; clearing site data wipes it. No export/import automation was requested
-    beyond a manual "Export JSON" button (downloads the raw array as
-    `mindful-moon-logs.json` via `Blob`/`<a download>`, same technique TimeZync uses for its
-    `.ics` export). The Export button lives inside the Settings panel (moved there to keep
-    the main screen focused on logging/history — it was previously a standalone footer
-    button at the bottom of the page).
+    cloud backup. **Data safety (v29)**: every save calls `scheduleSafeguard()`, which mirrors
+    all `SAFE_KEYS` into IndexedDB (`mindfulMoonSafe`/`kv`/`snapshot`) and calls
+    `navigator.storage.persist()`. On startup, if `localStorage` has no logs/notes but the
+    IndexedDB mirror does, it is restored automatically and the page reloads. Settings →
+    "Backup & Restore" has **Save backup to phone** (downloads
+    `stay-mindful-backup-<date>.json` via `Blob`/`<a download>` to Android Downloads, which
+    survives "Clear site data"), **Share** (Web Share API with file, shown only if supported),
+    and **Restore from backup** (accepts the new format or the legacy plain logs array; asks
+    before replacing existing data). A banner prompts for a backup when none was saved in 7
+        days (snooze 1 day); in addition, the first tap anywhere after 3 days (`AUTO_BACKUP_DAYS`)
+        triggers `saveBackupFile()` automatically (downloads need a user gesture on Android). Never rename storage keys or the origin/URL — a new origin loses all
+    data. New persisted keys must be added to `SAFE_KEYS`.
+  - **Moon Guide (bottom of the page, `renderMoonGuide()`)**: the interpretation lives here,
+    not in the top "right now" panel (which only shows "From Moon sign - Nth house" /
+    "From Asc - Nth house"). Tables: `SIGN_TONE`, `SIGN_GOOD`, `SIGN_WATCH`, `MOON_DIGNITY`
+    (strong Vrishabha/Karka, comfortable Mithuna/Simha/Kanya, strained Vrischika, neutral
+    rest), `NAK_TONE` (27 nakshatras), `HOUSE_FROM_ASC` ({area, good, watch}),
+    `HOUSE_FROM_MOON` (mood keywords; favorable houses 1,3,6,7,10,11 = Chandra Gochar).
+    Overall outlook = house favorability (±1) + dignity (strong +1, strained −1). Shows
+    sign/nakshatra box, Moon-sign view, Ascendant view, overall chip, plus collapsible
+    all-12-houses and all-12-signs tables with today's rows highlighted. Re-renders only when
+    the `guideSig` (sign|nakshatra|chart) changes so open `<details>` stay open. General
+    awareness cues, not predictions. **Accuracy basis:** Moon sign cross-checked against
+    `astronomy-engine` + Lahiri ayanamsa (1999/2000 random samples agree; the one miss was
+    within 0.05° of a sign boundary). BPHS/classical-backed: whole-sign houses from natal
+    Moon, favorable houses 1,3,6,7,10,11, classical Moon results per house (wealth/disease/
+    fear etc., reflected in `HOUSE_FROM_MOON`), Moon dignity (exalted Vrishabha, own Karka,
+    debilitated Vrischika, friendly Mithuna/Simha/Kanya via Mercury/Sun lords), and a
+    waning-Moon (Krishna Paksha) weakness note (`guideSig` also includes paksha). **Not**
+    literal BPHS (own interpretation): the from-Ascendant reading (standard bhava
+    significations), all "Good for/Watch" wording, sign tones, nakshatra keywords, and the
+    Overall score. Not implemented: Vedha, Tarabala (would need a birth nakshatra setting),
+    exact-degree exaltation/moolatrikona.
   - **History list** (below the week grid, `renderHistory()`): shows only the **currently
     selected day**'s logged moods (newest first) — not a dump of all history. Section title
     is just the date label itself (`formatDateHeader()`, e.g. "Today"/"Yesterday"/full date —
@@ -287,7 +314,9 @@ or apply that file's conventions here (e.g. `%USERPROFILE%\<Name>.ps1` external 
     same as TimeZync's icons) — a purple-gradient circle with a cream crescent moon and a
     yellow smiley face overlapping it. Regenerate the same way if the icon design changes.
   - **`service-worker.js`** — minimal cache-first service worker, same shape as TimeZync's.
-    `CACHE_NAME` is currently `mindful-moon-tracker-v28` (changelog since v18: v19 added the
+    `CACHE_NAME` is currently `mindful-moon-tracker-v34` (v29-v34: data-safety/backup
+    features, Moon Guide at the bottom, BPHS-aligned Moon-house wording and the waning-Moon
+    (Krishna Paksha) note — see the Storage and Moon Guide bullets above) (changelog since v18: v19 added the
     Tithi (lunar day) feature — `sunTropicalLongitude`/`kepler` ported from
     `mhah-panchang`'s `sun()`, Shukla/Krishna Paksha + day-in-paksha + name shown as a new
     line under Nakshatra in the "right now" panel, plus a short `tithiCode` (e.g. `S11`/

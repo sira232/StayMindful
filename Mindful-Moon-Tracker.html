@@ -326,6 +326,27 @@
     .safe-banner { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; background: #fef3c7; color: #92400e; border-radius: 10px; padding: 8px 10px; margin-bottom: 12px; font-size: 12px; }
     .safe-banner span { flex: 1 1 100%; }
     .safe-banner .footer-btn { padding: 6px 12px; }
+    .guide { margin-top: 26px; padding-top: 18px; border-top: 1px dashed #e2e5eb; }
+    .guide .g-box { background: #f7f5fd; border-radius: 12px; padding: 12px 14px; margin-bottom: 10px; font-size: 12.5px; line-height: 1.5; color: #374151; }
+    .guide .g-box.asc { background: #eef6fb; }
+    .guide .g-box.moon { background: #f3f0fb; }
+    .guide .g-head { font-size: 14px; font-weight: 700; color: #1f2937; margin-bottom: 4px; }
+    .guide .g-sub { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .03em; color: #6b7280; margin-bottom: 4px; }
+    .guide .g-line b { color: #1f2937; }
+    .guide .chip { display: inline-block; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 999px; vertical-align: middle; margin-left: 4px; }
+    .guide .chip.strong, .guide .chip.good { background: #dcfce7; color: #166534; }
+    .guide .chip.comfortable { background: #ccfbf1; color: #115e59; }
+    .guide .chip.neutral, .guide .chip.mixed { background: #f3f4f6; color: #4b5563; }
+    .guide .chip.strained, .guide .chip.gentle { background: #ffedd5; color: #9a3412; }
+    .guide details { margin-bottom: 8px; }
+    .guide summary { cursor: pointer; font-size: 12.5px; font-weight: 700; color: #4c1d95; padding: 8px 0; }
+    .guide .g-row { display: flex; gap: 8px; padding: 7px 8px; border-radius: 8px; font-size: 11.5px; line-height: 1.45; color: #374151; }
+    .guide .g-row:nth-child(even) { background: #fafafa; }
+    .guide .g-row.now-asc { background: #dbeafe; }
+    .guide .g-row.now-moon { background: #ede9fe; }
+    .guide .g-row.now-asc.now-moon { background: linear-gradient(90deg, #dbeafe, #ede9fe); }
+    .guide .g-num { flex: 0 0 26px; font-weight: 700; color: #4c1d95; }
+    .guide .g-note { font-size: 11px; color: #6b7280; margin-top: 8px; }
 </style>
 </head>
 <body>
@@ -584,6 +605,11 @@
     <div class="journal-actions">
         <button class="footer-btn" id="btnSaveNote">Save Note</button>
         <span class="settings-hint ok" id="journalStatus"></span>
+    </div>
+
+    <div class="guide" id="moonGuide">
+        <div class="section-title">🌙 Moon Guide</div>
+        <div id="guideBody"></div>
     </div>
 </div>
 
@@ -1076,34 +1102,105 @@ var HOUSE_FROM_ASC = [null,
     { area: 'gains, friends, networks, goals', good: 'networking, social and financial wins', watch: 'over-promising' },
     { area: 'rest, expenses, retreat, sleep', good: 'meditation, rest, solitude, charity', watch: 'overspending, isolation' }
 ];
-var HOUSE_FROM_MOON = [null, 'calm, confident', 'money worry, sharp words', 'motivated, brave', 'restless, unsettled', 'overthinking, impulsive', 'disciplined, beats obstacles', 'social, agreeable', 'anxious, sensitive, go slow', 'doubtful, delays, tired', 'focused, achieving', 'gains, support, optimistic', 'drained, withdrawn, spend less'];
+var HOUSE_FROM_MOON = [null, 'comfort, good food, wellbeing', 'money loss or worry, sharp words', 'gains, motivated, brave', 'health issues, restless, unsettled', 'setbacks in plans, overthinking', 'gains, overcomes obstacles', 'good gains, social, agreeable', 'fear, anxiety, sensitive, go slow', 'trouble with authority, doubt, delays', 'happiness, comfort, achievement', 'gains, support, optimistic', 'expenses or losses, drained, withdrawn'];
+var NAK_TONE = ['swift, healing, fresh starts', 'intense, transformative, responsible', 'sharp, purifying, critical', 'growth, beauty, sensual', 'searching, curious, gentle', 'stormy, emotional release, change', 'renewal, optimistic, returning home', 'nourishing, supportive, auspicious', 'clingy, psychological, sharp-minded', 'regal, ancestral, status-minded', 'pleasure, creativity, leisure', 'reliable, helpful, partnerships', 'skilled, practical, crafty', 'artistic, striking, design-minded', 'independent, flexible, trade', 'determined, goal-driven, competitive', 'devoted, friendly, loyal', 'protective, authoritative, tense', 'uprooting, investigative, truth-seeking', 'invigorating, persuasive, confident', 'principled, patient, lasting success', 'listening, learning, connecting', 'rhythmic, ambitious, wealth-minded', 'healing, secretive, solitary', 'intense, fiery, idealistic', 'deep, calm, wise', 'gentle, caring, safe journeys'];
+var DIGNITY_NOTE = {
+    strong: 'The Moon is strong here: emotions feel steadier and the positives below are amplified.',
+    comfortable: 'The Moon is comfortable here (friendly sign): generally supportive and easy-going.',
+    neutral: 'The Moon is neutral here: no extra boost or strain, so the house meaning leads.',
+    strained: 'The Moon is strained here (debilitated): feelings run intense, so go slower and avoid reacting in the moment.'
+};
 var MOON_FAVORABLE_HOUSES = [1, 3, 6, 7, 10, 11];
 
-function overallOutlook(dignity, houseFromMoon) {
+function overallInfo(dignity, houseFromMoon) {
     var score = (MOON_FAVORABLE_HOUSES.indexOf(houseFromMoon) >= 0 ? 1 : -1) +
         (dignity === 'strong' ? 1 : dignity === 'strained' ? -1 : 0);
-    return score >= 1 ? '🟢 Supportive' : score === 0 ? '🟡 Mixed' : '🟠 Go gently';
+    return score >= 1 ? { cls: 'good', text: '🟢 Supportive' } :
+        score === 0 ? { cls: 'mixed', text: '🟡 Mixed' } : { cls: 'gentle', text: '🟠 Go gently' };
 }
 
+// Top panel: only which house the Moon is in from the natal Moon and Ascendant.
 function renderHouseLines(rashiIndex) {
     var el = document.getElementById('nowHouses');
     var chart = loadUserChart();
-    var dignity = MOON_DIGNITY[rashiIndex];
-    var signLine = 'Moon in ' + rashiShort(RASHI_NAMES[rashiIndex]) + ' · ' +
-        (dignity === 'neutral' ? '' : dignity + ' · ') + SIGN_TONE[rashiIndex] + '<br>' +
-        'Best for: ' + SIGN_GOOD[rashiIndex] + ' · Watch: ' + SIGN_WATCH[rashiIndex] + '<br>';
     if (!chart) {
-        el.innerHTML = signLine + '<div class="hint">Set your Moon sign &amp; Ascendant in ⚙️ Settings to see which house the Moon is transiting for you.</div>';
+        el.innerHTML = '<div class="hint">Set your Moon sign &amp; Ascendant in ⚙️ Settings to see which house the Moon is transiting for you.</div>';
         return;
     }
-    var houseFromMoon = houseFromReference(rashiIndex, chart.moonSignIndex);
-    var houseFromAsc = houseFromReference(rashiIndex, chart.ascSignIndex);
-    var favorable = MOON_FAVORABLE_HOUSES.indexOf(houseFromMoon) >= 0;
-    el.innerHTML = signLine +
-        'From Moon sign - ' + ordinal(houseFromMoon) + ' house · ' + HOUSE_FROM_MOON[houseFromMoon] + (favorable ? ' ✅' : ' ⚠️') + '<br>' +
-        'From Asc - ' + ordinal(houseFromAsc) + ' house · ' + HOUSE_FROM_ASC[houseFromAsc].area + '<br>' +
-        'Good for: ' + HOUSE_FROM_ASC[houseFromAsc].good + ' · Watch: ' + HOUSE_FROM_ASC[houseFromAsc].watch + '<br>' +
-        'Overall: ' + overallOutlook(dignity, houseFromMoon);
+    el.innerHTML =
+        'From Moon sign - ' + ordinal(houseFromReference(rashiIndex, chart.moonSignIndex)) + ' house<br>' +
+        'From Asc - ' + ordinal(houseFromReference(rashiIndex, chart.ascSignIndex)) + ' house';
+}
+
+// Bottom Moon Guide: the interpretation (sign, nakshatra, both house views,
+// overall outlook, plus full reference tables with today's rows highlighted).
+// Re-rendered only when the sign/nakshatra/chart changes so open <details>
+// sections are not collapsed by the 60s refresh.
+var guideSig = '';
+function renderMoonGuide(p) {
+    var el = document.getElementById('guideBody');
+    if (!el) { return; }
+    var chart = loadUserChart();
+    var sig = p.rashiIndex + '|' + p.nakshatraIndex + '|' + p.tithi.paksha + '|' + (chart ? chart.moonSignIndex + ',' + chart.ascSignIndex : '-');
+    if (sig === guideSig) { return; }
+    guideSig = sig;
+
+    var r = p.rashiIndex;
+    var dignity = MOON_DIGNITY[r];
+    var hMoon = chart ? houseFromReference(r, chart.moonSignIndex) : 0;
+    var hAsc = chart ? houseFromReference(r, chart.ascSignIndex) : 0;
+    var waning = p.tithi.paksha === 'Krishna';
+    var html = '';
+    if (waning) {
+        html += '<div class="g-box"><div class="g-line">🌘 <b>Waning Moon (Krishna Paksha):</b> classically the Moon is weaker, so supportive cues below are milder and challenging ones can feel heavier.</div></div>';
+    }
+    html += '<div class="g-box"><div class="g-head">Moon in ' + rashiShort(RASHI_NAMES[r]) +
+        ' <span class="chip ' + dignity + '">' + dignity + '</span></div>' +
+        '<div class="g-line">' + SIGN_TONE[r] + '</div>' +
+        '<div class="g-line"><b>Best for:</b> ' + SIGN_GOOD[r] + '</div>' +
+        '<div class="g-line"><b>Watch:</b> ' + SIGN_WATCH[r] + '</div>' +
+        '<div class="g-line"><b>' + p.nakshatra + ' nakshatra:</b> ' + NAK_TONE[p.nakshatraIndex] + '</div>' +
+        '<div class="g-note">' + DIGNITY_NOTE[dignity] + '</div></div>';
+
+    if (chart) {
+        var favorable = MOON_FAVORABLE_HOUSES.indexOf(hMoon) >= 0;
+        var o = overallInfo(dignity, hMoon);
+        var a = HOUSE_FROM_ASC[hAsc];
+        html += '<div class="g-box moon"><div class="g-sub">From your Moon sign</div>' +
+            '<div class="g-head">' + ordinal(hMoon) + ' house <span class="chip ' + (favorable ? 'good' : 'gentle') + '">' + (favorable ? 'favorable' : 'challenging') + '</span></div>' +
+            '<div class="g-line"><b>Mood effect:</b> ' + HOUSE_FROM_MOON[hMoon] + '</div></div>';
+        html += '<div class="g-box asc"><div class="g-sub">From your Ascendant</div>' +
+            '<div class="g-head">' + ordinal(hAsc) + ' house</div>' +
+            '<div class="g-line"><b>Area activated:</b> ' + a.area + '</div>' +
+            '<div class="g-line"><b>Good for:</b> ' + a.good + '</div>' +
+            '<div class="g-line"><b>Watch:</b> ' + a.watch + '</div></div>';
+        html += '<div class="g-box"><div class="g-sub">Overall outlook</div>' +
+            '<div class="g-head"><span class="chip ' + o.cls + '" style="margin-left:0">' + o.text + '</span></div>' +
+            '<div class="g-line">Moon-sign house is ' + (favorable ? 'favorable' : 'challenging') + ' (' + ordinal(hMoon) + ') and the Moon is ' + dignity + ' in ' + rashiShort(RASHI_NAMES[r]) + '.</div></div>';
+    } else {
+        html += '<div class="g-box"><div class="g-line">Set your Moon sign &amp; Ascendant in ⚙️ Settings to see the house-based guidance for you.</div></div>';
+    }
+
+    html += '<details><summary>All 12 houses (today highlighted)</summary>';
+    for (var h = 1; h <= 12; h++) {
+        var cls = 'g-row' + (h === hAsc ? ' now-asc' : '') + (h === hMoon ? ' now-moon' : '');
+        var ha = HOUSE_FROM_ASC[h];
+        html += '<div class="' + cls + '"><div class="g-num">' + h + '</div><div>' +
+            '<b>Asc:</b> ' + ha.area + '<br><b>Good for:</b> ' + ha.good + ' · <b>Watch:</b> ' + ha.watch + '<br>' +
+            '<b>From Moon:</b> ' + HOUSE_FROM_MOON[h] + (MOON_FAVORABLE_HOUSES.indexOf(h) >= 0 ? ' ✅' : ' ⚠️') + '</div></div>';
+    }
+    html += '<div class="g-note">Blue = your Ascendant house today, purple = your Moon-sign house today. ✅ favorable / ⚠️ challenging houses from the natal Moon (Chandra Gochar).</div></details>';
+
+    html += '<details><summary>All 12 signs (today highlighted)</summary>';
+    for (var s = 0; s < 12; s++) {
+        html += '<div class="g-row' + (s === r ? ' now-moon' : '') + '"><div class="g-num">' + (s + 1) + '</div><div>' +
+            '<b>' + rashiShort(RASHI_NAMES[s]) + '</b> <span class="chip ' + MOON_DIGNITY[s] + '">' + MOON_DIGNITY[s] + '</span><br>' +
+            SIGN_TONE[s] + '<br><b>Best for:</b> ' + SIGN_GOOD[s] + ' · <b>Watch:</b> ' + SIGN_WATCH[s] + '</div></div>';
+    }
+    html += '</details>';
+
+    html += '<div class="g-note">These are general awareness cues based on classical Vedic transit ideas, not predictions or advice. Use them as a gentle prompt, not a rule.</div>';
+    el.innerHTML = html;
 }
 
 function loadLogs() {
@@ -1142,6 +1239,7 @@ function updateNowPanel() {
     document.getElementById('nowSub').textContent = p.nakshatra + ' nakshatra · Pada ' + p.pada;
     document.getElementById('nowTithi').textContent = p.tithi.paksha + ' Paksha, ' + p.tithi.name + ' (Tithi ' + p.tithi.dayInPaksha + ')';
     renderHouseLines(p.rashiIndex);
+    renderMoonGuide(p);
 }
 
 // ---------------------------------------------------------------------------
