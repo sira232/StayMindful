@@ -323,6 +323,9 @@
     .journal-actions { display: flex; align-items: center; gap: 10px; margin-bottom: 18px; }
     .journal-actions .footer-btn { flex: 0 0 auto; padding: 8px 16px; }
     .journal-actions .settings-hint { margin: 0; }
+    .safe-banner { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; background: #fef3c7; color: #92400e; border-radius: 10px; padding: 8px 10px; margin-bottom: 12px; font-size: 12px; }
+    .safe-banner span { flex: 1 1 100%; }
+    .safe-banner .footer-btn { padding: 6px 12px; }
 </style>
 </head>
 <body>
@@ -335,6 +338,12 @@
             <div class="weather-label" id="weatherLabel">—</div>
         </div>
         <button class="settings-btn" id="btnSettings" title="Your chart settings">⚙️</button>
+    </div>
+
+    <div class="safe-banner" id="safeBanner" style="display:none">
+        <span id="safeBannerText"></span>
+        <button class="footer-btn" id="btnBannerSave">💾 Save</button>
+        <button class="footer-btn" id="btnBannerLater">Later</button>
     </div>
 
     <div class="settings-panel" id="settingsPanel">
@@ -366,9 +375,16 @@
             <button class="footer-btn" id="btnSaveChart">Save</button>
             <button class="footer-btn" id="btnCloseSettings">Close</button>
         </div>
+        <div class="settings-title">Backup &amp; Restore</div>
         <div class="settings-actions">
-            <button class="footer-btn" id="btnExport">⬇ Export JSON</button>
+            <button class="footer-btn" id="btnExport">💾 Save backup to phone</button>
+            <button class="footer-btn" id="btnShareBackup" style="display:none">📤 Share</button>
         </div>
+        <div class="settings-actions">
+            <button class="footer-btn" id="btnImport">⬆ Restore from backup</button>
+            <input type="file" id="fileImport" accept=".json,application/json" style="display:none">
+        </div>
+        <div class="settings-hint" id="safeStatus"></div>
 
         <div class="settings-title">Insights</div>
         <div class="insight-range-row">
@@ -869,6 +885,7 @@ function loadUserChart() {
 
 function saveUserChart(chart) {
     localStorage.setItem(USER_CHART_KEY, JSON.stringify(chart));
+    scheduleSafeguard();
 }
 
 // ---------------------------------------------------------------------------
@@ -885,7 +902,7 @@ function loadGender() {
 }
 
 function saveGender(g) {
-    try { localStorage.setItem(GENDER_KEY, g); } catch (e) { /* ignore */ }
+    try { localStorage.setItem(GENDER_KEY, g); scheduleSafeguard(); } catch (e) { /* ignore */ }
 }
 
 function applyGenderVisibility() {
@@ -935,6 +952,7 @@ function loadUserLocation() {
 
 function saveUserLocation(loc) {
     localStorage.setItem(USER_LOCATION_KEY, JSON.stringify(loc));
+    scheduleSafeguard();
 }
 
 function getActiveLocation() {
@@ -1057,6 +1075,7 @@ function loadLogs() {
 
 function saveLogs(logs) {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(logs));
+    scheduleSafeguard();
 }
 
 function formatTime(d) {
@@ -1216,6 +1235,7 @@ function loadNotes() {
 
 function saveNotes(notes) {
     localStorage.setItem(NOTES_KEY, JSON.stringify(notes));
+    scheduleSafeguard();
 }
 
 function renderJournal() {
@@ -1344,18 +1364,239 @@ document.getElementById('btnMoreMoods').addEventListener('click', function () {
     document.getElementById('moreMoodsPanel').classList.toggle('open');
 });
 
-document.getElementById('btnExport').addEventListener('click', function () {
-    var logs = loadLogs();
-    var blob = new Blob([JSON.stringify(logs, null, 2)], { type: 'application/json' });
+// ---------------------------------------------------------------------------
+// Data safety. Everything lives in localStorage, which Android/Chrome can wipe
+// (storage eviction, "Clear site data", origin change). Layers of protection:
+//   1. navigator.storage.persist() - asks Chrome not to evict the site's data.
+//   2. IndexedDB mirror - restored automatically if localStorage comes back empty.
+//   3. Backup file saved to the phone's Downloads folder (survives clearing site
+//      data), with a periodic reminder, plus Share and Restore-from-file.
+// ---------------------------------------------------------------------------
+var SAFE_KEYS = [STORAGE_KEY, NOTES_KEY, USER_CHART_KEY, GENDER_KEY, USER_LOCATION_KEY, 'mindfulMoonInsightRange.v1'];
+var LAST_BACKUP_KEY = 'mindfulMoonLastBackup.v1';
+var BACKUP_SNOOZE_KEY = 'mindfulMoonBackupSnooze.v1';
+var BACKUP_DUE_DAYS = 7;
+var SAFE_DB = 'mindfulMoonSafe';
+var SAFE_STORE = 'kv';
+var safePersisted = false;
+var safeTimer = null;
+
+function hasUserData() {
+    return loadLogs().length > 0 || Object.keys(loadNotes()).length > 0;
+}
+
+function buildBackup() {
+    var data = {};
+    SAFE_KEYS.forEach(function (k) {
+        var v = localStorage.getItem(k);
+        if (v !== null) { data[k] = v; }
+    });
+    return { app: 'stay-mindful', version: 1, exportedAt: new Date().toISOString(), data: data };
+}
+
+// Accepts a full backup object or the legacy plain array of logs from the old
+// "Export JSON" button. Returns a {key: rawString} map, or null if invalid.
+function parseBackup(text) {
+    var obj;
+    try { obj = JSON.parse(text); } catch (e) { return null; }
+    var data = null;
+    if (Array.isArray(obj)) {
+        data = {};
+        data[STORAGE_KEY] = JSON.stringify(obj);
+    } else if (obj && typeof obj.data === 'object' && obj.data) {
+        data = {};
+        SAFE_KEYS.forEach(function (k) {
+            if (typeof obj.data[k] === 'string') { data[k] = obj.data[k]; }
+        });
+    }
+    if (!data) { return null; }
+    try {
+        if (data[STORAGE_KEY] && !Array.isArray(JSON.parse(data[STORAGE_KEY]))) { return null; }
+        if (data[NOTES_KEY] && (typeof JSON.parse(data[NOTES_KEY]) !== 'object')) { return null; }
+    } catch (e) { return null; }
+    var logs = data[STORAGE_KEY] ? JSON.parse(data[STORAGE_KEY]) : [];
+    var notes = data[NOTES_KEY] ? JSON.parse(data[NOTES_KEY]) : {};
+    if (!logs.length && !Object.keys(notes).length) { return null; }
+    return data;
+}
+
+function applyBackupData(data) {
+    Object.keys(data).forEach(function (k) { localStorage.setItem(k, data[k]); });
+}
+
+function idbOpen(cb) {
+    try {
+        var req = indexedDB.open(SAFE_DB, 1);
+        req.onupgradeneeded = function () { req.result.createObjectStore(SAFE_STORE); };
+        req.onsuccess = function () { cb(req.result); };
+        req.onerror = function () { cb(null); };
+    } catch (e) { cb(null); }
+}
+
+function idbPut(value) {
+    idbOpen(function (db) {
+        if (!db) { return; }
+        try {
+            var tx = db.transaction(SAFE_STORE, 'readwrite');
+            tx.objectStore(SAFE_STORE).put(value, 'snapshot');
+            tx.oncomplete = function () { db.close(); };
+        } catch (e) { /* ignore */ }
+    });
+}
+
+function idbGet(cb) {
+    idbOpen(function (db) {
+        if (!db) { cb(null); return; }
+        try {
+            var r = db.transaction(SAFE_STORE, 'readonly').objectStore(SAFE_STORE).get('snapshot');
+            r.onsuccess = function () { db.close(); cb(r.result || null); };
+            r.onerror = function () { db.close(); cb(null); };
+        } catch (e) { cb(null); }
+    });
+}
+
+function requestPersistentStorage() {
+    if (!(navigator.storage && navigator.storage.persist)) { return; }
+    navigator.storage.persisted().then(function (p) {
+        return p ? true : navigator.storage.persist();
+    }).then(function (p) {
+        safePersisted = !!p;
+        updateSafeStatus();
+    }).catch(function () {});
+}
+
+function scheduleSafeguard() {
+    clearTimeout(safeTimer);
+    safeTimer = setTimeout(function () {
+        idbPut(buildBackup());
+        requestPersistentStorage();
+        updateBackupBanner();
+    }, 500);
+}
+
+function daysSince(ts) {
+    return (Date.now() - ts) / 86400000;
+}
+
+function getLastBackup() {
+    var v = Number(localStorage.getItem(LAST_BACKUP_KEY));
+    return v > 0 ? v : 0;
+}
+
+function updateSafeStatus() {
+    var el = document.getElementById('safeStatus');
+    if (!el) { return; }
+    var last = getLastBackup();
+    el.textContent = 'Auto-protected storage: ' + (safePersisted ? 'on' : 'not granted by browser') +
+        ' · Last backup file: ' + (last ? new Date(last).toLocaleDateString() : 'never');
+}
+
+function updateBackupBanner() {
+    var banner = document.getElementById('safeBanner');
+    if (!banner) { return; }
+    var last = getLastBackup();
+    var snooze = Number(localStorage.getItem(BACKUP_SNOOZE_KEY)) || 0;
+    var due = hasUserData() && (!last || daysSince(last) > BACKUP_DUE_DAYS) && daysSince(snooze) > 1;
+    if (due) {
+        document.getElementById('safeBannerText').textContent = last
+            ? '💾 Your last backup was ' + Math.floor(daysSince(last)) + ' days ago. Save a copy to your phone so your data is safe.'
+            : '💾 Save a backup copy of your data to your phone so it is never lost.';
+    }
+    banner.style.display = due ? 'flex' : 'none';
+}
+
+function backupFileName() {
+    var d = new Date();
+    function p(n) { return (n < 10 ? '0' : '') + n; }
+    return 'stay-mindful-backup-' + d.getFullYear() + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate()) + '.json';
+}
+
+function saveBackupFile() {
+    var blob = new Blob([JSON.stringify(buildBackup(), null, 2)], { type: 'application/json' });
     var url = URL.createObjectURL(blob);
     var a = document.createElement('a');
     a.href = url;
-    a.download = 'mindful-moon-logs.json';
+    a.download = backupFileName();
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
     setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+    localStorage.setItem(LAST_BACKUP_KEY, String(Date.now()));
+    updateSafeStatus();
+    updateBackupBanner();
+}
+
+function shareBackupFile() {
+    var file = new File([JSON.stringify(buildBackup(), null, 2)], backupFileName(), { type: 'application/json' });
+    navigator.share({ files: [file], title: 'Stay Mindful backup' }).then(function () {
+        localStorage.setItem(LAST_BACKUP_KEY, String(Date.now()));
+        updateSafeStatus();
+        updateBackupBanner();
+    }).catch(function () {});
+}
+
+document.getElementById('btnExport').addEventListener('click', saveBackupFile);
+document.getElementById('btnBannerSave').addEventListener('click', saveBackupFile);
+document.getElementById('btnBannerLater').addEventListener('click', function () {
+    localStorage.setItem(BACKUP_SNOOZE_KEY, String(Date.now()));
+    updateBackupBanner();
 });
+
+(function () {
+    var shareBtn = document.getElementById('btnShareBackup');
+    try {
+        var probe = new File(['{}'], 'x.json', { type: 'application/json' });
+        if (navigator.share && navigator.canShare && navigator.canShare({ files: [probe] })) {
+            shareBtn.style.display = '';
+            shareBtn.addEventListener('click', shareBackupFile);
+        }
+    } catch (e) { /* share not supported */ }
+})();
+
+document.getElementById('btnImport').addEventListener('click', function () {
+    document.getElementById('fileImport').click();
+});
+document.getElementById('fileImport').addEventListener('change', function (ev) {
+    var f = ev.target.files && ev.target.files[0];
+    ev.target.value = '';
+    if (!f) { return; }
+    var reader = new FileReader();
+    reader.onload = function () {
+        var data = parseBackup(String(reader.result));
+        if (!data) { alert('That file is not a valid Stay Mindful backup.'); return; }
+        if (hasUserData() && !confirm('Replace the data currently in the app with this backup?')) { return; }
+        applyBackupData(data);
+        location.reload();
+    };
+    reader.readAsText(f);
+});
+
+document.getElementById('btnSettings').addEventListener('click', updateSafeStatus);
+
+// Browsers only allow downloads from a user gesture, so "automatic" backup piggybacks
+// on the first tap of the day after AUTO_BACKUP_DAYS without a saved file. Chrome may
+// ask once to allow multiple downloads; if blocked, the banner remains as a fallback.
+var AUTO_BACKUP_DAYS = 3;
+document.addEventListener('click', function (ev) {
+    if (ev.target.closest && ev.target.closest('#btnExport, #btnBannerSave, #btnShareBackup, #btnImport')) { return; }
+    if (!hasUserData()) { return; }
+    var last = getLastBackup();
+    if (!last || daysSince(last) >= AUTO_BACKUP_DAYS) { saveBackupFile(); }
+}, true);
+
+// Startup: if localStorage was wiped but the IndexedDB mirror survived, restore
+// it automatically; otherwise make sure the mirror exists for current users.
+if (hasUserData()) {
+    idbPut(buildBackup());
+} else {
+    idbGet(function (snap) {
+        var data = snap && snap.data ? parseBackup(JSON.stringify(snap)) : null;
+        if (data) { applyBackupData(data); location.reload(); }
+    });
+}
+requestPersistentStorage();
+updateSafeStatus();
+updateBackupBanner();
 
 // ---------------------------------------------------------------------------
 // Insights (Settings panel): mood distribution, dominant-mood badge,
