@@ -134,7 +134,12 @@ or apply that file's conventions here (e.g. `%USERPROFILE%\<Name>.ps1` external 
     sign/nakshatra box, Moon-sign view, Ascendant view, overall chip, plus collapsible
     all-12-houses and all-12-signs tables with today's rows highlighted. Re-renders only when
     the `guideSig` (sign|nakshatra|chart) changes so open `<details>` stay open. General
-    awareness cues, not predictions. **Accuracy basis:** Moon sign cross-checked against
+    awareness cues, not predictions. **Tithi & Moon strength box is first in the guide**:
+    `moonStrengthPct()` (linear estimate: Shukla day/15, Krishna (15−day)/15, so Purnima
+    100%, Amavasya 0%; not a classical figure), `TITHI_TYPES` (Nanda/Bhadra/Jaya/Rikta/Purna
+    repeating every 5 tithis, standard Muhurta tradition, not BPHS verbatim), a phase note,
+    and the strength feeds `overallInfo()` (≥75% +1, ≤25% −1). `guideSig` includes
+    paksha+day. **Accuracy basis:** Moon sign cross-checked against
     `astronomy-engine` + Lahiri ayanamsa (1999/2000 random samples agree; the one miss was
     within 0.05° of a sign boundary). BPHS/classical-backed: whole-sign houses from natal
     Moon, favorable houses 1,3,6,7,10,11, classical Moon results per house (wealth/disease/
@@ -314,7 +319,10 @@ or apply that file's conventions here (e.g. `%USERPROFILE%\<Name>.ps1` external 
     same as TimeZync's icons) — a purple-gradient circle with a cream crescent moon and a
     yellow smiley face overlapping it. Regenerate the same way if the icon design changes.
   - **`service-worker.js`** — minimal cache-first service worker, same shape as TimeZync's.
-    `CACHE_NAME` is currently `mindful-moon-tracker-v34` (v29-v34: data-safety/backup
+    `CACHE_NAME` is currently `mindful-moon-tracker-v36` (v36: top panel + Moon Guide follow the day selected in the
+     week view — today is live, other days are a noon preview with sign/nakshatra/tithi change
+     times from `moonEventsForDay()`; week navigation is unlimited in both directions)
+     (v29-v35: data-safety/backup
     features, Moon Guide at the bottom, BPHS-aligned Moon-house wording and the waning-Moon
     (Krishna Paksha) note — see the Storage and Moon Guide bullets above) (changelog since v18: v19 added the
     Tithi (lunar day) feature — `sunTropicalLongitude`/`kepler` ported from
