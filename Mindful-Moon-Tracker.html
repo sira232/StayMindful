@@ -1052,18 +1052,58 @@ function initSettingsPanel() {
     });
 }
 
+// Summary-level interpretation shown in the "right now" panel. Keywords are
+// approximate mood/awareness cues, not predictions. Indexed by sign (0=Mesha)
+// and house (1-12). Moon dignity (classical): strong in Vrishabha (exalted) and
+// Karka (own sign), comfortable in friendly Mithuna/Simha/Kanya (Mercury/Sun
+// lords), strained in Vrischika (debilitated), neutral elsewhere.
+var SIGN_TONE = ['bold, impulsive, quick-tempered', 'steady, comfort-seeking, stubborn', 'curious, chatty, restless mind', 'nurturing, sensitive, homey', 'proud, warm, expressive', 'analytical, practical, detail-focused', 'balanced, social, indecisive', 'intense, secretive, deep', 'optimistic, adventurous, blunt', 'disciplined, serious, reserved', 'detached, idealistic, social', 'dreamy, compassionate, escapist'];
+var MOON_DIGNITY = ['neutral', 'strong', 'comfortable', 'strong', 'comfortable', 'comfortable', 'neutral', 'strained', 'neutral', 'neutral', 'neutral', 'neutral'];
+var SIGN_GOOD = ['starting things, exercise, taking initiative', 'finances, food, comfort, steady work', 'communication, learning, errands', 'family, home, emotional care', 'leadership, creativity, presenting', 'planning, health, detail work', 'partnerships, negotiation, art', 'research, deep work, healing', 'learning, travel, big-picture planning', 'career, discipline, structure', 'networking, ideas, group causes', 'meditation, creativity, compassion, rest'];
+var SIGN_WATCH = ['anger, haste', 'stubbornness, overindulgence', 'scattered focus, gossip', 'moodiness, over-sensitivity', 'ego, pride', 'over-criticism, worry', 'indecision, people-pleasing', 'jealousy, secrecy, obsession', 'bluntness, overpromising', 'coldness, overwork', 'aloofness, detachment', 'escapism, confusion'];
+// From the Ascendant: area of life activated, what suits it, what to watch.
+var HOUSE_FROM_ASC = [null,
+    { area: 'self, body, appearance, energy', good: 'starting things, self-care', watch: 'impulsiveness' },
+    { area: 'money, speech, food, family', good: 'budgeting, family talks', watch: 'overspending, harsh words' },
+    { area: 'effort, courage, siblings, short trips', good: 'initiative, writing, calls', watch: 'rashness' },
+    { area: 'home, mother, comfort, emotions', good: 'rest, home matters, inner work', watch: 'restlessness' },
+    { area: 'children, creativity, romance, study', good: 'fun, learning, time with kids, creative work', watch: 'overindulgence, speculation' },
+    { area: 'work routine, health, debts, enemies', good: 'clearing tasks, health routine', watch: 'conflicts, overwork' },
+    { area: 'partner, relationships, deals', good: 'meetings, partnerships', watch: 'arguments, hasty contracts' },
+    { area: 'sudden events, hidden matters, health stress', good: 'research, healing, introspection', watch: 'big decisions, risks, arguments' },
+    { area: 'luck, travel, teachers, beliefs', good: 'learning, spiritual practice, long-term plans', watch: 'overconfidence' },
+    { area: 'career, status, public image', good: 'work, visibility, goals', watch: 'ego clashes with seniors' },
+    { area: 'gains, friends, networks, goals', good: 'networking, social and financial wins', watch: 'over-promising' },
+    { area: 'rest, expenses, retreat, sleep', good: 'meditation, rest, solitude, charity', watch: 'overspending, isolation' }
+];
+var HOUSE_FROM_MOON = [null, 'calm, confident', 'money worry, sharp words', 'motivated, brave', 'restless, unsettled', 'overthinking, impulsive', 'disciplined, beats obstacles', 'social, agreeable', 'anxious, sensitive, go slow', 'doubtful, delays, tired', 'focused, achieving', 'gains, support, optimistic', 'drained, withdrawn, spend less'];
+var MOON_FAVORABLE_HOUSES = [1, 3, 6, 7, 10, 11];
+
+function overallOutlook(dignity, houseFromMoon) {
+    var score = (MOON_FAVORABLE_HOUSES.indexOf(houseFromMoon) >= 0 ? 1 : -1) +
+        (dignity === 'strong' ? 1 : dignity === 'strained' ? -1 : 0);
+    return score >= 1 ? '🟢 Supportive' : score === 0 ? '🟡 Mixed' : '🟠 Go gently';
+}
+
 function renderHouseLines(rashiIndex) {
     var el = document.getElementById('nowHouses');
     var chart = loadUserChart();
+    var dignity = MOON_DIGNITY[rashiIndex];
+    var signLine = 'Moon in ' + rashiShort(RASHI_NAMES[rashiIndex]) + ' · ' +
+        (dignity === 'neutral' ? '' : dignity + ' · ') + SIGN_TONE[rashiIndex] + '<br>' +
+        'Best for: ' + SIGN_GOOD[rashiIndex] + ' · Watch: ' + SIGN_WATCH[rashiIndex] + '<br>';
     if (!chart) {
-        el.innerHTML = '<div class="hint">Set your Moon sign &amp; Ascendant in ⚙️ Settings to see which house the Moon is transiting for you.</div>';
+        el.innerHTML = signLine + '<div class="hint">Set your Moon sign &amp; Ascendant in ⚙️ Settings to see which house the Moon is transiting for you.</div>';
         return;
     }
     var houseFromMoon = houseFromReference(rashiIndex, chart.moonSignIndex);
     var houseFromAsc = houseFromReference(rashiIndex, chart.ascSignIndex);
-    el.innerHTML =
-        'From Moon sign - ' + ordinal(houseFromMoon) + ' house<br>' +
-        'From Asc - ' + ordinal(houseFromAsc) + ' house';
+    var favorable = MOON_FAVORABLE_HOUSES.indexOf(houseFromMoon) >= 0;
+    el.innerHTML = signLine +
+        'From Moon sign - ' + ordinal(houseFromMoon) + ' house · ' + HOUSE_FROM_MOON[houseFromMoon] + (favorable ? ' ✅' : ' ⚠️') + '<br>' +
+        'From Asc - ' + ordinal(houseFromAsc) + ' house · ' + HOUSE_FROM_ASC[houseFromAsc].area + '<br>' +
+        'Good for: ' + HOUSE_FROM_ASC[houseFromAsc].good + ' · Watch: ' + HOUSE_FROM_ASC[houseFromAsc].watch + '<br>' +
+        'Overall: ' + overallOutlook(dignity, houseFromMoon);
 }
 
 function loadLogs() {
