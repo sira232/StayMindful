@@ -215,6 +215,24 @@ or apply that file's conventions here (e.g. `%USERPROFILE%\<Name>.ps1` external 
     Virgo + Ascendant Sagittarius + transiting Moon in Virgo example). If no chart is saved yet, shows a hint
     pointing at the ⚙️ Settings button instead. Recomputed every `updateNowPanel()` tick
     (60s) and immediately after Save.
+  - **Selected-day view (v36)**: `updateNowPanel()` uses `getViewMoment()`, so tapping a day
+    in the week grid (or the calendar heatmap) updates both the top panel and the Moon Guide.
+    Today = live current time; any other day = local-noon preview (labelled "preview"). A
+    "Changes this day" guide box lists Moon sign / nakshatra / tithi change times from
+    `moonEventsForDay()` (10-min scan + bisection, ~1 min accuracy; the top panel shows the
+    day's sign ingress in `#nowChange`). Week navigation has no limit in either direction.
+    `guideSig` includes the viewed day.
+  - **Partner (optional, v37)**: ⚙️ Settings → "Partner (optional)" (`chkPartner`, name,
+    `selPartnerMoon`, `selPartnerAsc`) saves `mindfulMoonPartner.v1`
+    `{name, moonSignIndex, ascSignIndex}` (in `SAFE_KEYS`, so backed up/restored; unticking
+    removes it). Single users see no change. With a partner: the top panel adds a partner
+    line, and the Moon Guide gets You | Partner | Together tabs (`guideTab`, tab clicks
+    delegated on `#guideBody`; `guideSig` includes partner + tab). `personBoxes()` renders
+    either person; `togetherBox()` shows both houses side by side, a combined verdict
+    (both favorable / both challenging / one needs patience), each Ascendant area, and the
+    natal Moon-sign relation via `MOON_PAIR` (1/7, 3/11, 4/10 harmonious; 2/12, 5/9, 6/8
+    "needs care" per bhakoot; sign-only, not full Ashta-koota). Partner name is user text,
+    so always pass it through `escHtml()`.
   - **Location setting** (same ⚙️ Settings panel, above the chart fields): a plain text
     input (`#inpLocation`, e.g. "Mount Hope, Hamilton, ON, Canada") that's geocoded on Save
     via the free **Open-Meteo Geocoding API** (`geocoding-api.open-meteo.com/v1/search`, no
@@ -319,10 +337,9 @@ or apply that file's conventions here (e.g. `%USERPROFILE%\<Name>.ps1` external 
     same as TimeZync's icons) — a purple-gradient circle with a cream crescent moon and a
     yellow smiley face overlapping it. Regenerate the same way if the icon design changes.
   - **`service-worker.js`** — minimal cache-first service worker, same shape as TimeZync's.
-    `CACHE_NAME` is currently `mindful-moon-tracker-v36` (v36: top panel + Moon Guide follow the day selected in the
-     week view — today is live, other days are a noon preview with sign/nakshatra/tithi change
-     times from `moonEventsForDay()`; week navigation is unlimited in both directions)
-     (v29-v35: data-safety/backup
+    `CACHE_NAME` is currently `mindful-moon-tracker-v37` (v37: optional partner and Together tab;
+    v36: Moon panel/guide follow the selected day; see the bullets above)
+    (v29-v35: data-safety/backup
     features, Moon Guide at the bottom, BPHS-aligned Moon-house wording and the waning-Moon
     (Krishna Paksha) note — see the Storage and Moon Guide bullets above) (changelog since v18: v19 added the
     Tithi (lunar day) feature — `sunTropicalLongitude`/`kepler` ported from
