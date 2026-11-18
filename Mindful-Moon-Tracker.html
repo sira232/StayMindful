@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Stay Mindful</title>
 <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#0a0d26">
+<meta name="theme-color" content="#f7f1e3">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -500,213 +500,111 @@
     .guide .g-bar-fill { height: 100%; background: linear-gradient(90deg, #a78bfa, #6d28d9); }
 
     /* =====================================================================
-       COSMIC NIGHT THEME (v46): dark indigo sky, starfield, glass cards,
-       glowing accents. Appended last so it overrides the light styles above.
+       LUXE DAY (v48): ivory & champagne-gold, serif display type, airy spacing.
+       Appended last so it overrides the base styles above.
        ===================================================================== */
-    :root { color-scheme: dark; --tx: #eceeff; --tx2: #b7bce3; --tx3: #858dbd; --glass: rgba(255,255,255,.06); --glass2: rgba(255,255,255,.10); --line: rgba(255,255,255,.13); --acc: #a78bfa; --acc2: #67e8f9; --gold: #fbbf24; }
-    body {
-        color: var(--tx);
-        background-color: #080b22;
-        background-image:
-            radial-gradient(900px 520px at 8% -6%, rgba(124,92,255,.40), transparent 62%),
-            radial-gradient(800px 500px at 100% 18%, rgba(34,211,238,.15), transparent 62%),
-            radial-gradient(900px 600px at 50% 112%, rgba(236,72,153,.20), transparent 62%),
-            linear-gradient(180deg, #0a0d26, #0d1131);
-        background-attachment: fixed;
-    }
-    body::before, body::after { content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 0; }
-    body::before {
-        background-image:
-            radial-gradient(1.2px 1.2px at 6% 9%, #fff, transparent), radial-gradient(1px 1px at 14% 34%, #cfd6ff, transparent),
-            radial-gradient(1.6px 1.6px at 22% 62%, #fff, transparent), radial-gradient(1px 1px at 31% 14%, #fff, transparent),
-            radial-gradient(1.3px 1.3px at 38% 82%, #dbe0ff, transparent), radial-gradient(1px 1px at 47% 41%, #fff, transparent),
-            radial-gradient(1.5px 1.5px at 55% 7%, #fff, transparent), radial-gradient(1px 1px at 63% 70%, #cfd6ff, transparent),
-            radial-gradient(1.2px 1.2px at 71% 26%, #fff, transparent), radial-gradient(1.6px 1.6px at 79% 91%, #fff, transparent),
-            radial-gradient(1px 1px at 86% 52%, #dbe0ff, transparent), radial-gradient(1.3px 1.3px at 93% 18%, #fff, transparent),
-            radial-gradient(1px 1px at 11% 88%, #fff, transparent), radial-gradient(1.2px 1.2px at 96% 74%, #cfd6ff, transparent);
-        animation: twinkle 5s ease-in-out infinite alternate;
-    }
-    body::after {
-        background-image:
-            radial-gradient(1.4px 1.4px at 9% 47%, #fff, transparent), radial-gradient(1px 1px at 19% 76%, #fff, transparent),
-            radial-gradient(1.2px 1.2px at 27% 4%, #cfd6ff, transparent), radial-gradient(1.6px 1.6px at 42% 58%, #fff, transparent),
-            radial-gradient(1px 1px at 58% 33%, #fff, transparent), radial-gradient(1.3px 1.3px at 67% 12%, #dbe0ff, transparent),
-            radial-gradient(1px 1px at 74% 60%, #fff, transparent), radial-gradient(1.5px 1.5px at 89% 36%, #fff, transparent),
-            radial-gradient(1.2px 1.2px at 3% 66%, #fff, transparent), radial-gradient(1px 1px at 51% 95%, #cfd6ff, transparent);
-        animation: twinkle 7s ease-in-out -3s infinite alternate;
-    }
-    @keyframes twinkle { from { opacity: .35; } to { opacity: 1; } }
-    @keyframes tabIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
-    @keyframes orbGlow { 0%,100% { filter: drop-shadow(0 0 8px rgba(226,232,255,.55)); } 50% { filter: drop-shadow(0 0 18px rgba(226,232,255,.9)); } }
-    @keyframes sheen { from { background-position: 0% 50%; } to { background-position: 200% 50%; } }
-    @media (prefers-reduced-motion: reduce) { body::before, body::after, .now-orb, .tab-page.active, .now-panel::after { animation: none !important; } }
+    :root { --ink: #1c1730; --ink2: #5d5670; --mute: #8c8372; --ivory: #fbf7ee; --paper: #fffdf8; --gold1: #ecd48f; --gold2: #c29b3d; --gold3: #8f6d1f; --hair: rgba(194,155,61,.28); --serif: "Cormorant Garamond", "Playfair Display", "Palatino Linotype", Georgia, serif; --sans: "Segoe UI Variable Text", "Segoe UI", system-ui, sans-serif; }
+    body { font-family: var(--sans); color: var(--ink); background: radial-gradient(900px 500px at 0% -5%, #f3e6c4 0%, transparent 60%), radial-gradient(700px 500px at 100% 105%, #eadff7 0%, transparent 60%), var(--ivory); background-attachment: fixed; padding-top: 22px; }
+    .card { background: var(--paper); border: 1px solid var(--hair); border-radius: 26px; padding: 26px 20px 30px; box-shadow: 0 30px 70px rgba(80,60,20,.14), 0 2px 0 rgba(255,255,255,.9) inset; }
+    .header { margin-bottom: 22px; padding-bottom: 16px; border-bottom: 1px solid var(--hair); gap: 12px; }
+    .header .icon { width: 46px; height: 46px; border-radius: 16px; background: linear-gradient(145deg, #2b1a3d, #1a1030); box-shadow: 0 6px 16px rgba(43,26,61,.35), 0 0 0 1.5px var(--gold2) inset; }
+    h1 { font-family: var(--serif); font-size: 27px; font-weight: 700; letter-spacing: .02em; background: linear-gradient(90deg, #1c1730, #6b4f12 60%, #b8893a); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .weather-badge { background: transparent; border: 1px solid var(--hair); border-radius: 14px; }
+    .weather-badge .weather-label { color: var(--gold3); letter-spacing: .08em; }
+    .page-title { font-family: var(--serif); font-size: 28px; font-weight: 700; color: var(--ink); margin: 2px 0 18px; letter-spacing: .01em; }
+    .page-title::after { height: 1px; background: linear-gradient(90deg, var(--gold2), transparent); }
 
-    .card { position: relative; z-index: 1; background: rgba(15,19,50,.66); -webkit-backdrop-filter: blur(18px) saturate(150%); backdrop-filter: blur(18px) saturate(150%); border: 1px solid var(--line); box-shadow: 0 14px 60px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.08); }
-    .tab-page.active { animation: tabIn .38s cubic-bezier(.2,.8,.2,1); }
-    h1 { background: linear-gradient(90deg, #fff 0%, #d8ccff 50%, #67e8f9 100%); -webkit-background-clip: text; background-clip: text; color: transparent; letter-spacing: .01em; }
-    .header .icon { background: radial-gradient(circle at 35% 30%, #6d4fd6, #2a1f6e); box-shadow: 0 0 18px rgba(124,92,255,.55); }
-    .weather-badge { background: var(--glass2); border: 1px solid var(--line); }
-    .weather-badge .weather-label { color: var(--acc2); }
-    .settings-btn { background: var(--glass); border-color: var(--line); color: var(--tx); }
-    .settings-btn:active, .footer-btn:active, .week-nav-btn:active, .mood-btn:active { background: var(--glass2); }
+    /* panels */
+    .tab-page .settings-panel:not(.tr-hero):not(.mh-hero), #tab-transit .settings-panel.tr-card, .mh-card { background: #fff; border: 1px solid var(--hair); border-radius: 22px; padding: 18px 16px; margin-bottom: 18px; box-shadow: 0 10px 30px rgba(80,60,20,.07); }
+    .settings-panel .settings-title, .mh-card .settings-title, #tab-transit .tr-card .settings-title { font-family: var(--serif); font-size: 21px; font-weight: 700; color: var(--ink); letter-spacing: .01em; margin-bottom: 12px; }
+    #tab-transit .tr-card .settings-title::after { height: 1px; background: linear-gradient(90deg, var(--gold2), transparent); }
+    .section-title, .guide .g-sub, .pg-label, .mh-k, .mh-sub, .birth-head, .guide summary { font-family: var(--sans); font-size: 10.5px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--gold3); }
+    .settings-hint { color: var(--mute); font-size: 12px; line-height: 1.5; }
 
-    /* text colours */
-    .page-title, .section-title, .settings-panel .settings-title, .insight-badge, .insight-bar-row, .insight-month-nav, .house-pattern-group strong,
-    .week-day .wd-date, .history-entry .moon-info, .footer-btn, .week-nav-btn, .mood-btn .label, .guide .g-head, .guide .g-line b, .guide .g-box,
-    .guide .g-row, .cal-cell, #tab-transit .tr-vt, .mh-name, .mh-until, .pg-main, .mh-time, .tr-when button, .birth-res .birth-row, .privacy-box p, .privacy-box ul,
-    .settings-row input[type="text"], .settings-row select, .journal-textarea, .insight-range-row select, .birth-box input, .birth-box select { color: var(--tx); }
-    .settings-hint, .settings-row label, .week-nav .week-range, .week-day .wd-label, .history-date, .history-entry .time, .empty-hint, .guide .g-note,
-    .guide .g-sub, .insight-subtitle, .insight-range-row, .house-pattern-row, .cal-head, .mh-use, .mh-sub, .mh-k, .pg-label, .pg-sub, .mh-time small, .mh-name small, .pg-main small,
-    .tr-table th, .tr-table .tr-next, #tab-transit .tr-vh .tr-house, .birth-sub, .birth-res .birth-note, .tr-table td { color: var(--tx3); }
-    .tr-table td, .mh-name small { color: var(--tx2); }
-    .settings-hint.ok { color: #6ee7b7; } .settings-hint.error { color: #fca5a5; }
-    .page-title { text-shadow: 0 0 18px rgba(167,139,250,.5); }
-    .page-title::after { background: linear-gradient(90deg, rgba(167,139,250,.8), rgba(103,232,249,.4), transparent); }
-    .guide { border-top-color: var(--line); }
-    .insight-block { border-top-color: var(--line); }
-    .guide summary, .guide .g-num, .birth-box label, .birth-head, .birth-res .birth-row b { color: #c4b5fd; }
+    /* deep hero panels */
+    .now-panel, body .mh-hero, body #tab-transit .tr-hero { background: radial-gradient(500px 220px at 90% 0%, rgba(194,155,61,.28), transparent 60%), linear-gradient(135deg, #1c1030 0%, #2e1a45 60%, #3b1f3a 100%) !important; border: 1px solid var(--gold2) !important; border-radius: 24px; color: #f7efdb; box-shadow: 0 18px 40px rgba(43,26,61,.35), inset 0 1px 0 rgba(236,212,143,.35) !important; }
+    .now-panel { padding: 22px 20px; position: relative; overflow: hidden; }
+    .now-panel .now-moon { font-family: var(--serif); font-size: 30px; font-weight: 700; color: #fff6dc; letter-spacing: .01em; }
+    .now-panel .now-time, .now-panel .now-sub, .now-panel .now-houses { color: #d9cdb0; }
+    .now-panel .now-houses b { color: var(--gold1); }
+    .now-orb { filter: drop-shadow(0 0 14px rgba(236,212,143,.55)); }
+    body .mh-hero .mh-vara { font-family: var(--serif); font-size: 26px; color: #fff6dc; }
+    body .mh-hero .mh-suns span { background: rgba(236,212,143,.12); border: 1px solid rgba(236,212,143,.4); color: #f7efdb; }
+    .mh-loc { font-size: 12px; color: #d9cdb0; margin-top: 10px; }
+    body .mh-hero .tr-when input, body #tab-transit .tr-hero .tr-when input { background: rgba(0,0,0,.35) !important; color: #fff6dc !important; border: 1px solid rgba(236,212,143,.45) !important; border-radius: 12px; }
+    body .mh-hero .tr-when button, body #tab-transit .tr-hero .tr-when button { background: transparent !important; border: 1px solid rgba(236,212,143,.5) !important; color: var(--gold1) !important; border-radius: 12px; }
+    body .mh-hero .tr-when button#mhToday, body #tab-transit .tr-hero .tr-when button#trNow { background: linear-gradient(135deg, #f3dfa2, #c29b3d) !important; color: #2a1d05 !important; border: 0 !important; font-weight: 800; }
+    body #tab-transit .tr-hero .settings-hint { color: #d9cdb0; }
 
-    /* glass surfaces */
-    body .tab-page .settings-panel:not(.tr-hero):not(.mh-hero), body #tab-transit .settings-panel.tr-card, .tab-page .mh-card, .guide .g-box, .guide .g-box.asc, .guide .g-box.moon, .g-box.moon {
-        background: var(--glass); border: 1px solid var(--line); box-shadow: 0 8px 28px rgba(0,0,0,.28), inset 0 1px 0 rgba(255,255,255,.06); color: var(--tx);
-        -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
-    }
-    .guide .g-box.moon, .g-box.moon { background: linear-gradient(135deg, rgba(124,92,255,.20), rgba(34,211,238,.07)); }
-    .guide .g-box.asc { background: linear-gradient(135deg, rgba(34,211,238,.14), rgba(59,130,246,.08)); }
-    .guide .g-box.g-profile { background: linear-gradient(135deg, rgba(124,92,255,.55), rgba(217,70,239,.35)); border-color: rgba(196,181,253,.45); box-shadow: 0 0 28px rgba(124,92,255,.35); }
-    body #tab-transit .settings-panel.tr-card .settings-title, .mh-card .settings-title { color: #d8ccff; }
-    #tab-transit .tr-card .settings-title::after { background: linear-gradient(90deg, rgba(167,139,250,.6), transparent); }
-    body #tab-transit .settings-panel.tr-hero { background: linear-gradient(135deg, #3a2a9c 0%, #6d3fd1 55%, #b044d6 100%); box-shadow: 0 8px 30px rgba(124,92,255,.5); }
-    .mh-hero { background: linear-gradient(135deg, #8a2d0c 0%, #b4213f 50%, #4c1d95 100%); box-shadow: 0 8px 30px rgba(225,29,72,.38); }
-    .mh-nowcard { background: linear-gradient(135deg, rgba(251,191,36,.16), rgba(124,92,255,.14)) !important; border-color: rgba(251,191,36,.4) !important; box-shadow: 0 0 26px rgba(251,191,36,.18) !important; }
-    .tr-when input { background: rgba(255,255,255,.1); border: 1px solid var(--line); color: var(--tx); }
-    .tr-when button { background: var(--glass2); border-color: var(--line); }
-    #tab-transit .tr-hero .tr-when input, .mh-hero .tr-when input { background: rgba(8,11,34,.55); color: #fff; border-color: rgba(255,255,255,.25); }
-    #tab-transit .tr-hero .tr-when button#trNow { background: #fff; color: #4c1d95; }
-    .mh-hero .tr-when button#mhToday { background: #fff; color: #9f1239; }
-    #tab-transit .tr-chart { background: radial-gradient(circle at 50% 40%, rgba(124,92,255,.22) 0%, rgba(8,11,34,.5) 100%); border: 1px solid var(--line); }
-    #tab-transit .tr-table th { background: rgba(167,139,250,.14); color: #c4b5fd; }
-    #tab-transit .tr-table tr:nth-child(even) td { background: rgba(255,255,255,.035); }
-    .tr-table td { border-bottom-color: rgba(255,255,255,.06); }
-    #tab-transit .tr-vrow { border-bottom-color: var(--line); }
-    #tab-transit .tr-vrow.no { border-left-color: rgba(255,255,255,.2); }
-    .g-valid { background: rgba(167,139,250,.16); color: #cbbffc; border: 1px solid rgba(167,139,250,.25); }
-    .g-valid b { color: #fff; }
+    /* moods */
+    .mood-row { gap: 10px; }
+    .mood-btn { background: #fff; border: 1px solid var(--hair); border-radius: 18px; box-shadow: 0 6px 16px rgba(80,60,20,.06); padding: 12px 4px 10px; transition: transform .15s ease, box-shadow .15s ease; }
+    .mood-btn:hover, .mood-btn:active { transform: translateY(-2px); box-shadow: 0 10px 22px rgba(194,155,61,.25); border-color: var(--gold2); }
+    .mood-btn .label { color: var(--ink2); font-size: 11px; letter-spacing: .02em; }
+    .section-title { margin: 26px 0 12px; }
+
+    /* nav */
+    .bottom-nav { background: rgba(255,253,248,.92); -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px); border-top: 1px solid var(--hair); box-shadow: 0 -10px 30px rgba(80,60,20,.08); }
+    .nav-btn { color: var(--mute); letter-spacing: .03em; }
+    .nav-btn.on { color: var(--ink); }
+    .nav-btn.on::before { left: 30%; right: 30%; height: 2px; background: linear-gradient(90deg, var(--gold1), var(--gold2), var(--gold1)); }
 
     /* inputs & buttons */
-    .settings-row input[type="text"], .settings-row select, .journal-textarea, .insight-range-row select, .birth-box input[type="date"], .birth-box input[type="time"], .birth-box input[type="text"], .birth-box select {
-        background: rgba(8,11,34,.55); border: 1.5px solid var(--line); color: var(--tx);
-    }
-    .settings-row input:focus, .settings-row select:focus, .journal-textarea:focus, .birth-box input:focus, .birth-box select:focus, .tr-when input:focus { outline: none; border-color: var(--acc); box-shadow: 0 0 0 3px rgba(167,139,250,.28); }
-    ::placeholder { color: var(--tx3); }
-    .footer-btn, .week-nav-btn { background: var(--glass); border-color: var(--line); transition: transform .12s ease, box-shadow .15s ease, background .15s ease; }
-    .footer-btn:hover, .week-nav-btn:hover { background: var(--glass2); }
-    .footer-btn.primary { background: linear-gradient(135deg, #7c5cff, #c026d3); border: 0; color: #fff; box-shadow: 0 6px 20px rgba(124,92,255,.5); }
-    .footer-btn.primary:active { transform: scale(.97); }
-    .footer-btn.danger { color: #fca5a5; }
-    .week-nav-btn:disabled { color: rgba(255,255,255,.25); }
-    .safe-banner { background: rgba(251,191,36,.14); color: #fde68a; border: 1px solid rgba(251,191,36,.35); }
-    .toast { background: rgba(52,211,153,.14); border-color: rgba(52,211,153,.4); color: #6ee7b7; }
+    .settings-row input[type="text"], .settings-row select, .journal-textarea, .birth-box input, .birth-box select, .insight-range-row select { background: #fffcf5; border: 1px solid var(--hair); border-radius: 12px; color: var(--ink); }
+    .settings-row input:focus, .settings-row select:focus, .journal-textarea:focus, .birth-box input:focus, .birth-box select:focus { outline: none; border-color: var(--gold2); box-shadow: 0 0 0 3px rgba(194,155,61,.2); }
+    .tr-when input { border: 1px solid var(--hair); background: #fffcf5; }
+    .footer-btn { border: 1px solid var(--hair); background: #fff; color: var(--ink); border-radius: 12px; }
+    .footer-btn.primary { background: linear-gradient(135deg, #2b1a3d, #1a1030); color: var(--gold1); border: 1px solid var(--gold2); }
 
-    /* home */
-    .now-panel { position: relative; overflow: hidden; background: linear-gradient(135deg, #2e1a86 0%, #5b34c9 55%, #b43ad0 125%); border: 1px solid rgba(196,181,253,.35); box-shadow: 0 10px 36px rgba(109,63,209,.55), inset 0 1px 0 rgba(255,255,255,.2); }
-    .now-panel::after { content: ""; position: absolute; inset: 0; background: linear-gradient(110deg, transparent 30%, rgba(255,255,255,.10) 50%, transparent 70%); background-size: 200% 100%; animation: sheen 7s linear infinite; pointer-events: none; }
-    .now-panel .now-time, .now-panel .now-moon, .now-panel .now-sub { padding-right: 86px; }
-    .now-panel .now-moon { font-size: 19px; font-weight: 800; text-shadow: 0 0 16px rgba(255,255,255,.35); }
-    .now-orb { position: absolute; top: 14px; right: 14px; width: 70px; height: 70px; animation: orbGlow 4.5s ease-in-out infinite; z-index: 1; }
-    .mood-btn { background: var(--glass); border-color: var(--line); transition: transform .15s ease, box-shadow .2s ease, border-color .2s ease; }
-    .mood-btn:hover { border-color: var(--acc); box-shadow: 0 0 18px rgba(167,139,250,.4); transform: translateY(-2px); }
-    .mood-btn:active { transform: scale(.94); }
-    .week-day { background: var(--glass); border-color: var(--line); }
-    .week-day.is-today { background: rgba(167,139,250,.18); border-color: var(--acc); }
-    .week-day.is-selected { background: rgba(167,139,250,.28); box-shadow: 0 0 0 1.5px var(--acc) inset, 0 0 18px rgba(167,139,250,.4); }
-    .history-entry { border-bottom-color: rgba(255,255,255,.07); }
-    .history-entry .del-btn { color: var(--tx3); }
-    .insight-bar-row .bar { background: linear-gradient(90deg, #7c5cff, #67e8f9); box-shadow: 0 0 10px rgba(124,92,255,.5); }
-    .cal-cell { background: rgba(255,255,255,.07); }
-    .cal-cell.cal-empty { background: rgba(255,255,255,.04); color: var(--tx3); }
-    .cal-cell[style*="background"] { color: #0f172a; font-weight: 700; }
-    .cal-cell.cal-today { box-shadow: 0 0 0 1.5px var(--gold) inset, 0 0 10px rgba(251,191,36,.5); }
-    .cal-head { color: var(--tx3); }
+    /* week & calendar */
+    .week-day { border-radius: 16px; border: 1px solid var(--hair); background: #fff; }
+    .week-day.is-selected { background: linear-gradient(160deg, #fff7de, #fff); box-shadow: 0 0 0 1.5px var(--gold2) inset, 0 8px 18px rgba(194,155,61,.25); }
 
     /* guide */
-    .guide .g-tab { background: var(--glass); border-color: var(--line); color: var(--tx2); }
-    .guide .g-tab.on { background: linear-gradient(135deg, #7c5cff, #c026d3); color: #fff; border-color: transparent; box-shadow: 0 4px 16px rgba(124,92,255,.5); }
-    .guide .g-row:nth-child(even) { background: rgba(255,255,255,.03); }
-    .guide .g-row.now-asc { background: rgba(34,211,238,.16); }
-    .guide .g-row.now-moon { background: rgba(167,139,250,.22); }
-    .guide .g-row.now-asc.now-moon { background: linear-gradient(90deg, rgba(34,211,238,.2), rgba(167,139,250,.25)); }
-    .guide .g-bar { background: rgba(255,255,255,.1); }
-    .guide .g-bar-fill { background: linear-gradient(90deg, #67e8f9, #a78bfa, #e879f9); box-shadow: 0 0 10px rgba(167,139,250,.6); }
-    .guide .chip.strong, .guide .chip.good, .mh-chip.good, .mh-tag.ok { background: rgba(52,211,153,.16); color: #6ee7b7; }
-    .guide .chip.comfortable { background: rgba(45,212,191,.16); color: #5eead4; }
-    .guide .chip.neutral, .guide .chip.mixed, .mh-chip.mid { background: rgba(255,255,255,.09); color: #c7cbe8; }
-    .guide .chip.strained, .guide .chip.gentle, .mh-chip.bad, .mh-tag.warn { background: rgba(251,146,60,.16); color: #fdba74; }
-    .mh-tag { background: rgba(167,139,250,.16); color: #cbbffc; }
-    .pg-ic { background: var(--glass2); box-shadow: 0 0 14px rgba(124,92,255,.35); }
-    .pg-row { border-top-color: var(--line); }
-    .pg-tag { background: rgba(255,255,255,.07); border-color: var(--line); color: #cbbffc; }
-    .gr-chip { box-shadow: 0 0 12px rgba(255,255,255,.12); }
-    .mh-row { background: var(--glass); border-left-width: 4px; box-shadow: inset 0 0 0 1px rgba(255,255,255,.05); }
-    .mh-row.cur { background: rgba(251,191,36,.14); box-shadow: 0 0 0 1.5px rgba(251,191,36,.75), 0 0 20px rgba(251,191,36,.28); }
-    .mh-warn { background: rgba(251,146,60,.16); color: #fdba74; border: 1px solid rgba(251,146,60,.3); }
-    .mh-suns span, .g-profile .g-pchips span { background: rgba(255,255,255,.16); backdrop-filter: blur(4px); }
+    .guide .g-box, .guide .g-box.asc, .guide .g-box.moon { background: #fff; border: 1px solid var(--hair); border-radius: 22px; padding: 18px 16px; margin-bottom: 16px; box-shadow: 0 10px 28px rgba(80,60,20,.07); }
+    .guide .g-box.moon { background: linear-gradient(160deg, #fff9e8, #fff); }
+    .guide .g-box.asc { background: linear-gradient(160deg, #f4f1fb, #fff); }
+    .guide .g-box.g-profile, .g-profile { background: linear-gradient(135deg, #1c1030, #2e1a45) !important; border: 1px solid var(--gold2) !important; color: #f7efdb; }
+    .g-profile .g-pname { font-family: var(--serif); font-size: 26px; color: #fff6dc; }
+    .g-profile .g-sub, .g-profile .g-line b { color: var(--gold1); }
+    .guide .g-tab { border: 1px solid var(--hair); background: #fff; border-radius: 14px; color: var(--ink2); }
+    .guide .g-tab.on { background: linear-gradient(135deg, #2b1a3d, #1a1030); color: var(--gold1); border-color: var(--gold2); }
+    .pg-row { padding: 14px 0; border-top: 1px solid var(--hair); }
+    .pg-ic { box-shadow: 0 0 0 1px var(--hair), 0 4px 10px rgba(80,60,20,.08); }
+    .pg-main { font-family: var(--serif); font-size: 22px; font-weight: 700; color: var(--ink); }
+    .pg-tag { background: #fffcf5; border-color: var(--hair); color: var(--ink2); }
+    .g-valid { background: transparent; color: var(--mute); padding: 0; font-size: 11.5px; }
+    .g-valid b { color: var(--ink); }
+    .guide .g-note, #tab-transit .tr-card > .settings-hint, #tab-transit #trVedha ~ .settings-hint, .tab-page#tab-transit .settings-hint:not(#trMeta) { display: none; }
+    .mh-need { font-size: 12px; color: var(--mute); padding: 4px 2px; }
 
-    /* settings extras */
-    .privacy-box { background: linear-gradient(135deg, rgba(52,211,153,.14), rgba(34,211,238,.08)); border-color: rgba(52,211,153,.35); }
-    .privacy-box .privacy-head { color: #6ee7b7; }
-    .birth-box { background: linear-gradient(135deg, rgba(124,92,255,.18), rgba(34,211,238,.08)); border-color: rgba(167,139,250,.35); }
-    .birth-res { background: rgba(52,211,153,.10); border-color: rgba(52,211,153,.35); border-left-color: #34d399; }
-    .birth-res .birth-title { color: #6ee7b7; }
-    .birth-res .birth-warn { background: rgba(251,191,36,.14); color: #fde68a; }
-    .birth-or { color: var(--tx3); }
-    .birth-or::before, .birth-or::after { background: var(--line); }
-
-    /* bottom nav */
-    .bottom-nav { background: rgba(10,13,38,.78); -webkit-backdrop-filter: blur(18px) saturate(160%); backdrop-filter: blur(18px) saturate(160%); border-top: 1px solid var(--line); box-shadow: 0 -8px 30px rgba(0,0,0,.4); }
-    .nav-btn { color: var(--tx3); }
-    .nav-btn.on { color: #fff; }
-    .nav-btn.on::before { background: linear-gradient(90deg, #67e8f9, #a78bfa, #e879f9); box-shadow: 0 0 12px rgba(167,139,250,.9); }
-    .nav-btn.on .ni { filter: drop-shadow(0 0 8px rgba(167,139,250,.95)); }
-    ::-webkit-scrollbar { width: 8px; height: 8px; } ::-webkit-scrollbar-thumb { background: rgba(167,139,250,.35); border-radius: 8px; }
-
-    /* ROYAL LUXE (v47): midnight black-navy with champagne-gold accents, serif headings, hairline gold borders */
-    :root { --gold1: #f3dfa2; --gold2: #d4af37; --gold3: #9a7b2c; --line: rgba(212,175,55,.20); --acc: #e6c76a; --glass: rgba(255,255,255,.045); --tx3: #9096bd; }
-    body { background-image: radial-gradient(900px 520px at 8% -6%, rgba(88,64,170,.30), transparent 62%), radial-gradient(800px 500px at 100% 20%, rgba(212,175,55,.10), transparent 62%), radial-gradient(900px 600px at 50% 112%, rgba(120,30,70,.22), transparent 62%), linear-gradient(180deg, #06081a, #0a0d26); }
-    .card { border: 1px solid rgba(212,175,55,.28); box-shadow: 0 18px 70px rgba(0,0,0,.65), 0 0 0 1px rgba(212,175,55,.06), inset 0 1px 0 rgba(243,223,162,.14); }
-    h1, .page-title, .settings-title, .mh-card .settings-title, body #tab-transit .settings-panel.tr-card .settings-title { font-family: Georgia, "Palatino Linotype", "Times New Roman", serif; }
-    h1 { background: linear-gradient(90deg, #fff6d6 0%, #e6c76a 55%, #b8923a 100%); -webkit-background-clip: text; background-clip: text; color: transparent; letter-spacing: .04em; }
-    .page-title { color: var(--gold1); letter-spacing: .04em; text-shadow: 0 0 20px rgba(212,175,55,.35); }
-    .page-title::after { background: linear-gradient(90deg, rgba(212,175,55,.75), rgba(212,175,55,.08), transparent); }
-    body #tab-transit .settings-panel.tr-card .settings-title, .mh-card .settings-title, .settings-panel .settings-title, .guide summary, .birth-head { color: var(--gold1); letter-spacing: .02em; }
-    #tab-transit .tr-card .settings-title::after { background: linear-gradient(90deg, rgba(212,175,55,.6), transparent); }
-    body .tab-page .settings-panel:not(.tr-hero):not(.mh-hero), body #tab-transit .settings-panel.tr-card, .tab-page .mh-card, .guide .g-box { border: 1px solid rgba(212,175,55,.20); background: linear-gradient(160deg, rgba(255,255,255,.06), rgba(255,255,255,.02)); box-shadow: 0 10px 30px rgba(0,0,0,.35), inset 0 1px 0 rgba(243,223,162,.10); }
-    body .tab-page .settings-panel.mh-hero, body #tab-transit .settings-panel.tr-hero { background: linear-gradient(135deg, #1a0f2e 0%, #2a1236 55%, #3a1a2c 100%) !important; border: 1px solid rgba(212,175,55,.55) !important; box-shadow: 0 10px 34px rgba(0,0,0,.5), 0 0 26px rgba(212,175,55,.16), inset 0 1px 0 rgba(243,223,162,.25) !important; color: #f6efdc !important; }
-    body .mh-hero .mh-vara, body .mh-hero .mh-suns span { color: #f6efdc; }
-    body .mh-hero .mh-suns span { background: rgba(212,175,55,.14); border: 1px solid rgba(212,175,55,.35); }
-    body .mh-hero .settings-hint, body #tab-transit .tr-hero .settings-hint { color: #d9cfb4 !important; }
-    body .mh-hero .tr-when input, body #tab-transit .tr-hero .tr-when input { background: rgba(0,0,0,.4) !important; color: #f6efdc !important; border: 1px solid rgba(212,175,55,.4) !important; }
-    body .mh-hero .tr-when button, body #tab-transit .tr-hero .tr-when button { background: rgba(212,175,55,.12) !important; border: 1px solid rgba(212,175,55,.45) !important; color: var(--gold1) !important; }
-    body .mh-hero .tr-when button#mhToday, body #tab-transit .tr-hero .tr-when button#trNow { background: linear-gradient(135deg, #f3dfa2, #c9a02f) !important; color: #2a1d05 !important; border: 0 !important; font-weight: 800; }
-    .mh-nowcard { background: linear-gradient(135deg, rgba(212,175,55,.16), rgba(124,92,255,.10)) !important; border-color: rgba(212,175,55,.5) !important; box-shadow: 0 0 28px rgba(212,175,55,.16) !important; }
-    .mh-row.cur { background: rgba(212,175,55,.15); box-shadow: 0 0 0 1.5px rgba(212,175,55,.8), 0 0 20px rgba(212,175,55,.25); }
-    .mh-now { background: linear-gradient(135deg, #f3dfa2, #c9a02f); color: #2a1d05; font-weight: 800; }
-    .mh-time { color: var(--gold1); }
-    .mh-k, .mh-sub { color: #c9b57a; }
-    .mh-mrow { display: flex; align-items: center; gap: 8px; padding: 6px 8px; border-radius: 10px; border-left: 3px solid var(--c); background: var(--glass); margin-bottom: 4px; }
-    .mh-mrow.cur { background: rgba(212,175,55,.15); box-shadow: 0 0 0 1.5px rgba(212,175,55,.8); }
-    .mh-mrow .mh-time { flex: 0 0 92px; font-size: 11px; }
-    .mh-mrow .mh-main { display: flex; flex-direction: column; gap: 3px; }
-    .mh-mrow .mh-name { font-size: 12.5px; }
-    .mh-mrow .mh-tags { margin: 0; gap: 3px; }
-    .mh-mrow .mh-tag { font-size: 10px; padding: 0 6px; }
+    /* muhurta rows */
+    .mh-row, .mh-mrow { background: #fffcf5; border-radius: 14px; padding: 10px 12px; margin-bottom: 8px; box-shadow: inset 0 0 0 1px rgba(194,155,61,.14); }
+    .mh-row.cur, .mh-mrow.cur { background: linear-gradient(135deg, #fff4d2, #fffaf0); box-shadow: 0 0 0 1.5px var(--gold2), 0 8px 20px rgba(194,155,61,.25); }
+    .mh-time { color: var(--ink); font-weight: 700; }
+    .mh-now { background: linear-gradient(135deg, #f3dfa2, #c29b3d); color: #2a1d05; font-weight: 800; letter-spacing: .06em; }
+    .mh-name { font-family: var(--serif); font-size: 18px; color: var(--ink); }
+    .mh-use { display: none; }
+    .mh-nowcard { background: linear-gradient(135deg, #fff7de, #fff) !important; border-color: var(--gold2) !important; }
+    .mh-until { font-family: var(--serif); font-size: 18px; }
+    .mh-mrow { display: flex; align-items: center; gap: 8px; border-left: 3px solid var(--c); }
+    .mh-mrow .mh-time { flex: 0 0 96px; font-size: 11.5px; }
+    .mh-mrow .mh-main { display: flex; flex-direction: column; gap: 4px; flex: 1; min-width: 0; }
+    .mh-mrow .mh-tags { margin: 0; }
     .mh-mrow .mh-chip { flex: 0 0 auto; }
-    .nav-btn.on { color: var(--gold1); }
-    .nav-btn.on::before { background: linear-gradient(90deg, transparent, #f3dfa2, #d4af37, #f3dfa2, transparent); box-shadow: 0 0 12px rgba(212,175,55,.9); }
-    .nav-btn.on .ni { filter: drop-shadow(0 0 8px rgba(212,175,55,.9)); }
-    .bottom-nav { border-top: 1px solid rgba(212,175,55,.3); background: rgba(6,8,24,.88); }
-    .settings-row input:focus, .settings-row select:focus, .journal-textarea:focus, .birth-box input:focus, .birth-box select:focus, .tr-when input:focus { border-color: var(--gold2); box-shadow: 0 0 0 3px rgba(212,175,55,.25); }
-    ::-webkit-scrollbar-thumb { background: rgba(212,175,55,.35); }
+
+    /* transit */
+    #tab-transit .tr-chart { background: radial-gradient(circle at 50% 40%, #fffdf7, #f8efd8); border: 1px solid var(--hair); border-radius: 18px; }
+    #tab-transit .tr-table th { background: #f8efd8; color: var(--gold3); letter-spacing: .12em; }
+    #tab-transit .tr-table td { padding: 10px 5px; }
+    #tab-transit .tr-table tr:nth-child(even) td { background: #fffcf5; }
+    .tr-table td, .tr-table th { border-bottom-color: rgba(194,155,61,.15); }
+    .birth-box { background: linear-gradient(160deg, #fff9e8, #fff); border: 1px solid var(--hair); border-radius: 18px; }
+    .birth-box label { color: var(--gold3); }
+    .week-nav-btn { border: 1px solid var(--hair); background: #fff; color: var(--ink2); border-radius: 12px; }
+    .guide .g-bar-fill { background: linear-gradient(90deg, var(--gold1), var(--gold2)); }
+    .week-day.is-today .wd-date { color: var(--gold3); }
+    ::-webkit-scrollbar-thumb { background: rgba(194,155,61,.4); border-radius: 8px; }
 </style>
 </head>
 <body>
@@ -730,7 +628,7 @@
     <div class="page-title">⚙️ Settings</div>
     <div class="settings-panel">
         <div class="settings-title">📍 Location</div>
-        <div class="settings-hint">Used for the weather badge and your local time.</div>
+        
         <div class="settings-row">
             <label for="inpLocation">City, Region, Country</label>
             <input type="text" id="inpLocation" placeholder="e.g. Mount Hope, Hamilton, ON, Canada">
@@ -755,7 +653,7 @@
             <label for="selNak">Your Birth Nakshatra (optional)</label>
             <select id="selNak"></select>
         </div>
-        <div class="settings-hint">Adds Tarabala (nakshatra-based strength of the day) to your guide. Only nakshatras inside your Moon sign are listed.</div>
+        
         <div class="settings-row">
             <label for="selAscSign">Your Ascendant (Lagna)</label>
             <select id="selAscSign"></select>
@@ -767,7 +665,7 @@
                 <option value="male">Male</option>
             </select>
         </div>
-        <div class="settings-hint">Shows the 🩸 Period activity button only for Female</div>
+        
 
     </div>
     <div class="settings-panel">
@@ -1585,9 +1483,10 @@ var TITHI_NAMES = ['Pratipada','Dwitiya','Tritiya','Chaturthi','Panchami','Shash
 // inauspicious ones are flagged bad.
 // VERSIONING: bump APP_VERSION + APP_BUILD (= service-worker CACHE_NAME number) and
 // add a line at the TOP of APP_CHANGELOG on every release.
-var APP_VERSION = '2.7.1';
-var APP_BUILD = 47;
+var APP_VERSION = '2.8.0';
+var APP_BUILD = 48;
 var APP_CHANGELOG = [
+    ['2.8.0', 'Luxe Day redesign: ivory & champagne-gold, serif display type, deep aubergine hero panels, airier cards, and far less explanatory text.'],
     ['2.7.1', 'Royal Luxe look: midnight navy with champagne-gold accents and serif headings; Muhurta header readable again; compact Moon Tara/Chandra bala card (Sampat, Vipat…) moved right under "Right now".'],
     ['2.7.0', 'Cosmic Night redesign: deep indigo starfield theme, glass cards, glowing accents, live moon-phase orb on Home, smooth tab transitions and a new glass navigation bar.'],
     ['2.6.0', 'New Muhurta tab: Hora, Choghadiya, Rahu Kaal/Yamaganda/Gulika, Abhijit and Moon nakshatra windows with your Tarabala and Chandrabala. Panchang at a glance redesigned, now with the ruling planet of tithi, yoga and karana.'],
@@ -2108,7 +2007,7 @@ function renderVedha(rows) {
     if (!el) { return; }
     var chart = loadUserChart();
     if (!chart) {
-        el.innerHTML = '<div class="settings-hint">Save your Moon sign in Settings to see Gochara and Vedha for you.</div>';
+        el.innerHTML = '<div class="mh-need">Save your Moon sign in Settings to see Gochara and Vedha for you.</div>';
         return;
     }
     var pos = {};
@@ -2134,7 +2033,7 @@ function renderVedha(rows) {
     el.innerHTML = html;
 }
 
-var TR_COLOR = { Lagna: '#7c5cff', Sun: '#f08a24', Moon: '#4aa8e0', Mars: '#ef4b4b', Mercury: '#2fb36b', Jupiter: '#d9a514', Venus: '#e8579b', Saturn: '#7488a0', Rahu: '#a24fd0', Ketu: '#c4703a' };
+var TR_COLOR = { Lagna: '#5b4b9a', Sun: '#e67e22', Moon: '#3a8fc9', Mars: '#e74c3c', Mercury: '#1f9d57', Jupiter: '#c79200', Venus: '#d6458a', Saturn: '#5d6d7e', Rahu: '#7d3c98', Ketu: '#a0522d' };
 function trBadge(name) {
     return '<span class="tr-dot" style="background:' + TR_COLOR[name] + '">' + TR_ABBR[name] + '</span>';
 }
@@ -2158,23 +2057,23 @@ function trSvg(rows) {
         (byHouse[h] = byHouse[h] || []).push(r);
     });
     var s = '<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="North Indian rashi chart" font-family="system-ui,sans-serif">' +
-        '<rect x="1" y="1" width="398" height="398" fill="#0b0d26" stroke="#c9a94f" stroke-width="2.5" rx="8"/>' +
-        '<g fill="#2a2440" opacity=".8"><polygon points="100,100 200,1 300,100 200,200"/><polygon points="100,100 1,200 100,300 200,200"/><polygon points="100,300 200,399 300,300 200,200"/><polygon points="300,100 399,200 300,300 200,200"/></g>' +
-        '<path d="M1 1L399 399M399 1L1 399M200 1L399 200L200 399L1 200Z" fill="none" stroke="#c9a94f" stroke-width="1.5"/>';
+        '<rect x="1" y="1" width="398" height="398" fill="#fffdf7" stroke="#b8943a" stroke-width="2.5" rx="8"/>' +
+        '<g fill="#f6ecd0" opacity=".8"><polygon points="100,100 200,1 300,100 200,200"/><polygon points="100,100 1,200 100,300 200,200"/><polygon points="100,300 200,399 300,300 200,200"/><polygon points="300,100 399,200 300,300 200,200"/></g>' +
+        '<path d="M1 1L399 399M399 1L1 399M200 1L399 200L200 399L1 200Z" fill="none" stroke="#b8943a" stroke-width="1.5"/>';
     for (var h = 1; h <= 12; h++) {
         var P = TR_HOUSE[h];
         var signNo = ((lagna.sign + h - 1) % 12) + 1;
-        s += '<text x="' + P.n[0] + '" y="' + P.n[1] + '" text-anchor="middle" dominant-baseline="middle" font-size="11" fill="#8088b8">' + signNo + '</text>';
+        s += '<text x="' + P.n[0] + '" y="' + P.n[1] + '" text-anchor="middle" dominant-baseline="middle" font-size="11" fill="#a39a82">' + signNo + '</text>';
         var items = (byHouse[h] || []).slice().sort(function (a, b) { return (a.name === 'Lagna' ? -1 : 0) - (b.name === 'Lagna' ? -1 : 0); });
         var lines = [];
         for (var i = 0; i < items.length; i += P.per) { lines.push(items.slice(i, i + P.per)); }
         var lh = 15, y0 = P.c[1] - (lines.length - 1) * lh / 2;
         lines.forEach(function (line, li) {
-            s += '<text x="' + P.c[0] + '" y="' + (y0 + li * lh) + '" text-anchor="middle" dominant-baseline="middle" font-size="12" fill="#e9ebff">';
+            s += '<text x="' + P.c[0] + '" y="' + (y0 + li * lh) + '" text-anchor="middle" dominant-baseline="middle" font-size="12" fill="#2b2418">';
             line.forEach(function (r, k) {
                 s += (k ? '<tspan dx="5">' : '<tspan>') +
                     '<tspan font-weight="700" fill="' + TR_COLOR[r.name] + '">' + TR_ABBR[r.name] + '</tspan> ' + r.deg + '°' +
-                    (r.retro ? '<tspan fill="#ff7b6b" font-weight="700" font-size="9"> R</tspan>' : '') + '</tspan>';
+                    (r.retro ? '<tspan fill="#c0392b" font-weight="700" font-size="9"> R</tspan>' : '') + '</tspan>';
             });
             s += '</text>';
         });
@@ -2379,7 +2278,7 @@ function renderMuhurta() {
         var yd = new Date(Date.UTC(ref.y, ref.m - 1, ref.d) - 86400000);
         sun = mhSunTimes(yd.getUTCFullYear(), yd.getUTCMonth() + 1, yd.getUTCDate(), loc) || sun;
     }
-    if (!sun) { body.innerHTML = '<div class="settings-panel mh-card"><div class="settings-hint">The Sun does not rise and set on this date at your location, so hora and choghadiya cannot be computed.</div></div>'; return; }
+    if (!sun) { body.innerHTML = '<div class="settings-panel mh-card"><div class="mh-need">The Sun does not rise and set on this date at your location, so hora and choghadiya cannot be computed.</div></div>'; return; }
     var inDay = function (s) { return now >= s.start && now < s.end; };
     var showNow = live;
     var dayLen = sun.set - sun.rise, nightLen = sun.next - sun.set;
@@ -2390,7 +2289,7 @@ function renderMuhurta() {
     document.getElementById('mhMeta').innerHTML =
         '<div class="mh-vara">' + MH_VARA[vara] + ' · ruled by ' + grahaChip(MH_VARA_LORD[vara]) + '</div>' +
         '<div class="mh-suns"><span>🌅 ' + mhFmt(sun.rise, tz) + '</span><span>🌇 ' + mhFmt(sun.set, tz) + '</span><span>☀️ ' + hm(dayLen) + '</span><span>🌙 ' + hm(nightLen) + '</span></div>' +
-        '<div class="settings-hint">📍 ' + escHtml(loc.name || 'Your location') + ' · times in ' + escHtml(tz) + '<br>At sunrise: ' + pr.tithi.paksha + ' ' + pr.tithi.name + ' · ' + pr.nakshatra + '</div>';
+        '<div class="mh-loc">📍 ' + escHtml(loc.name || 'Your location') + ' · ' + pr.tithi.paksha + ' ' + pr.tithi.name + ' · ' + pr.nakshatra + '</div>';
 
     var html = '';
     var horas = mhSlots(sun.rise, sun.set, 12).concat(mhSlots(sun.set, sun.next, 12));
@@ -2458,12 +2357,8 @@ function renderMuhurta() {
             (tags ? '<div class="mh-tags">' + tags + '</div>' : '') + '</div><span class="mh-chip ' + v + '">' + vt + '</span></div>';
     }).join('');
     var moonCard = '<div class="settings-panel mh-card"><div class="settings-title">⭐ Moon · Tara &amp; Chandra bala</div>' + segHtml +
-        '<div class="settings-hint">' + (uc && typeof uc.nakshatraIndex === 'number'
-            ? 'Tara = count from your birth star (Sampat, Kshema, Sadhana, Mitra, Parama Mitra good; Janma, Vipat, Pratyak, Naidhana careful). Chandra = Moon\'s house from your Moon sign (1, 3, 6, 7, 10, 11 good; 8th is Chandrashtama). Tap a Tara tag for its meaning.'
-            : 'Add your birth Moon sign and nakshatra in ⚙️ Settings to see your personal Tara (Sampat, Vipat…) and Chandrabala here.') +
-        ' Windows split when the Moon changes nakshatra or sign.</div></div>';
+        ((uc && typeof uc.nakshatraIndex === 'number') ? '' : '<div class="mh-need">Add your birth star in ⚙️ Settings to see your Tara (Sampat, Vipat…) and Chandra bala.</div>') + '</div>';
     html = html.replace('<!--MOON-->', moonCard);
-    html += '<div class="settings-panel mh-card"><div class="settings-hint">Sunrise and sunset use the upper limb of the Sun with standard refraction, like most panchangs; Rahu Kaal, Yamaganda, Gulika and Abhijit follow the usual weekday tables. These are traditional guides, not guarantees. Hora and Choghadiya systems vary a little by region.</div></div>';
     body.innerHTML = html;
 }
 
@@ -3692,7 +3587,7 @@ var MOOD_SENTIMENT = {
     lonely: 'negative', insecure: 'negative', guilty: 'negative', irritated: 'negative',
     restless: 'negative', overstimulated: 'negative', lazy: 'negative'
 };
-var SENTIMENT_COLOR = { positive: '#4ade80', neutral: '#a5b0c8', negative: '#f87171' };
+var SENTIMENT_COLOR = { positive: '#86efac', neutral: '#e5e0d0', negative: '#fca5a5' };
 var MIN_HOUSE_ENTRIES = 3;
 var insightMonthOffset = 0; // 0 = current calendar month, for the mini heatmap calendar
 
