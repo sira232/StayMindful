@@ -330,6 +330,9 @@
     .guide .g-box { background: #f7f5fd; border-radius: 12px; padding: 12px 14px; margin-bottom: 10px; font-size: 12.5px; line-height: 1.5; color: #374151; }
     .guide .g-box.asc { background: #eef6fb; }
     .guide .g-box.moon { background: #f3f0fb; }
+    .guide .g-tabs { display: flex; gap: 6px; margin: 8px 0; }
+    .guide .g-tab { flex: 1; padding: 8px 4px; border: 1px solid #d6cfee; border-radius: 10px; background: #fff; color: #5b4b9a; font-size: 13px; cursor: pointer; }
+    .guide .g-tab.on { background: #5b4b9a; color: #fff; }
     .guide .g-head { font-size: 14px; font-weight: 700; color: #1f2937; margin-bottom: 4px; }
     .guide .g-sub { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .03em; color: #6b7280; margin-bottom: 4px; }
     .guide .g-line b { color: #1f2937; }
@@ -394,6 +397,27 @@
             </select>
         </div>
         <div class="settings-hint">Shows the 🩸 Period activity button only for Female</div>
+
+        <div class="settings-title">Partner (optional)</div>
+        <div class="settings-row">
+            <label for="chkPartner">Track my partner too</label>
+            <input type="checkbox" id="chkPartner">
+        </div>
+        <div id="partnerFields" style="display:none">
+            <div class="settings-row">
+                <label for="inpPartnerName">Partner's name</label>
+                <input type="text" id="inpPartnerName" maxlength="20" placeholder="Partner">
+            </div>
+            <div class="settings-row">
+                <label for="selPartnerMoon">Partner's Moon Sign (Rashi)</label>
+                <select id="selPartnerMoon"></select>
+            </div>
+            <div class="settings-row">
+                <label for="selPartnerAsc">Partner's Ascendant (Lagna)</label>
+                <select id="selPartnerAsc"></select>
+            </div>
+            <div class="settings-hint">Adds a Partner and Together view to the Moon Guide. Stored only on this phone.</div>
+        </div>
         <div class="settings-actions">
             <button class="footer-btn" id="btnSaveChart">Save</button>
             <button class="footer-btn" id="btnCloseSettings">Close</button>
@@ -917,6 +941,30 @@ function saveUserChart(chart) {
     scheduleSafeguard();
 }
 
+// Optional partner chart (same inputs as the user's): { name, moonSignIndex, ascSignIndex }.
+// Absent/null means single-user mode and nothing partner-related is shown.
+var PARTNER_KEY = 'mindfulMoonPartner.v1';
+
+function loadPartner() {
+    try {
+        var raw = localStorage.getItem(PARTNER_KEY);
+        var p = raw ? JSON.parse(raw) : null;
+        return p && typeof p.moonSignIndex === 'number' && typeof p.ascSignIndex === 'number' ? p : null;
+    } catch (e) { return null; }
+}
+
+function savePartner(partner) {
+    if (partner) { localStorage.setItem(PARTNER_KEY, JSON.stringify(partner)); }
+    else { localStorage.removeItem(PARTNER_KEY); }
+    scheduleSafeguard();
+}
+
+function escHtml(s) {
+    return String(s).replace(/[&<>"']/g, function (c) {
+        return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+}
+
 // ---------------------------------------------------------------------------
 // Gender preference — only used to decide whether the 🩸 Period activity
 // button is shown (female-only). Defaults to 'female' so existing users who
@@ -1018,6 +1066,23 @@ function initSettingsPanel() {
         selAsc.value = chart.ascSignIndex;
     }
 
+    var chkPartner = document.getElementById('chkPartner');
+    var selPMoon = document.getElementById('selPartnerMoon');
+    var selPAsc = document.getElementById('selPartnerAsc');
+    populateSignSelect(selPMoon);
+    populateSignSelect(selPAsc);
+    var partner = loadPartner();
+    if (partner) {
+        chkPartner.checked = true;
+        document.getElementById('inpPartnerName').value = partner.name || '';
+        selPMoon.value = partner.moonSignIndex;
+        selPAsc.value = partner.ascSignIndex;
+    }
+    document.getElementById('partnerFields').style.display = chkPartner.checked ? '' : 'none';
+    chkPartner.addEventListener('change', function () {
+        document.getElementById('partnerFields').style.display = chkPartner.checked ? '' : 'none';
+    });
+
     var selGender = document.getElementById('selGender');
     selGender.value = loadGender();
     applyGenderVisibility();
@@ -1056,6 +1121,12 @@ function initSettingsPanel() {
     });
     document.getElementById('btnSaveChart').addEventListener('click', function () {
         saveUserChart({ moonSignIndex: Number(selMoon.value), ascSignIndex: Number(selAsc.value) });
+        savePartner(chkPartner.checked ? {
+            name: document.getElementById('inpPartnerName').value.trim().slice(0, 20),
+            moonSignIndex: Number(selPMoon.value),
+            ascSignIndex: Number(selPAsc.value)
+        } : null);
+        if (!chkPartner.checked) { guideTab = 'you'; }
 
         var query = inpLocation.value.trim();
         var finish = function () {
@@ -1147,9 +1218,81 @@ function renderHouseLines(rashiIndex) {
         el.innerHTML = '<div class="hint">Set your Moon sign &amp; Ascendant in ⚙️ Settings to see which house the Moon is transiting for you.</div>';
         return;
     }
+    var partner = loadPartner();
+    var pHtml = partner
+        ? '<br><b>' + escHtml(partner.name || 'Partner') + ':</b> Moon sign - ' + ordinal(houseFromReference(rashiIndex, partner.moonSignIndex)) + ' house · Asc - ' + ordinal(houseFromReference(rashiIndex, partner.ascSignIndex)) + ' house'
+        : '';
     el.innerHTML =
         'From Moon sign - ' + ordinal(houseFromReference(rashiIndex, chart.moonSignIndex)) + ' house<br>' +
-        'From Asc - ' + ordinal(houseFromReference(rashiIndex, chart.ascSignIndex)) + ' house';
+        'From Asc - ' + ordinal(houseFromReference(rashiIndex, chart.ascSignIndex)) + ' house' + pHtml;
+}
+
+// Rashi-koota style relation between two Moon signs (distance from A to B).
+// 1/7, 3/11, 4/10 are classically harmonious; 2/12, 5/9, 6/8 are the bhakoot
+// pairings treated as needing care. Only the sign part of Ashta-koota.
+var MOON_PAIR = {
+    1: ['good', 'Same Moon sign: you feel and react alike, which brings easy understanding.'],
+    7: ['good', 'Moon signs are opposite (1/7): attracted by differences and balancing each other.'],
+    3: ['good', 'Moon signs are 3/11 apart: friendly, supportive and encouraging of each other.'],
+    11: ['good', 'Moon signs are 3/11 apart: friendly, supportive and encouraging of each other.'],
+    4: ['good', 'Moon signs are 4/10 apart: steady, caring and mutually supportive.'],
+    10: ['good', 'Moon signs are 4/10 apart: steady, caring and mutually supportive.'],
+    2: ['gentle', 'Moon signs are 2/12 apart: different emotional wavelengths, and money or spending can be a touchy topic.'],
+    12: ['gentle', 'Moon signs are 2/12 apart: different emotional wavelengths, and money or spending can be a touchy topic.'],
+    5: ['gentle', 'Moon signs are 5/9 apart: strong bond, but opinions and egos can clash.'],
+    9: ['gentle', 'Moon signs are 5/9 apart: strong bond, but opinions and egos can clash.'],
+    6: ['gentle', 'Moon signs are 6/8 apart: the most demanding pairing classically, so patience and clear talk help a lot.'],
+    8: ['gentle', 'Moon signs are 6/8 apart: the most demanding pairing classically, so patience and clear talk help a lot.']
+};
+
+var guideTab = 'you'; // 'you' | 'partner' | 'together'
+
+function personBoxes(chart, who, r, dignity, pct, strengthLabel) {
+    var hMoon = houseFromReference(r, chart.moonSignIndex);
+    var hAsc = houseFromReference(r, chart.ascSignIndex);
+    var favorable = MOON_FAVORABLE_HOUSES.indexOf(hMoon) >= 0;
+    var o = overallInfo(dignity, hMoon, pct);
+    var a = HOUSE_FROM_ASC[hAsc];
+    var poss = who === 'you' ? 'your' : escHtml(who) + "'s";
+    return '<div class="g-box moon"><div class="g-sub">From ' + poss + ' Moon sign</div>' +
+        '<div class="g-head">' + ordinal(hMoon) + ' house <span class="chip ' + (favorable ? 'good' : 'gentle') + '">' + (favorable ? 'favorable' : 'challenging') + '</span></div>' +
+        '<div class="g-line"><b>Mood effect:</b> ' + HOUSE_FROM_MOON[hMoon] + '</div></div>' +
+        '<div class="g-box asc"><div class="g-sub">From ' + poss + ' Ascendant</div>' +
+        '<div class="g-head">' + ordinal(hAsc) + ' house</div>' +
+        '<div class="g-line"><b>Area activated:</b> ' + a.area + '</div>' +
+        '<div class="g-line"><b>Good for:</b> ' + a.good + '</div>' +
+        '<div class="g-line"><b>Watch:</b> ' + a.watch + '</div></div>' +
+        '<div class="g-box"><div class="g-sub">Overall outlook</div>' +
+        '<div class="g-head"><span class="chip ' + o.cls + '" style="margin-left:0">' + o.text + '</span></div>' +
+        '<div class="g-line">Moon-sign house is ' + (favorable ? 'favorable' : 'challenging') + ' (' + ordinal(hMoon) + ') and the Moon is ' + dignity + ' in ' + rashiShort(RASHI_NAMES[r]) + ' with ' + strengthLabel + ' strength (' + pct + '%).</div></div>';
+}
+
+function togetherBox(chart, partner, r, dignity, pct) {
+    var pname = escHtml(partner.name || 'Partner');
+    var yM = houseFromReference(r, chart.moonSignIndex), yA = houseFromReference(r, chart.ascSignIndex);
+    var pM = houseFromReference(r, partner.moonSignIndex), pA = houseFromReference(r, partner.ascSignIndex);
+    var yFav = MOON_FAVORABLE_HOUSES.indexOf(yM) >= 0, pFav = MOON_FAVORABLE_HOUSES.indexOf(pM) >= 0;
+    var yO = overallInfo(dignity, yM, pct), pO = overallInfo(dignity, pM, pct);
+    var verdict;
+    if (yFav && pFav) { verdict = 'Both of you are in favorable Moon houses: a good day for plans, outings and important talks together.'; }
+    else if (!yFav && !pFav) { verdict = 'Both of you are in challenging Moon houses: go gently, keep talks light, and postpone big decisions or arguments.'; }
+    else if (yFav) { verdict = 'You are likely to feel lighter while ' + pname + ' may feel off: offer patience, support and space.'; }
+    else { verdict = pname + ' is likely to feel lighter while you may feel off: ask for patience and share how you feel kindly.'; }
+    var rel = MOON_PAIR[houseFromReference(partner.moonSignIndex, chart.moonSignIndex)];
+    var html = '<div class="g-box"><div class="g-sub">Today, side by side</div>' +
+        '<div class="g-line"><b>You:</b> Moon sign - ' + ordinal(yM) + ' house <span class="chip ' + (yFav ? 'good' : 'gentle') + '">' + (yFav ? 'favorable' : 'challenging') + '</span> · Asc - ' + ordinal(yA) + ' house<br>' + HOUSE_FROM_MOON[yM] + '</div>' +
+        '<div class="g-line"><b>' + pname + ':</b> Moon sign - ' + ordinal(pM) + ' house <span class="chip ' + (pFav ? 'good' : 'gentle') + '">' + (pFav ? 'favorable' : 'challenging') + '</span> · Asc - ' + ordinal(pA) + ' house<br>' + HOUSE_FROM_MOON[pM] + '</div></div>';
+    html += '<div class="g-box moon"><div class="g-sub">Together today</div>' +
+        '<div class="g-line">' + verdict + '</div>' +
+        '<div class="g-line"><b>Outlook:</b> you ' + yO.text + ' · ' + pname + ' ' + pO.text + '</div></div>';
+    html += '<div class="g-box asc"><div class="g-sub">Areas in focus</div>' +
+        '<div class="g-line"><b>You (' + ordinal(yA) + ' house):</b> ' + HOUSE_FROM_ASC[yA].area + '<br><b>Good for:</b> ' + HOUSE_FROM_ASC[yA].good + '<br><b>Watch:</b> ' + HOUSE_FROM_ASC[yA].watch + '</div>' +
+        '<div class="g-line"><b>' + pname + ' (' + ordinal(pA) + ' house):</b> ' + HOUSE_FROM_ASC[pA].area + '<br><b>Good for:</b> ' + HOUSE_FROM_ASC[pA].good + '<br><b>Watch:</b> ' + HOUSE_FROM_ASC[pA].watch + '</div></div>';
+    html += '<div class="g-box"><div class="g-sub">Your Moon signs together (always true)</div>' +
+        '<div class="g-head"><span class="chip ' + rel[0] + '" style="margin-left:0">' + (rel[0] === 'good' ? 'harmonious' : 'needs care') + '</span></div>' +
+        '<div class="g-line">' + rel[1] + '</div>' +
+        '<div class="g-note">Sign-based only (the Rashi part of Ashta-koota); a full match also uses nakshatras and sign lords, so treat it as a gentle hint.</div></div>';
+    return html;
 }
 
 // Bottom Moon Guide: the interpretation (sign, nakshatra, both house views,
@@ -1157,21 +1300,31 @@ function renderHouseLines(rashiIndex) {
 // Re-rendered only when the sign/nakshatra/chart changes so open <details>
 // sections are not collapsed by the 60s refresh.
 var guideSig = '';
+document.getElementById('guideBody').addEventListener('click', function (e) {
+    var btn = e.target.closest ? e.target.closest('.g-tab') : null;
+    if (!btn) { return; }
+    guideTab = btn.getAttribute('data-tab');
+    updateNowPanel();
+});
 function renderMoonGuide(p, view, events) {
     var el = document.getElementById('guideBody');
     if (!el) { return; }
     var chart = loadUserChart();
+    var partner = loadPartner();
+    if (!partner) { guideTab = 'you'; }
     document.getElementById('guideTitle').textContent = view.live
         ? '🌙 Moon Guide — Today'
         : '🌙 Moon Guide — ' + view.day.toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' }) + ' (preview)';
-    var sig = view.day.getTime() + '|' + view.live + '|' + p.rashiIndex + '|' + p.nakshatraIndex + '|' + p.tithi.paksha + p.tithi.dayInPaksha + '|' + (chart ? chart.moonSignIndex + ',' + chart.ascSignIndex : '-');
+    var sig = view.day.getTime() + '|' + view.live + '|' + p.rashiIndex + '|' + p.nakshatraIndex + '|' + p.tithi.paksha + p.tithi.dayInPaksha + '|' + (chart ? chart.moonSignIndex + ',' + chart.ascSignIndex : '-') +
+        '|' + (partner ? partner.name + ',' + partner.moonSignIndex + ',' + partner.ascSignIndex : '-') + '|' + guideTab;
     if (sig === guideSig) { return; }
     guideSig = sig;
 
     var r = p.rashiIndex;
     var dignity = MOON_DIGNITY[r];
-    var hMoon = chart ? houseFromReference(r, chart.moonSignIndex) : 0;
-    var hAsc = chart ? houseFromReference(r, chart.ascSignIndex) : 0;
+    var ref = guideTab === 'partner' && partner ? partner : chart;
+    var hMoon = ref ? houseFromReference(r, ref.moonSignIndex) : 0;
+    var hAsc = ref ? houseFromReference(r, ref.ascSignIndex) : 0;
     var pct = moonStrengthPct(p.tithi);
     var strengthLabel = pct >= 75 ? 'strong' : pct >= 35 ? 'moderate' : 'low';
     var tType = TITHI_TYPES[(p.tithi.dayInPaksha - 1) % 5];
@@ -1202,20 +1355,22 @@ function renderMoonGuide(p, view, events) {
         '<div class="g-note">' + DIGNITY_NOTE[dignity] + '</div></div>';
 
     if (chart) {
-        var favorable = MOON_FAVORABLE_HOUSES.indexOf(hMoon) >= 0;
-        var o = overallInfo(dignity, hMoon, pct);
-        var a = HOUSE_FROM_ASC[hAsc];
-        html += '<div class="g-box moon"><div class="g-sub">From your Moon sign</div>' +
-            '<div class="g-head">' + ordinal(hMoon) + ' house <span class="chip ' + (favorable ? 'good' : 'gentle') + '">' + (favorable ? 'favorable' : 'challenging') + '</span></div>' +
-            '<div class="g-line"><b>Mood effect:</b> ' + HOUSE_FROM_MOON[hMoon] + '</div></div>';
-        html += '<div class="g-box asc"><div class="g-sub">From your Ascendant</div>' +
-            '<div class="g-head">' + ordinal(hAsc) + ' house</div>' +
-            '<div class="g-line"><b>Area activated:</b> ' + a.area + '</div>' +
-            '<div class="g-line"><b>Good for:</b> ' + a.good + '</div>' +
-            '<div class="g-line"><b>Watch:</b> ' + a.watch + '</div></div>';
-        html += '<div class="g-box"><div class="g-sub">Overall outlook</div>' +
-            '<div class="g-head"><span class="chip ' + o.cls + '" style="margin-left:0">' + o.text + '</span></div>' +
-            '<div class="g-line">Moon-sign house is ' + (favorable ? 'favorable' : 'challenging') + ' (' + ordinal(hMoon) + ') and the Moon is ' + dignity + ' in ' + rashiShort(RASHI_NAMES[r]) + ' with ' + strengthLabel + ' strength (' + pct + '%).</div></div>';
+        if (partner) {
+            var tabs = [['you', 'You'], ['partner', escHtml(partner.name || 'Partner')], ['together', 'Together 💞']];
+            html += '<div class="g-tabs">';
+            tabs.forEach(function (t) {
+                html += '<button type="button" class="g-tab' + (guideTab === t[0] ? ' on' : '') + '" data-tab="' + t[0] + '">' + t[1] + '</button>';
+            });
+            html += '</div>';
+        }
+        var strengthTxt = strengthLabel;
+        if (guideTab === 'together' && partner) {
+            html += togetherBox(chart, partner, r, dignity, pct);
+        } else if (guideTab === 'partner' && partner) {
+            html += personBoxes(partner, partner.name || 'Partner', r, dignity, pct, strengthTxt);
+        } else {
+            html += personBoxes(chart, 'you', r, dignity, pct, strengthTxt);
+        }
     } else {
         html += '<div class="g-box"><div class="g-line">Set your Moon sign &amp; Ascendant in ⚙️ Settings to see the house-based guidance for you.</div></div>';
     }
@@ -1607,7 +1762,7 @@ document.getElementById('btnMoreMoods').addEventListener('click', function () {
 //   3. Backup file saved to the phone's Downloads folder (survives clearing site
 //      data), with a periodic reminder, plus Share and Restore-from-file.
 // ---------------------------------------------------------------------------
-var SAFE_KEYS = [STORAGE_KEY, NOTES_KEY, USER_CHART_KEY, GENDER_KEY, USER_LOCATION_KEY, 'mindfulMoonInsightRange.v1'];
+var SAFE_KEYS = [STORAGE_KEY, NOTES_KEY, USER_CHART_KEY, PARTNER_KEY, GENDER_KEY, USER_LOCATION_KEY, 'mindfulMoonInsightRange.v1'];
 var LAST_BACKUP_KEY = 'mindfulMoonLastBackup.v1';
 var BACKUP_SNOOZE_KEY = 'mindfulMoonBackupSnooze.v1';
 var BACKUP_DUE_DAYS = 7;
