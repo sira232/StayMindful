@@ -17,12 +17,19 @@ your phone* below to add it to your home screen like a real app).
 - Review your week, your history, and (optionally) whether your mood tends to
   line up with certain Moon positions.
 
-## The six tabs (bottom bar)
+## The seven tabs (bottom bar)
+
+The app has a deep-indigo "Cosmic Night" look: starfield, glass cards, glowing
+accents and a live moon-phase orb on Home.
 
 - **🏠 Home** — the live Moon panel, mood buttons (8 main moods plus a second
   row; the rest behind ➕) and daily check-ins.
 - **📓 Journal** — week grid (browse any week), the selected day's history, and
   a note for the day.
+- **🕉️ Muhurta** — Hora and Choghadiya for any day (from sunrise/sunset at your
+  location), Rahu Kaal / Yamaganda / Gulika / Abhijit, and Moon nakshatra/sign
+  windows rated favourable or not for you. Tithi, Yoga and Karana also show their
+  ruling planet.
 - **🌙 Guide** — the Moon Guide for today or any selected day:
   - **Panchang at a glance**: Moon sign (element, mode, ruler), Nakshatra +
     pada (lord, deity), navamsa, **Tithi, Yoga and Karana each with its

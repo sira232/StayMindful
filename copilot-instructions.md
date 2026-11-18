@@ -249,6 +249,15 @@ or apply that file's conventions here (e.g. `%USERPROFILE%\<Name>.ps1` external 
     in the classical table. Each planet shows a one-line meaning. The Transit tab was also
     restyled (hero date bar, cards, coloured planet badges via `TR_COLOR`/`trBadge`, tinted kendra
     houses). Prompts for a Moon sign if none is saved. Vedha is no longer a backlog item.
+  - **Muhurta tab, graha lords, Cosmic Night theme (v45–v46, app 2.6.0–2.7.0)**: now 7 tabs; the 🕉️
+    Muhurta tab (`#tab-muhurta`, `renderMuhurta`, `mhSunTimes`, `mhSlots`, `mhMoonSegments`) shows
+    sunrise/sunset-based Hora (12 day + 12 night), Choghadiya, Rahu Kaal/Yamaganda/Gulika/Abhijit and
+    Moon nakshatra/sign windows scored with Tarabala/Chandrabala; date nav, 30 s refresh, times in the
+    location's IANA zone. Panchang card rows (`pgRow`) add graha lords for tithi/yoga/karana
+    (`TITHI_GRAHA_CYCLE`, `YOGA_GRAHA_CYCLE`, `KARANA_GRAHA`; traditional, sources vary). v46 is a dark
+    theme: the last CSS block ("COSMIC NIGHT THEME") overrides earlier light styles (starfield, glass
+    cards, glass nav); new light-coloured widgets must be styled there. Home has a live moon-phase orb
+    (`moonOrbSvg`). `trSvg`, `TR_COLOR`, `SENTIMENT_COLOR` and manifest/theme-color use dark-friendly colours.
   - **Birth-details calculator + names (v44, app 2.5.0)**: Settings has a `birth-box` (per person:
     `initBirthBox` in `initSettingsPanel`, ids `bbYou`/`bbPartner`) that takes date/time/place, geocodes
     via Open-Meteo (`geocodePlaces`, ranks by extra comma tokens, picker if several), converts local→UTC
@@ -403,7 +412,7 @@ or apply that file's conventions here (e.g. `%USERPROFILE%\<Name>.ps1` external 
     same as TimeZync's icons) — a purple-gradient circle with a cream crescent moon and a
     yellow smiley face overlapping it. Regenerate the same way if the icon design changes.
   - **`service-worker.js`** — minimal cache-first service worker, same shape as TimeZync's.
-    `CACHE_NAME` is currently `mindful-moon-tracker-v44` (v44 = app 2.5.0: birth-details calculator, names, privacy note; v43 = app 2.4.0: Panchang lords + validity times, UI polish; v42 = app 2.3.0: Gochara & Vedha + Transit restyle; v41 = app 2.2.0: Transit tab with bundled astronomy-engine; v40 = app 2.1.0: Panchang-at-a-glance box with yoga/karana/lords/deity/navamsa, Chandrashtama alert, next-signs lookahead, 6 more moods on the main row with the rest behind ➕; v39: Tarabala; v38: bottom-tab navigation, see above;     v37: optional partner and Together tab;
+    `CACHE_NAME` is currently `mindful-moon-tracker-v46` (v46 = app 2.7.0: Cosmic Night dark theme + moon orb; v45 = app 2.6.0: Muhurta tab + graha lords; v44 = app 2.5.0: birth-details calculator, names, privacy note; v43 = app 2.4.0: Panchang lords + validity times, UI polish; v42 = app 2.3.0: Gochara & Vedha + Transit restyle; v41 = app 2.2.0: Transit tab with bundled astronomy-engine; v40 = app 2.1.0: Panchang-at-a-glance box with yoga/karana/lords/deity/navamsa, Chandrashtama alert, next-signs lookahead, 6 more moods on the main row with the rest behind ➕; v39: Tarabala; v38: bottom-tab navigation, see above;     v37: optional partner and Together tab;
     **VERSIONING (required on every release):** in `Mindful-Moon-Tracker.html` bump `APP_VERSION` (semver) and
     `APP_BUILD` (must equal the `CACHE_NAME` number) and add a line at the top of `APP_CHANGELOG`; they render at the
     bottom of the Settings tab ("Version x.y.z (build N)" + "What's new").
