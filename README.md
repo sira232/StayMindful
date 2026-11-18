@@ -15,7 +15,39 @@ your phone* below to add it to your home screen like a real app).
   (lunar mansion), and Tithi (lunar day) — purely for your own curiosity, no
   action needed from you.
 - Review your week, your history, and (optionally) whether your mood tends to
-  line up with certain Moon positions, all from one Settings panel.
+  line up with certain Moon positions.
+
+## The six tabs (bottom bar)
+
+- **🏠 Home** — the live Moon panel, mood buttons (8 main moods plus a second
+  row; the rest behind ➕) and daily check-ins.
+- **📓 Journal** — week grid (browse any week), the selected day's history, and
+  a note for the day.
+- **🌙 Guide** — the Moon Guide for today or any selected day:
+  - **Panchang at a glance**: Moon sign (element, mode, ruler), Nakshatra +
+    pada (lord, deity), navamsa, **Tithi, Yoga and Karana each with its
+    presiding lord**, and for the sign, nakshatra, tithi, yoga and karana the
+    **start → end time** they are valid for (your device's time zone).
+  - Tithi & Moon strength, "Changes this day", sign/nakshatra notes.
+  - If you saved your chart: house from your Moon sign, from your Ascendant,
+    Tarabala (needs your birth nakshatra), Chandrashtama alert, overall
+    outlook and the next four signs. With a partner added, a Together view too.
+- **🪐 Transit** — the live kundli in North Indian style (Lagna + nine grahas
+  with Rahu/Ketu), a table with each planet's degree, sign, nakshatra/pada and
+  its **next pada and sign change**, retrograde flags, any date/time, and a
+  **Gochara & Vedha** card: each classical planet counted from your Moon sign,
+  whether it is favorable, whether another planet blocks it (Vedha; Sun–Saturn
+  and Moon–Mercury exempt), with a one-line meaning per planet.
+- **📊 Insights** — weekly mood breakdown, streaks, mood calendar, and mood
+  patterns by house and by tithi.
+- **⚙️ Settings** — location, your chart, optional partner, Save, Backup &
+  Restore, and About (with the **app version** and "What's new").
+
+Planet positions use the bundled astronomy-engine library (MIT licence),
+checked against Swiss Ephemeris to within about 10 arcseconds (Lahiri
+ayanamsa, mean Rahu/Ketu). Tithi, yoga and karana times use the same engine.
+The guidance is general awareness based on classical Vedic ideas, not
+prediction or advice.
 
 ## Logging your mood
 
@@ -63,8 +95,18 @@ location permission is needed for it to work.
 
 ## Your birth chart (optional, for deeper insights)
 
-In ⚙️ Settings, you can enter your **Moon sign** and **Ascendant (Lagna)**.
-Once saved, every log also shows which house (1st–12th) the current
+In ⚙️ Settings, add your **name** (optional) and either:
+
+- **🧮 Calculate from birth details** — enter date, time and place of birth;
+  the app finds the place (pick from the list if several match) and fills in
+  your Moon sign, birth nakshatra and Ascendant automatically. If you don't
+  know the birth time, it uses noon for the Moon and skips the Ascendant (a
+  warning shows if the Moon changed sign that day). The same works for a
+  partner.
+- **Choose manually** — pick **Moon sign** and **Ascendant (Lagna)** yourself.
+
+Names personalise the Moon Guide (a "Guide for <name>" card, tab labels and
+the Together view). Once saved, every log also shows which house (1st–12th) the current
 transiting Moon falls in, counted from each of those — e.g. "Moon(6H),
 Asc(4H)". This lets the app later show you whether certain house positions
 tend to line up with certain moods (see Insights below).
@@ -86,9 +128,7 @@ completely for Male. Defaults to Female.
 - Weather refreshes automatically (every ~20 minutes, and instantly whenever
   you reopen the app).
 
-## Settings panel (⚙️) — Insights
-
-Opening Settings also shows a read-only **Insights** section, entirely derived
+## Insights tab
 from your own logged history:
 
 - **This week's mood breakdown** — a "Most common this week: 😊 Happy (x5)"
@@ -111,13 +151,13 @@ from your own logged history:
   pattern analyses above look, so they stay meaningful (and the panel stays
   tidy) even after a year+ of daily logging.
 - The two pattern sections are **collapsed by default** — tap the heading to
-  expand them — to keep Settings uncluttered.
+  expand them — to keep the tab uncluttered.
 
-## Exporting your data
+## Backing up your data
 
-Settings → **⬇ Export JSON** downloads your entire logged history as a single
-file, in case you want a personal backup. There's no cloud sync — this is the
-only way to back up your data.
+Settings → **Backup & Restore** saves your whole history, notes and chart as
+one file (and can share it), and restores it later. There is no cloud sync —
+this file is the only backup, so save one now and then.
 
 ## Installing on your phone (PWA)
 
@@ -130,10 +170,12 @@ This app is a Progressive Web App:
 
 ## Privacy
 
-Everything — moods, activities, your birth chart, your location, your
-history — is stored only in your browser's local storage, on your own
-device. Nothing is ever sent anywhere except two free, anonymous, no-signup
-API calls: one to fetch the weather for your area, and one (only if you type
-a location name) to look up its coordinates. There is no account, login, or
-cloud sync. Clearing your browser's site data will erase everything, so use
-Export JSON if you want a backup.
+Everything — moods, activities, names, birth details, your chart, your
+location, your history — is stored only in your browser's local storage, on
+your own device. The developer has no access to it (a 🔒 privacy note in
+Settings says so). Nothing is ever sent anywhere except free, anonymous,
+no-signup API calls: one to fetch the weather for your area, and one (only
+when you type a location or birth place) to look up its coordinates and time
+zone — only the place name is sent. There is no account, login, or
+cloud sync. Clearing your browser's site data will erase everything, so save a
+backup file (Settings → Backup & Restore) now and then.

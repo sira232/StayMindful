@@ -104,6 +104,44 @@
     .tr-table .tr-retro { color: #c0392b; font-weight: 700; }
     .tr-table .tr-next { color: #4b5563; font-size: 11px; }
     .tr-table .tr-next div { margin-bottom: 3px; }
+    .g-valid { font-size: 11px; color: #6b5fa5; background: #f3f0ff; border-radius: 8px; padding: 2px 8px; margin: 3px 0 4px; display: block; width: fit-content; }
+    .g-valid b { color: #4b3f85; }
+    /* shared polish across tabs */
+    .page-title { font-size: 18px; font-weight: 800; display: flex; align-items: center; gap: 8px; }
+    .page-title::after { content: ""; flex: 1; height: 3px; border-radius: 3px; background: linear-gradient(90deg, #cfc4f5, rgba(207,196,245,0)); }
+    .tab-page .settings-panel:not(.tr-hero) { background: #fff; border: 1px solid #ebe7f7; border-radius: 16px; box-shadow: 0 3px 12px rgba(91,75,154,.08); }
+    .g-box { box-shadow: 0 2px 8px rgba(91,75,154,.07); }
+    .g-box.moon { background: linear-gradient(135deg, #f6f2ff 0%, #efe9ff 100%); }
+    .nav-btn { position: relative; transition: transform .15s ease, color .15s ease; }
+    .nav-btn.on::before { content: ""; position: absolute; top: -1px; left: 28%; right: 28%; height: 3px; border-radius: 0 0 4px 4px; background: linear-gradient(90deg, #7c6bb5, #a48fe0); }
+    .nav-btn.on .ni { transform: scale(1.15); }
+    .week-day { transition: transform .12s ease, box-shadow .12s ease; }
+    .week-day.is-selected { background: #f3eefc; box-shadow: 0 0 0 1.5px #5b3a9e inset, 0 4px 10px rgba(91,58,158,.18); transform: translateY(-1px); }
+    #tab-transit .settings-panel.tr-card { background: #fff; border: 1px solid #ebe7f7; border-radius: 16px; box-shadow: 0 4px 14px rgba(91,75,154,.10); padding: 14px; }
+    #tab-transit .settings-panel.tr-hero { background: linear-gradient(135deg, #5b4b9a 0%, #7c6bb5 55%, #a48fe0 100%); border: 0; border-radius: 16px; box-shadow: 0 6px 18px rgba(91,75,154,.35); color: #fff; }
+    #tab-transit .tr-hero .settings-hint { color: #ece8ff; }
+    #tab-transit .tr-hero .tr-when input { background: rgba(255,255,255,.95); border-color: transparent; }
+    #tab-transit .tr-hero .tr-when button { background: rgba(255,255,255,.18); border-color: rgba(255,255,255,.35); color: #fff; font-weight: 600; }
+    #tab-transit .tr-hero .tr-when button#trNow { background: #fff; color: #5b4b9a; }
+    #tab-transit .tr-card .settings-title { font-size: 14px; font-weight: 800; color: #4b3f85; display: flex; align-items: center; gap: 6px; }
+    #tab-transit .tr-card .settings-title::after { content: ""; flex: 1; height: 2px; background: linear-gradient(90deg, #d9d2f5, transparent); border-radius: 2px; }
+    #tab-transit .tr-chart { background: radial-gradient(circle at 50% 40%, #fff 0%, #f3f0ff 100%); border-radius: 14px; padding: 8px; }
+    #tab-transit .tr-table th { background: #f3f0ff; border-bottom: 0; font-size: 11px; text-transform: uppercase; letter-spacing: .04em; color: #5b4b9a; }
+    #tab-transit .tr-table th:first-child { border-radius: 8px 0 0 8px; }
+    #tab-transit .tr-table th:last-child { border-radius: 0 8px 8px 0; }
+    #tab-transit .tr-table tr:nth-child(even) td { background: #faf9ff; }
+    #tab-transit .tr-table tr:last-child td { border-bottom: 0; }
+    #tab-transit .tr-pl { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
+    #tab-transit .tr-dot { display: inline-block; min-width: 24px; padding: 2px 0; text-align: center; border-radius: 999px; color: #fff; font-size: 10px; font-weight: 700; }
+    #tab-transit .tr-vrow { display: flex; gap: 10px; align-items: flex-start; padding: 9px 0; border-bottom: 1px solid #f0eef9; }
+    #tab-transit .tr-vrow:last-child { border-bottom: 0; }
+    #tab-transit .tr-vh { flex: 0 0 74px; text-align: center; }
+    #tab-transit .tr-vh .chip { display: block; margin: 4px 0 0; font-size: 9.5px; padding: 2px 4px; }
+    #tab-transit .tr-vh .tr-house { font-size: 11px; color: #6b7280; margin-top: 3px; }
+    #tab-transit .tr-vt { font-size: 12px; color: #374151; line-height: 1.45; }
+    #tab-transit .tr-vrow.ok { border-left: 4px solid #2ecc71; padding-left: 8px; }
+    #tab-transit .tr-vrow.bad { border-left: 4px solid #e67e22; padding-left: 8px; }
+    #tab-transit .tr-vrow.no { border-left: 4px solid #cbd5e1; padding-left: 8px; }
     .settings-panel .settings-title { font-size: 12.5px; font-weight: 700; color: #374151; margin-bottom: 8px; }
     .settings-row { margin-bottom: 10px; }
     .settings-row label { display: block; font-size: 11.5px; color: #6b7280; margin-bottom: 4px; font-weight: 600; }
@@ -131,6 +169,36 @@
         color: #1f2937;
     }
     .settings-actions { display: flex; gap: 8px; margin-top: 4px; }
+    .g-profile { background: linear-gradient(135deg, #5b4b9a 0%, #8a74d6 100%); color: #fff; border: 0; }
+    .g-profile .g-sub { color: #e4dcff; }
+    .g-profile .g-pname { font-size: 18px; font-weight: 800; margin: 2px 0 8px; }
+    .g-profile .g-pchips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
+    .g-profile .g-pchips span { background: rgba(255,255,255,.18); border-radius: 999px; padding: 3px 10px; font-size: 12px; }
+    .g-profile .g-line { color: #f4f0ff; }
+    .g-profile .g-line b { color: #fff; }
+    .privacy-box { background: linear-gradient(135deg, #eafaf1 0%, #e8f4ff 100%); border: 1.5px solid #c9e8d6; border-radius: 14px; padding: 12px; }
+    .privacy-box .privacy-head { font-size: 13.5px; font-weight: 800; color: #166534; margin-bottom: 4px; }
+    .privacy-box ul { margin: 6px 0 0 16px; padding: 0; font-size: 11.5px; color: #374151; line-height: 1.5; }
+    .privacy-box p { margin: 0; font-size: 12px; color: #374151; line-height: 1.5; }
+    .birth-box { background: linear-gradient(135deg, #f1ecff 0%, #e8f1ff 100%); border: 1.5px solid #d9d0f7; border-radius: 14px; padding: 12px; margin: 4px 0 8px; }
+    .birth-head { font-size: 13.5px; font-weight: 800; color: #4b3f85; margin-bottom: 3px; }
+    .birth-sub { font-size: 11.5px; color: #5b6477; line-height: 1.45; margin-bottom: 10px; }
+    .birth-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .birth-box label { display: block; font-size: 11.5px; color: #4b3f85; font-weight: 700; margin: 0 0 4px; }
+    .birth-box input[type="date"], .birth-box input[type="time"], .birth-box input[type="text"], .birth-box select { width: 100%; box-sizing: border-box; padding: 8px 9px; border-radius: 8px; border: 1.5px solid #d8d3ec; font-size: 13px; font-family: inherit; background: #fff; color: #1f2937; }
+    .birth-box .birth-field { margin-bottom: 8px; }
+    .birth-box .birth-chk { display: flex; align-items: center; gap: 6px; font-weight: 600; color: #5b6477; margin: 2px 0 10px; }
+    .birth-box .birth-chk input { width: auto; }
+    .birth-box .footer-btn { width: 100%; margin-top: 2px; }
+    .birth-msg { font-size: 11.5px; margin-top: 8px; }
+    .birth-res { background: #fff; border: 1.5px solid #cfe9d8; border-left: 5px solid #2ecc71; border-radius: 12px; padding: 10px 12px; margin-top: 10px; }
+    .birth-res .birth-title { font-weight: 800; color: #166534; font-size: 13px; margin-bottom: 6px; }
+    .birth-res .birth-row { font-size: 12.5px; color: #374151; padding: 3px 0; }
+    .birth-res .birth-row b { color: #4b3f85; }
+    .birth-res .birth-warn { font-size: 11.5px; color: #9a5b00; background: #fff4e0; border-radius: 8px; padding: 5px 8px; margin-top: 6px; }
+    .birth-res .birth-note { font-size: 11.5px; color: #5b6477; margin-top: 6px; }
+    .birth-or { text-align: center; font-size: 11px; color: #9ca3af; margin: 6px 0 10px; display: flex; align-items: center; gap: 8px; }
+    .birth-or::before, .birth-or::after { content: ""; flex: 1; height: 1px; background: #e5e1f5; }
     .insight-block { margin-top: 14px; padding-top: 12px; border-top: 1px dashed #e2e5eb; }
     .insight-badge { font-size: 13px; font-weight: 700; color: #374151; margin-bottom: 6px; }
     .insight-subtitle {
@@ -415,7 +483,13 @@
     </div>
     <div class="settings-panel">
         <div class="settings-title">🪐 Your chart</div>
-        <div class="settings-hint">Your Moon sign and Ascendant decide which houses the Moon transits for you.</div>
+        <div class="settings-hint">Your Moon sign and Ascendant decide which houses the Moon transits for you. Don't know them? Calculate them from your birth details, or pick them manually.</div>
+        <div class="settings-row">
+            <label for="inpUserName">Your name (optional)</label>
+            <input type="text" id="inpUserName" maxlength="20" placeholder="e.g. Asha">
+        </div>
+        <div id="birthYou"></div>
+        <div class="birth-or">or choose manually</div>
         <div class="settings-row">
             <label for="selMoonSign">Your Moon Sign (Rashi)</label>
             <select id="selMoonSign"></select>
@@ -450,6 +524,8 @@
                 <label for="inpPartnerName">Partner's name</label>
                 <input type="text" id="inpPartnerName" maxlength="20" placeholder="Partner">
             </div>
+            <div id="birthPartner"></div>
+            <div class="birth-or">or choose manually</div>
             <div class="settings-row">
                 <label for="selPartnerMoon">Partner's Moon Sign (Rashi)</label>
                 <select id="selPartnerMoon"></select>
@@ -468,6 +544,14 @@
     <div class="settings-actions save-bar">
         <button class="footer-btn primary" id="btnSaveChart">Save settings</button>
         <button class="footer-btn" id="btnCloseSettings">Cancel</button>
+    </div>
+    <div class="settings-panel privacy-box">
+        <div class="privacy-head">🔒 Your privacy</div>
+        <p>All your data (mood logs, notes, names, birth details, chart) stays only on this phone. The developer has no access to it, there are no accounts, and nothing is uploaded or shared.</p>
+        <ul>
+            <li>Birth place search sends only the place name to a public geocoding service (Open-Meteo); nothing else leaves your phone.</li>
+            <li>Clearing browser data or uninstalling removes everything, so keep a backup below.</li>
+        </ul>
     </div>
     <div class="settings-panel">
         <div class="settings-title">💾 Backup &amp; Restore</div>
@@ -492,7 +576,7 @@
 
     <div class="tab-page" id="tab-transit">
     <div class="page-title">🪐 Transit</div>
-    <div class="settings-panel">
+    <div class="settings-panel tr-hero">
         <div class="tr-when">
             <button type="button" id="trPrev" title="Previous day">◀</button>
             <input type="datetime-local" id="trWhen">
@@ -501,15 +585,21 @@
         </div>
         <div class="settings-hint" id="trMeta" style="margin-top:8px"></div>
     </div>
-    <div class="settings-panel">
-        <div class="settings-title">Rashi chart · North Indian</div>
+    <div class="settings-panel tr-card">
+        <div class="settings-title">🪐 Rashi chart · North Indian</div>
         <div class="tr-chart" id="trChart"></div>
         <div class="settings-hint">Houses run anticlockwise from the top diamond (house 1 = Lagna). Small numbers are the rashi (1 Mesha … 12 Meena). Red R = retrograde.</div>
     </div>
-    <div class="settings-panel">
-        <div class="settings-title">Graha positions &amp; next change</div>
+    <div class="settings-panel tr-card">
+        <div class="settings-title">📍 Graha positions &amp; next change</div>
         <div class="tr-scroll"><table class="tr-table" id="trTable"></table></div>
         <div class="settings-hint">Sidereal (Lahiri), geocentric, nine grahas. Rahu/Ketu are the <b>mean</b> node (Drik Panchang's default). Lagna uses your location from Settings. Times are in your device's time zone. Planet positions agree with Swiss Ephemeris to within about 10 arcseconds and Lagna to within about 2; degrees are truncated, as in most panchangs. Own caveat: a planet sitting almost exactly on a boundary (or stationary there) can flip in the last few seconds.</div>
+    </div>
+    <div class="settings-panel tr-card">
+        <div class="settings-title">🛡️ Gochara &amp; Vedha · from your Moon sign</div>
+        <div class="settings-hint" style="margin-bottom:6px">Vedha = a planet in a favorable house is blocked (its good result reduced) when another planet sits in its paired "obstruction" house.</div>
+        <div id="trVedha"></div>
+        <div class="settings-hint">Classical Gochara per BPHS (ch. 65-66): Sun, Moon, Mars, Mercury, Jupiter, Venus, Saturn counted from the natal Moon. Sun-Saturn and Moon-Mercury do not obstruct each other. Rahu/Ketu are not part of the classical table. Whole-sign houses; the wording of each line is a simple summary.</div>
     </div>
     </div>
 
@@ -1222,9 +1312,12 @@ var TITHI_NAMES = ['Pratipada','Dwitiya','Tritiya','Chaturthi','Panchami','Shash
 // inauspicious ones are flagged bad.
 // VERSIONING: bump APP_VERSION + APP_BUILD (= service-worker CACHE_NAME number) and
 // add a line at the TOP of APP_CHANGELOG on every release.
-var APP_VERSION = '2.2.0';
-var APP_BUILD = 41;
+var APP_VERSION = '2.5.0';
+var APP_BUILD = 44;
 var APP_CHANGELOG = [
+    ['2.5.0', 'Calculate your chart from date, time and place of birth (Moon sign, nakshatra, Ascendant), add your and your partner\'s names for a personalised Guide, and a privacy note in Settings.'],
+    ['2.4.0', 'Panchang at a glance now shows the presiding lord of tithi, yoga and karana plus start → end times for Moon sign, nakshatra, tithi, yoga and karana; Tithi/Yoga/Karana now use the arcsecond-level engine; UI polish across tabs'],
+    ['2.3.0', 'Gochara &amp; Vedha in the Transit tab: each classical planet counted from your Moon sign, favorable houses, Vedha obstruction (Sun-Saturn and Moon-Mercury exempt) with a one-line meaning per planet'],
     ['2.2.0', 'New Transit tab: North Indian rashi chart with Lagna and the nine grahas (mean Rahu/Ketu), degree/sign/nakshatra-pada table, retrograde flags, next pada/sign change times, any date/time; planets verified against Swiss Ephemeris'],
     ['2.1.0', 'Panchang at a glance (yoga, karana, lords, deity, navamsa), Chandrashtama alert, next-signs lookahead, more moods on main page, version display'],
     ['2.0.0', 'Bottom tabs, partner tracking, Tarabala, selected-day Moon view, Moon Guide, backup & restore']
@@ -1292,18 +1385,24 @@ function rashiShort(name) {
 
 function getMoonPanchang(date) {
     var jd = toJulianDay(date);
-    var moonLon = moonTropicalLongitude(jd);
-    var ayanamsa = calcAyanamsaLahiri(jd);
-    var sidereal = fix360(moonLon + ayanamsa);
     var nakWidth = 360 / 27;
+    var sidereal, sunSidereal;
+    if (typeof Astronomy !== 'undefined') {
+        // Same arcsecond-level engine as the Transit tab, so tithi/yoga/karana
+        // boundaries (and the end times derived from them) match Drik/Swiss Ephemeris.
+        sidereal = trSiderealLon('Moon', date);
+        sunSidereal = trSiderealLon('Sun', date);
+    } else {
+        var ayanamsa = calcAyanamsaLahiri(jd);
+        sidereal = fix360(moonTropicalLongitude(jd) + ayanamsa);
+        sunSidereal = fix360(sunTropicalLongitude(jd) + ayanamsa);
+    }
     var nakIndex = Math.min(26, Math.floor(sidereal / nakWidth));
     var padaWidth = nakWidth / 4;
     var pada = Math.floor((sidereal % nakWidth) / padaWidth) + 1;
     var rashiIndex = Math.min(11, Math.floor(sidereal / 30));
-    var sunLon = sunTropicalLongitude(jd);
-    var tithi = getTithiInfo(moonLon, sunLon);
-    var elong = fix360(moonLon - sunLon);
-    var sunSidereal = fix360(sunLon + ayanamsa);
+    var tithi = getTithiInfo(sidereal, sunSidereal);
+    var elong = fix360(sidereal - sunSidereal);
     return {
         nakshatra: NAKSHATRA_NAMES[nakIndex],
         nakshatraIndex: nakIndex,
@@ -1315,6 +1414,58 @@ function getMoonPanchang(date) {
         yogaIndex: Math.min(26, Math.floor(fix360(sidereal + sunSidereal) / nakWidth)),
         karanaIndex: Math.min(59, Math.floor(elong / 6))
     };
+}
+
+// Presiding lords (deities) from the classical Panchang tables, as listed by Drik Panchang.
+var TITHI_LORDS = ['Agni', 'Brahma', 'Gauri', 'Ganesha', 'Nagas (Serpents)', 'Kartikeya', 'Surya', 'Shiva', 'Durga', 'Yama', 'Vishvedevas', 'Vishnu', 'Kamadeva', 'Shiva', 'Chandra'];
+var YOGA_LORDS = ['Yama', 'Vishnu', 'Chandra', 'Brahma', 'Brihaspati', 'Chandra', 'Indra', 'Varuna (Jala)', 'Sarpa (Nagas)', 'Agni', 'Surya', 'Bhumi', 'Vayu', 'Bhaga', 'Varuna', 'Ganesha', 'Rudra', 'Kubera', 'Vishvakarma', 'Mitra', 'Kartikeya', 'Savitri', 'Lakshmi', 'Parvati', 'Ashwini Kumaras', 'Pitris', 'Diti'];
+var KARANA_LORDS = { 'Bava': 'Indra', 'Balava': 'Brahma', 'Kaulava': 'Mitra', 'Taitila': 'Aryaman', 'Gara': 'Prithvi', 'Vanija': 'Lakshmi', 'Vishti (Bhadra)': 'Yama', 'Shakuni': 'Kali', 'Chatushpada': 'Vrishabha (Nandi)', 'Naga': 'Sarpa (Nagas)', 'Kimstughna': 'Vayu' };
+function tithiLord(tithi) {
+    if (tithi.dayInPaksha === 15) { return tithi.paksha === 'Shukla' ? 'Chandra' : 'Pitris'; }
+    return TITHI_LORDS[tithi.dayInPaksha - 1];
+}
+
+// Start/end of the tithi, yoga, karana, nakshatra and Moon sign that are running at `date`:
+// scans outward in 15-minute steps, then bisects each boundary to about a second.
+function panchangSpans(date) {
+    var fields = {
+        rashi: function (p) { return p.rashiIndex; },
+        nak: function (p) { return p.nakshatraIndex; },
+        tithi: function (p) { return Math.floor(p.elongation / 12); },
+        yoga: function (p) { return p.yogaIndex; },
+        karana: function (p) { return p.karanaIndex; }
+    };
+    var t0 = date.getTime(), step = 900000, maxSteps = 200;
+    var out = {};
+    Object.keys(fields).forEach(function (k) {
+        var f = fields[k];
+        var cur = f(getMoonPanchang(date));
+        var span = {};
+        [[1, 'end'], [-1, 'start']].forEach(function (d) {
+            var inside = t0, outside = null;
+            for (var i = 1; i <= maxSteps; i++) {
+                var t = t0 + d[0] * i * step;
+                if (f(getMoonPanchang(new Date(t))) !== cur) { outside = t; break; }
+                inside = t;
+            }
+            if (outside === null) { span[d[1]] = null; return; }
+            for (var j = 0; j < 16; j++) {
+                var mid = (inside + outside) / 2;
+                if (f(getMoonPanchang(new Date(mid))) === cur) { inside = mid; } else { outside = mid; }
+            }
+            span[d[1]] = new Date(d[0] === 1 ? outside : inside);
+        });
+        out[k] = span;
+    });
+    return out;
+}
+
+function spanText(span, ref) {
+    var fmt = function (d) {
+        var o = { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' };
+        return d.toLocaleString(undefined, o);
+    };
+    return '<div class="g-valid">⏱ ' + (span.start ? fmt(span.start) : '…') + ' → <b>' + (span.end ? fmt(span.end) : '…') + '</b></div>';
 }
 
 // ---------------------------------------------------------------------------
@@ -1638,6 +1789,62 @@ function trCompute(date, loc) {
     return rows;
 }
 
+// Gochara favorable houses from the natal Moon -> their Vedha (obstruction) house.
+var VEDHA = {
+    Sun: { 3: 9, 6: 12, 10: 4, 11: 5 },
+    Moon: { 1: 5, 3: 9, 6: 12, 7: 2, 10: 4, 11: 8 },
+    Mars: { 3: 12, 6: 9, 10: 4, 11: 5 },
+    Mercury: { 2: 5, 4: 3, 6: 9, 8: 1, 10: 8, 11: 12 },
+    Jupiter: { 2: 12, 5: 4, 7: 3, 9: 10, 11: 8 },
+    Venus: { 1: 8, 2: 7, 3: 1, 4: 10, 5: 9, 8: 5, 9: 11, 11: 6, 12: 3 },
+    Saturn: { 3: 12, 6: 9, 11: 5 }
+};
+var VEDHA_THEME = {
+    Sun: 'confidence, status and vitality', Moon: 'mind and mood', Mars: 'energy, courage and drive',
+    Mercury: 'communication, business and learning', Jupiter: 'wisdom, growth and finances',
+    Venus: 'comfort, love and enjoyment', Saturn: 'discipline, work and stability'
+};
+function vedhaExempt(a, b) {
+    return (a === 'Sun' && b === 'Saturn') || (a === 'Saturn' && b === 'Sun') ||
+        (a === 'Moon' && b === 'Mercury') || (a === 'Mercury' && b === 'Moon');
+}
+
+function renderVedha(rows) {
+    var el = document.getElementById('trVedha');
+    if (!el) { return; }
+    var chart = loadUserChart();
+    if (!chart) {
+        el.innerHTML = '<div class="settings-hint">Save your Moon sign in Settings to see Gochara and Vedha for you.</div>';
+        return;
+    }
+    var pos = {};
+    rows.forEach(function (r) { if (VEDHA[r.name]) { pos[r.name] = houseFromReference(r.sign, chart.moonSignIndex); } });
+    var html = '';
+    Object.keys(VEDHA).forEach(function (name) {
+        var h = pos[name], v = VEDHA[name][h], theme = VEDHA_THEME[name], chip, text, cls;
+        if (v === undefined) {
+            cls = 'no'; chip = '<span class="chip gentle">challenging</span>';
+            text = 'Not a supportive house now, so ' + theme + ' need patience; no extra Vedha applies.';
+        } else {
+            var blockers = Object.keys(pos).filter(function (o) { return o !== name && pos[o] === v && !vedhaExempt(name, o); });
+            if (blockers.length) {
+                cls = 'bad'; chip = '<span class="chip gentle">blocked (Vedha)</span>';
+                text = 'Would support ' + theme + ', but ' + blockers.join(' + ') + ' in the ' + ordinal(v) + ' cancels the benefit: expect delays or a weaker result.';
+            } else {
+                cls = 'ok'; chip = '<span class="chip good">favorable</span>';
+                text = 'Supports ' + theme + '; nothing sits in its Vedha house (' + ordinal(v) + '), so you get the full benefit.';
+            }
+        }
+        html += '<div class="tr-vrow ' + cls + '"><div class="tr-vh">' + trBadge(name) + '<div class="tr-house">' + ordinal(h) + ' house</div>' + chip + '</div><div class="tr-vt">' + text + '</div></div>';
+    });
+    el.innerHTML = html;
+}
+
+var TR_COLOR = { Lagna: '#5b4b9a', Sun: '#e67e22', Moon: '#5dade2', Mars: '#e74c3c', Mercury: '#27ae60', Jupiter: '#d4a017', Venus: '#e0689f', Saturn: '#5d6d7e', Rahu: '#7d3c98', Ketu: '#a0522d' };
+function trBadge(name) {
+    return '<span class="tr-dot" style="background:' + TR_COLOR[name] + '">' + TR_ABBR[name] + '</span>';
+}
+
 var TR_HOUSE = [null,
     { c: [200, 85], n: [200, 165], per: 2 }, { c: [100, 35], n: [100, 86], per: 2 },
     { c: [42, 100], n: [86, 100], per: 1 }, { c: [100, 200], n: [160, 200], per: 2 },
@@ -1657,7 +1864,8 @@ function trSvg(rows) {
         (byHouse[h] = byHouse[h] || []).push(r);
     });
     var s = '<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="North Indian rashi chart" font-family="system-ui,sans-serif">' +
-        '<rect x="1" y="1" width="398" height="398" fill="#fbfaff" stroke="#7c6bb5" stroke-width="2"/>' +
+        '<rect x="1" y="1" width="398" height="398" fill="#fbfaff" stroke="#7c6bb5" stroke-width="2.5" rx="6"/>' +
+        '<g fill="#ece7ff" opacity=".75"><polygon points="100,100 200,1 300,100 200,200"/><polygon points="100,100 1,200 100,300 200,200"/><polygon points="100,300 200,399 300,300 200,200"/><polygon points="300,100 399,200 300,300 200,200"/></g>' +
         '<path d="M1 1L399 399M399 1L1 399M200 1L399 200L200 399L1 200Z" fill="none" stroke="#7c6bb5" stroke-width="1.5"/>';
     for (var h = 1; h <= 12; h++) {
         var P = TR_HOUSE[h];
@@ -1671,7 +1879,7 @@ function trSvg(rows) {
             s += '<text x="' + P.c[0] + '" y="' + (y0 + li * lh) + '" text-anchor="middle" dominant-baseline="middle" font-size="12" fill="#374151">';
             line.forEach(function (r, k) {
                 s += (k ? '<tspan dx="5">' : '<tspan>') +
-                    '<tspan font-weight="700" fill="' + (r.name === 'Lagna' ? '#5b4b9a' : '#374151') + '">' + TR_ABBR[r.name] + '</tspan> ' + r.deg + '°' +
+                    '<tspan font-weight="700" fill="' + TR_COLOR[r.name] + '">' + TR_ABBR[r.name] + '</tspan> ' + r.deg + '°' +
                     (r.retro ? '<tspan fill="#c0392b" font-weight="700" font-size="9"> R</tspan>' : '') + '</tspan>';
             });
             s += '</text>';
@@ -1709,7 +1917,8 @@ function renderTransit() {
     var now = new Date();
     var when = trCustom || now;
     var loc = getActiveLocation();
-    var key = Math.floor(when.getTime() / 60000) + '|' + loc.lat + '|' + loc.lon + '|' + (trCustom ? 'c' : 'l');
+    var uc = loadUserChart();
+    var key = Math.floor(when.getTime() / 60000) + '|' + loc.lat + '|' + loc.lon + '|' + (trCustom ? 'c' : 'l') + '|' + (uc ? uc.moonSignIndex : '-');
     var input = document.getElementById('trWhen');
     if (document.activeElement !== input) { input.value = trToLocalInput(when); }
     if (key === trLastKey) { return; }
@@ -1722,12 +1931,13 @@ function renderTransit() {
     chartEl.innerHTML = trSvg(rows);
     var html = '<tr><th>Graha</th><th>Position</th><th>Nakshatra</th><th>Next change</th></tr>';
     rows.forEach(function (r) {
-        html += '<tr><td><b>' + (r.name === 'Lagna' ? 'Lagna (Asc)' : r.name) + '</b>' + (r.retro ? ' <span class="tr-retro">(R)</span>' : '') + '</td>' +
+        html += '<tr><td><span class="tr-pl">' + trBadge(r.name) + '<b>' + (r.name === 'Lagna' ? 'Lagna' : r.name) + '</b></span>' + (r.retro ? ' <span class="tr-retro">(R)</span>' : '') + '</td>' +
             '<td>' + r.deg + '°' + (r.min < 10 ? '0' : '') + r.min + '′' + (r.sec < 10 ? '0' : '') + r.sec + '″<br>' + rashiShort(RASHI_NAMES[r.sign]) + '</td>' +
             '<td>' + NAKSHATRA_NAMES[r.nak] + '<br>pada ' + r.pada + '</td>' +
             '<td class="tr-next">' + trNextLine('Pada', r.next.pada, r, when) + trNextLine('Sign', r.next.sign, r, when) + '</td></tr>';
     });
     document.getElementById('trTable').innerHTML = html;
+    renderVedha(rows);
 }
 
 (function () {
@@ -1764,6 +1974,139 @@ function showTab(name) {
     window.scrollTo(0, 0);
 }
 
+// ---------------------------------------------------------------------------
+// Birth-details calculator: date + time + place -> Moon sign, nakshatra, Lagna
+// (same engine as the Transit tab). The place is looked up once online; the
+// birth-time zone/DST comes from the browser's IANA time zone database.
+// ---------------------------------------------------------------------------
+var BIRTH_KEY = 'mindfulMoonBirth.v1';
+function loadBirth() {
+    try { return JSON.parse(localStorage.getItem(BIRTH_KEY)) || {}; } catch (e) { return {}; }
+}
+function saveBirth(who, data) {
+    var all = loadBirth();
+    all[who] = data;
+    localStorage.setItem(BIRTH_KEY, JSON.stringify(all));
+    scheduleSafeguard();
+}
+
+function tzOffsetMs(utcMs, tz) {
+    var f = new Intl.DateTimeFormat('en-US', { timeZone: tz, hourCycle: 'h23', year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' });
+    var p = {};
+    f.formatToParts(new Date(utcMs)).forEach(function (x) { p[x.type] = x.value; });
+    return Date.UTC(+p.year, +p.month - 1, +p.day, +p.hour % 24, +p.minute, +p.second) - Math.floor(utcMs / 1000) * 1000;
+}
+function localToUtc(y, mo, d, h, mi, tz) {
+    var guess = Date.UTC(y, mo - 1, d, h, mi);
+    var off = tzOffsetMs(guess, tz);
+    var utc = guess - off;
+    var off2 = tzOffsetMs(utc, tz);
+    if (off2 !== off) { utc = guess - off2; }
+    return new Date(utc);
+}
+
+function geocodePlaces(query) {
+    var tokens = query.split(',').map(function (s) { return s.trim(); }).filter(Boolean);
+    var url = 'https://geocoding-api.open-meteo.com/v1/search?name=' + encodeURIComponent(tokens[0]) + '&count=10&language=en&format=json';
+    return fetch(url).then(function (res) { return res.json(); }).then(function (data) {
+        var list = (data && data.results ? data.results : []).map(function (r, i) {
+            var hay = [r.name, r.admin1, r.admin2, r.country].join(' ').toLowerCase();
+            var score = tokens.slice(1).filter(function (t) { return hay.indexOf(t.toLowerCase()) >= 0; }).length;
+            return { i: i, score: score, name: [r.name, r.admin1, r.country].filter(Boolean).join(', '), lat: r.latitude, lon: r.longitude, timezone: r.timezone || 'UTC' };
+        });
+        list.sort(function (a, b) { return b.score - a.score || a.i - b.i; });
+        if (!list.length) { throw new Error('Place not found'); }
+        return list.slice(0, 5);
+    });
+}
+
+function computeBirthChart(place, dateStr, timeStr, unknownTime) {
+    var d = dateStr.split('-').map(Number);
+    var t = (unknownTime ? '12:00' : timeStr).split(':').map(Number);
+    var utc = localToUtc(d[0], d[1], d[2], t[0], t[1], place.timezone);
+    var res = { utc: utc, moon: trDescribe(trSiderealLon('Moon', utc)) };
+    if (!unknownTime) { res.asc = trDescribe(trLagnaLon(utc, place.lat, place.lon)); }
+    var s0 = trDescribe(trSiderealLon('Moon', localToUtc(d[0], d[1], d[2], 0, 0, place.timezone))).sign;
+    var s1 = trDescribe(trSiderealLon('Moon', localToUtc(d[0], d[1], d[2], 23, 59, place.timezone))).sign;
+    res.moonChangesSign = s0 !== s1;
+    return res;
+}
+
+function birthBoxHtml(id, whose) {
+    return '<div class="birth-box">' +
+        '<div class="birth-head">✨ Don\'t know ' + whose + ' chart? Let the app work it out</div>' +
+        '<div class="birth-sub">Enter when and where ' + (whose === 'your' ? 'you were' : 'they were') + ' born. The Moon sign, birth nakshatra and Ascendant are calculated right on your phone. Only the place name is sent (once) to find its coordinates.</div>' +
+        '<div class="birth-grid"><div class="birth-field"><label for="' + id + 'Date">📅 Date of birth</label><input type="date" id="' + id + 'Date"></div>' +
+        '<div class="birth-field"><label for="' + id + 'Time">🕐 Time of birth</label><input type="time" id="' + id + 'Time"></div></div>' +
+        '<label class="birth-chk"><input type="checkbox" id="' + id + 'Unk"> I don\'t know the exact birth time</label>' +
+        '<div class="birth-field"><label for="' + id + 'Place">📍 Place of birth</label><input type="text" id="' + id + 'Place" placeholder="City, State/Region, Country"></div>' +
+        '<div class="birth-field" id="' + id + 'PickWrap" style="display:none"><label for="' + id + 'Pick">Which one is it?</label><select id="' + id + 'Pick"></select></div>' +
+        '<button type="button" class="footer-btn primary" id="' + id + 'Go">✨ Calculate chart</button>' +
+        '<div class="birth-msg" id="' + id + 'Msg"></div><div id="' + id + 'Out"></div></div>';
+}
+
+function initBirthBox(host, id, who, whose, cfg) {
+    host.innerHTML = birthBoxHtml(id, whose);
+    var $ = function (s) { return document.getElementById(id + s); };
+    var saved = loadBirth()[who];
+    $('Date').max = new Date().toISOString().slice(0, 10);
+    if (saved) {
+        $('Date').value = saved.date || '';
+        $('Time').value = saved.time || '';
+        $('Unk').checked = !!saved.unknown;
+        $('Place').value = saved.place ? saved.place.name : '';
+    }
+    $('Time').disabled = $('Unk').checked;
+    $('Unk').addEventListener('change', function () { $('Time').disabled = $('Unk').checked; });
+    var picks = [];
+    $('Place').addEventListener('input', function () { picks = []; $('PickWrap').style.display = 'none'; });
+    var msg = function (text, cls) { $('Msg').textContent = text; $('Msg').className = 'birth-msg settings-hint ' + (cls || ''); };
+
+    function finish(place) {
+        var unknown = $('Unk').checked;
+        var res = computeBirthChart(place, $('Date').value, $('Time').value, unknown);
+        saveBirth(who, { date: $('Date').value, time: $('Time').value, unknown: unknown, place: place });
+        var m = res.moon;
+        cfg.selMoon.value = m.sign;
+        fillNakSelect(cfg.selNak, m.sign, m.nak);
+        if (res.asc) { cfg.selAsc.value = res.asc.sign; }
+        var dm = function (x) { return x.deg + '°' + (x.min < 10 ? '0' : '') + x.min + '′'; };
+        var html = '<div class="birth-res"><div class="birth-title">✅ Chart calculated</div>' +
+            '<div class="birth-row">🌙 Moon sign (Rashi): <b>' + rashiShort(RASHI_NAMES[m.sign]) + '</b> · ' + dm(m) + '</div>' +
+            '<div class="birth-row">⭐ Birth nakshatra: <b>' + NAKSHATRA_NAMES[m.nak] + '</b>, pada ' + m.pada + '</div>' +
+            (res.asc ? '<div class="birth-row">⬆️ Ascendant (Lagna): <b>' + rashiShort(RASHI_NAMES[res.asc.sign]) + '</b> · ' + dm(res.asc) + '</div>'
+                : '<div class="birth-row">⬆️ Ascendant: <b>not calculated</b> (needs the birth time)</div>');
+        if (unknown) { html += '<div class="birth-warn">Without a birth time, noon was used for the Moon. ' + (res.moonChangesSign ? 'The Moon changed sign that day, so the Moon sign could be different: use the exact time if you can find it.' : 'The Moon stayed in the same sign all day, so the Moon sign is reliable.') + '</div>'; }
+        else if (res.moonChangesSign) { html += '<div class="birth-warn">The Moon changed sign that day, so the exact birth time matters: double-check it.</div>'; }
+        html += '<div class="birth-note">Filled into the fields below. <button type="button" class="footer-btn" id="' + id + 'Save" style="margin-top:6px">💾 Save now</button></div></div>';
+        $('Out').innerHTML = html;
+        msg('');
+        $('Save').addEventListener('click', function () { cfg.save(); $('Save').textContent = '✔ Saved'; });
+    }
+
+    $('Go').addEventListener('click', function () {
+        if (!$('Date').value) { msg('Please enter the date of birth.', 'error'); return; }
+        if (!$('Unk').checked && !$('Time').value) { msg('Please enter the time of birth, or tick "I don\'t know the exact birth time".', 'error'); return; }
+        var q = $('Place').value.trim();
+        if (!q) { msg('Please enter the place of birth.', 'error'); return; }
+        if (picks.length) { finish(picks[Number($('Pick').value)]); return; }
+        if (saved && saved.place && saved.place.name === q) { finish(saved.place); return; }
+        msg('Finding the place…');
+        geocodePlaces(q).then(function (list) {
+            if (list.length > 1) {
+                picks = list;
+                $('Pick').innerHTML = list.map(function (p, i) { return '<option value="' + i + '">' + escHtml(p.name) + '</option>'; }).join('');
+                $('PickWrap').style.display = '';
+                msg('Pick the right place above, then tap Calculate again.', 'ok');
+            } else {
+                finish(list[0]);
+            }
+        }).catch(function () {
+            msg('Could not find that place (it needs an internet connection). Try "City, Country", or choose the signs manually below.', 'error');
+        });
+    });
+}
+
 function initSettingsPanel() {
     var selMoon = document.getElementById('selMoonSign');
     var selAsc = document.getElementById('selAscSign');
@@ -1771,6 +2114,7 @@ function initSettingsPanel() {
     populateSignSelect(selAsc);
     var chart = loadUserChart();
     if (chart) {
+        document.getElementById('inpUserName').value = chart.name || '';
         selMoon.value = chart.moonSignIndex;
         selAsc.value = chart.ascSignIndex;
     }
@@ -1804,6 +2148,21 @@ function initSettingsPanel() {
     selGender.addEventListener('change', function () {
         saveGender(selGender.value);
         applyGenderVisibility();
+    });
+
+    initBirthBox(document.getElementById('birthYou'), 'bbYou', 'you', 'your', {
+        selMoon: selMoon, selNak: selNak, selAsc: selAsc,
+        save: function () {
+            saveUserChart({ name: document.getElementById('inpUserName').value.trim().slice(0, 20), moonSignIndex: Number(selMoon.value), ascSignIndex: Number(selAsc.value), nakshatraIndex: readNak(selNak) });
+            updateNowPanel();
+        }
+    });
+    initBirthBox(document.getElementById('birthPartner'), 'bbPartner', 'partner', 'their', {
+        selMoon: selPMoon, selNak: selPNak, selAsc: selPAsc,
+        save: function () {
+            savePartner({ name: document.getElementById('inpPartnerName').value.trim().slice(0, 20), moonSignIndex: Number(selPMoon.value), ascSignIndex: Number(selPAsc.value), nakshatraIndex: readNak(selPNak) });
+            updateNowPanel();
+        }
     });
 
     var inpLocation = document.getElementById('inpLocation');
@@ -1841,7 +2200,7 @@ function initSettingsPanel() {
         showTab('home');
     });
     document.getElementById('btnSaveChart').addEventListener('click', function () {
-        saveUserChart({ moonSignIndex: Number(selMoon.value), ascSignIndex: Number(selAsc.value), nakshatraIndex: readNak(selNak) });
+        saveUserChart({ name: document.getElementById('inpUserName').value.trim().slice(0, 20), moonSignIndex: Number(selMoon.value), ascSignIndex: Number(selAsc.value), nakshatraIndex: readNak(selNak) });
         savePartner(chkPartner.checked ? {
             name: document.getElementById('inpPartnerName').value.trim().slice(0, 20),
             moonSignIndex: Number(selPMoon.value),
@@ -1994,7 +2353,14 @@ function personBoxes(chart, who, r, dignity, pct, strengthLabel, nIdx) {
     var o = overallInfo(dignity, hMoon, pct);
     var a = HOUSE_FROM_ASC[hAsc];
     var poss = who === 'you' ? 'your' : escHtml(who) + "'s";
-    return '<div class="g-box moon"><div class="g-sub">From ' + poss + ' Moon sign</div>' +
+    var nameLabel = who === 'you' ? 'You' : escHtml(who);
+    var natal = '<div class="g-box g-profile"><div class="g-sub">Guide for</div>' +
+        '<div class="g-pname">👤 ' + nameLabel + '</div><div class="g-pchips">' +
+        '<span>🌙 Moon <b>' + rashiShort(RASHI_NAMES[chart.moonSignIndex]) + '</b></span>' +
+        (typeof chart.nakshatraIndex === 'number' ? '<span>⭐ <b>' + NAKSHATRA_NAMES[chart.nakshatraIndex] + '</b></span>' : '') +
+        '<span>⬆️ Lagna <b>' + rashiShort(RASHI_NAMES[chart.ascSignIndex]) + '</b></span></div>' +
+        '<div class="g-line">Today the Moon is in ' + poss + ' <b>' + ordinal(hMoon) + '</b> house from the Moon sign and the <b>' + ordinal(hAsc) + '</b> from the Ascendant.</div></div>';
+    return natal + '<div class="g-box moon"><div class="g-sub">From ' + poss + ' Moon sign</div>' +
         '<div class="g-head">' + ordinal(hMoon) + ' house <span class="chip ' + (favorable ? 'good' : 'gentle') + '">' + (favorable ? 'favorable' : 'challenging') + '</span></div>' +
         '<div class="g-line"><b>Mood effect:</b> ' + HOUSE_FROM_MOON[hMoon] + '</div></div>' +
         '<div class="g-box asc"><div class="g-sub">From ' + poss + ' Ascendant</div>' +
@@ -2014,6 +2380,7 @@ function personBoxes(chart, who, r, dignity, pct, strengthLabel, nIdx) {
 }
 
 function togetherBox(chart, partner, r, dignity, pct, nIdx) {
+    var yname = chart.name ? escHtml(chart.name) : 'You';
     var pname = escHtml(partner.name || 'Partner');
     var yM = houseFromReference(r, chart.moonSignIndex), yA = houseFromReference(r, chart.ascSignIndex);
     var pM = houseFromReference(r, partner.moonSignIndex), pA = houseFromReference(r, partner.ascSignIndex);
@@ -2026,13 +2393,13 @@ function togetherBox(chart, partner, r, dignity, pct, nIdx) {
     else { verdict = pname + ' is likely to feel lighter while you may feel off: ask for patience and share how you feel kindly.'; }
     var rel = MOON_PAIR[houseFromReference(partner.moonSignIndex, chart.moonSignIndex)];
     var html = '<div class="g-box"><div class="g-sub">Today, side by side</div>' +
-        '<div class="g-line"><b>You:</b> Moon sign - ' + ordinal(yM) + ' house <span class="chip ' + (yFav ? 'good' : 'gentle') + '">' + (yFav ? 'favorable' : 'challenging') + '</span> · Asc - ' + ordinal(yA) + ' house<br>' + HOUSE_FROM_MOON[yM] + '</div>' +
+        '<div class="g-line"><b>' + yname + ':</b> Moon sign - ' + ordinal(yM) + ' house <span class="chip ' + (yFav ? 'good' : 'gentle') + '">' + (yFav ? 'favorable' : 'challenging') + '</span> · Asc - ' + ordinal(yA) + ' house<br>' + HOUSE_FROM_MOON[yM] + '</div>' +
         '<div class="g-line"><b>' + pname + ':</b> Moon sign - ' + ordinal(pM) + ' house <span class="chip ' + (pFav ? 'good' : 'gentle') + '">' + (pFav ? 'favorable' : 'challenging') + '</span> · Asc - ' + ordinal(pA) + ' house<br>' + HOUSE_FROM_MOON[pM] + '</div></div>';
     html += '<div class="g-box moon"><div class="g-sub">Together today</div>' +
         '<div class="g-line">' + verdict + '</div>' +
-        '<div class="g-line"><b>Outlook:</b> you ' + yO.text + ' · ' + pname + ' ' + pO.text + '</div>' + taraLine(chart, 'You', nIdx) + taraLine(partner, pname, nIdx) + '</div>';
+        '<div class="g-line"><b>Outlook:</b> ' + yname + ' ' + yO.text + ' · ' + pname + ' ' + pO.text + '</div>' + taraLine(chart, yname, nIdx) + taraLine(partner, pname, nIdx) + '</div>';
     html += '<div class="g-box asc"><div class="g-sub">Areas in focus</div>' +
-        '<div class="g-line"><b>You (' + ordinal(yA) + ' house):</b> ' + HOUSE_FROM_ASC[yA].area + '<br><b>Good for:</b> ' + HOUSE_FROM_ASC[yA].good + '<br><b>Watch:</b> ' + HOUSE_FROM_ASC[yA].watch + '</div>' +
+        '<div class="g-line"><b>' + yname + ' (' + ordinal(yA) + ' house):</b> ' + HOUSE_FROM_ASC[yA].area + '<br><b>Good for:</b> ' + HOUSE_FROM_ASC[yA].good + '<br><b>Watch:</b> ' + HOUSE_FROM_ASC[yA].watch + '</div>' +
         '<div class="g-line"><b>' + pname + ' (' + ordinal(pA) + ' house):</b> ' + HOUSE_FROM_ASC[pA].area + '<br><b>Good for:</b> ' + HOUSE_FROM_ASC[pA].good + '<br><b>Watch:</b> ' + HOUSE_FROM_ASC[pA].watch + '</div></div>';
     html += '<div class="g-box"><div class="g-sub">Your Moon signs together (always true)</div>' +
         '<div class="g-head"><span class="chip ' + rel[0] + '" style="margin-left:0">' + (rel[0] === 'good' ? 'harmonious' : 'needs care') + '</span></div>' +
@@ -2061,7 +2428,7 @@ function renderMoonGuide(p, view, events) {
     document.getElementById('guideTitle').textContent = view.live
         ? '🌙 Moon Guide — Today'
         : '🌙 Moon Guide — ' + view.day.toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' }) + ' (preview)';
-    var sig = view.day.getTime() + '|' + view.live + '|' + p.rashiIndex + '|' + p.nakshatraIndex + '|' + p.tithi.paksha + p.tithi.dayInPaksha + '|' + p.yogaIndex + '|' + p.karanaIndex + '|' + p.pada + '|' + (chart ? chart.moonSignIndex + ',' + chart.ascSignIndex + ',' + chart.nakshatraIndex : '-') +
+    var sig = view.day.getTime() + '|' + view.live + '|' + p.rashiIndex + '|' + p.nakshatraIndex + '|' + p.tithi.paksha + p.tithi.dayInPaksha + '|' + p.yogaIndex + '|' + p.karanaIndex + '|' + p.pada + '|' + (chart ? chart.moonSignIndex + ',' + chart.ascSignIndex + ',' + chart.nakshatraIndex + ',' + (chart.name || '') : '-') +
             '|' + (partner ? partner.name + ',' + partner.moonSignIndex + ',' + partner.ascSignIndex + ',' + partner.nakshatraIndex : '-') + '|' + guideTab;
     if (sig === guideSig) { return; }
     guideSig = sig;
@@ -2082,14 +2449,15 @@ function renderMoonGuide(p, view, events) {
     var navIdx = (p.nakshatraIndex * 4 + p.pada - 1) % 12;
     var yoga = YOGAS[p.yogaIndex];
     var karana = karanaInfo(p.karanaIndex);
+    var sp = panchangSpans(view.date);
     html += '<div class="g-box moon"><div class="g-sub">Panchang at a glance</div>' +
-        '<div class="g-line">🌙 <b>Sign:</b> ' + rashiShort(RASHI_NAMES[r]) + ' · ' + SIGN_ELEMENT[r % 4] + ' · ' + SIGN_MODE[r % 3] + ' · ruled by ' + SIGN_LORD[r] + '</div>' +
-        '<div class="g-line">⭐ <b>Nakshatra:</b> ' + p.nakshatra + ', pada ' + p.pada + ' · lord ' + nakLord + ' · deity ' + NAK_DEITY[p.nakshatraIndex] + '</div>' +
+        '<div class="g-line">🌙 <b>Sign:</b> ' + rashiShort(RASHI_NAMES[r]) + ' · ' + SIGN_ELEMENT[r % 4] + ' · ' + SIGN_MODE[r % 3] + ' · ruled by ' + SIGN_LORD[r] + spanText(sp.rashi) + '</div>' +
+        '<div class="g-line">⭐ <b>Nakshatra:</b> ' + p.nakshatra + ', pada ' + p.pada + ' · lord ' + nakLord + ' · deity ' + NAK_DEITY[p.nakshatraIndex] + spanText(sp.nak) + '</div>' +
         '<div class="g-line">🔷 <b>Navamsa of this pada:</b> ' + rashiShort(RASHI_NAMES[navIdx]) + '</div>' +
-        '<div class="g-line">🌗 <b>Tithi:</b> ' + p.tithi.paksha + ' ' + p.tithi.name + '</div>' +
-        '<div class="g-line">' + (yoga.bad ? '⚠️' : '✨') + ' <b>Yoga:</b> ' + yoga.name + ' <span class="chip ' + (yoga.bad ? 'strained' : 'strong') + '">' + (yoga.bad ? 'inauspicious' : 'auspicious') + '</span></div>' +
-        '<div class="g-line">' + (karana.bad ? '⚠️' : '🔹') + ' <b>Karana:</b> ' + karana.name + (karana.bad ? ' <span class="chip strained">avoid starting new things</span>' : '') + '</div>' +
-        '<div class="g-note">Sign lord, nakshatra lord (Vimshottari order), deity and the 27 Yogas / 60 Karanas are standard classical tables. Yoga uses sidereal Sun + Moon; Karana is a half-tithi. Vishti (Bhadra) and the nine inauspicious Yogas are the traditional "avoid" ones.</div></div>';
+        '<div class="g-line">🌗 <b>Tithi:</b> ' + p.tithi.paksha + ' ' + p.tithi.name + ' · lord ' + tithiLord(p.tithi) + spanText(sp.tithi) + '</div>' +
+        '<div class="g-line">' + (yoga.bad ? '⚠️' : '✨') + ' <b>Yoga:</b> ' + yoga.name + ' · lord ' + YOGA_LORDS[p.yogaIndex] + ' <span class="chip ' + (yoga.bad ? 'strained' : 'strong') + '">' + (yoga.bad ? 'inauspicious' : 'auspicious') + '</span>' + spanText(sp.yoga) + '</div>' +
+        '<div class="g-line">' + (karana.bad ? '⚠️' : '🔹') + ' <b>Karana:</b> ' + karana.name + ' · lord ' + KARANA_LORDS[karana.name] + (karana.bad ? ' <span class="chip strained">avoid starting new things</span>' : '') + spanText(sp.karana) + '</div>' +
+        '<div class="g-note">⏱ shows when each item started and when it ends (your device time zone), computed from the same arcsecond-level Sun/Moon engine as the Transit tab; each is valid at the moment shown above. "Lord" is the presiding deity from the classical Panchang tables (Drik Panchang lists the same). Yoga uses sidereal Sun + Moon; Karana is a half-tithi. Vishti (Bhadra) and the nine inauspicious Yogas are the traditional "avoid" ones. Tithi here is the instantaneous one, not the sunrise-based tithi of the day.</div></div>';
     html += '<div class="g-box"><div class="g-sub">Tithi &amp; Moon strength</div>' +
         '<div class="g-head">' + p.tithi.paksha + ' ' + p.tithi.name + ' <span class="chip ' + (pct >= 75 ? 'strong' : pct >= 35 ? 'neutral' : 'strained') + '">' + strengthLabel + '</span></div>' +
         '<div class="g-bar"><div class="g-bar-fill" style="width:' + pct + '%"></div></div>' +
@@ -2114,7 +2482,8 @@ function renderMoonGuide(p, view, events) {
 
     if (chart) {
         if (partner) {
-            var tabs = [['you', 'You'], ['partner', escHtml(partner.name || 'Partner')], ['together', 'Together 💞']];
+            var yn = chart.name ? escHtml(chart.name) : 'You';
+            var tabs = [['you', yn], ['partner', escHtml(partner.name || 'Partner')], ['together', 'Together 💞']];
             html += '<div class="g-tabs">';
             tabs.forEach(function (t) {
                 html += '<button type="button" class="g-tab' + (guideTab === t[0] ? ' on' : '') + '" data-tab="' + t[0] + '">' + t[1] + '</button>';
@@ -2127,7 +2496,7 @@ function renderMoonGuide(p, view, events) {
         } else if (guideTab === 'partner' && partner) {
             html += personBoxes(partner, partner.name || 'Partner', r, dignity, pct, strengthTxt, p.nakshatraIndex);
         } else {
-            html += personBoxes(chart, 'you', r, dignity, pct, strengthTxt, p.nakshatraIndex);
+            html += personBoxes(chart, chart.name || 'you', r, dignity, pct, strengthTxt, p.nakshatraIndex);
         }
     } else {
         html += '<div class="g-box"><div class="g-line">Set your Moon sign &amp; Ascendant in ⚙️ Settings to see the house-based guidance for you.</div></div>';
@@ -2527,7 +2896,7 @@ document.getElementById('btnMoreMoods').addEventListener('click', function () {
 //   3. Backup file saved to the phone's Downloads folder (survives clearing site
 //      data), with a periodic reminder, plus Share and Restore-from-file.
 // ---------------------------------------------------------------------------
-var SAFE_KEYS = [STORAGE_KEY, NOTES_KEY, USER_CHART_KEY, PARTNER_KEY, GENDER_KEY, USER_LOCATION_KEY, 'mindfulMoonInsightRange.v1'];
+var SAFE_KEYS = [STORAGE_KEY, NOTES_KEY, USER_CHART_KEY, PARTNER_KEY, GENDER_KEY, USER_LOCATION_KEY, BIRTH_KEY, 'mindfulMoonInsightRange.v1'];
 var LAST_BACKUP_KEY = 'mindfulMoonLastBackup.v1';
 var BACKUP_SNOOZE_KEY = 'mindfulMoonBackupSnooze.v1';
 var BACKUP_DUE_DAYS = 7;

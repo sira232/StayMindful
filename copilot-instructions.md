@@ -148,7 +148,7 @@ or apply that file's conventions here (e.g. `%USERPROFILE%\<Name>.ps1` external 
     waning-Moon (Krishna Paksha) weakness note (`guideSig` also includes paksha). **Not**
     literal BPHS (own interpretation): the from-Ascendant reading (standard bhava
     significations), all "Good for/Watch" wording, sign tones, nakshatra keywords, and the
-    Overall score. Not implemented: Vedha (backlog; Tarabala was added in v39),
+    Overall score. Not implemented: none pending here (Vedha added in v42, Tarabala in v39),
     exact-degree exaltation/moolatrikona.
   - **History list** (below the week grid, `renderHistory()`): shows only the **currently
     selected day**'s logged moods (newest first) — not a dump of all history. Section title
@@ -240,13 +240,36 @@ or apply that file's conventions here (e.g. `%USERPROFILE%\<Name>.ps1` external 
     Ephemeris (`sweph` npm, Moshier, Lahiri) over 8 dates: planets ≤ ~11″ (Venus/Saturn worst),
     Rahu < 1″, Lagna ≤ ~1.5″. A third-party page quoting Drik's Rahu→Makara time (5 Dec 2026
     19:28 IST) disagreed with Swiss Ephemeris and this engine (≈22:30 IST) by ~3 h; Drik itself
-    could not be fetched, so that was not chased. Times use the device time zone. This also
-    unlocks the Vedha backlog item below (other planets' positions now exist).
- Classical Chandra Gochar says a
-    good Moon transit house can be cancelled/obstructed when another planet occupies its
-    paired Vedha house (and vice versa). Not implemented because it needs the other planets'
-    sidereal positions (Sun, Mars, Mercury, Jupiter, Venus, Saturn, Rahu/Ketu); the app only
-    computes the Moon today. When the user returns to this project, remind them this is pending.
+    could not be fetched, so that was not chased. Times use the device time zone.
+  - **Gochara & Vedha (v42, app 2.3.0)**: card at the bottom of the Transit tab
+    (`renderVedha(rows)`, tables `VEDHA`, `VEDHA_THEME`, `vedhaExempt`). Counts Sun, Moon, Mars,
+    Mercury, Jupiter, Venus, Saturn from the saved natal Moon sign; favorable houses map to a
+    Vedha (obstruction) house per BPHS ch. 65-66; a favorable planet is "blocked" when another
+    planet occupies its Vedha house. Sun-Saturn and Moon-Mercury are exempt; Rahu/Ketu are not
+    in the classical table. Each planet shows a one-line meaning. The Transit tab was also
+    restyled (hero date bar, cards, coloured planet badges via `TR_COLOR`/`trBadge`, tinted kendra
+    houses). Prompts for a Moon sign if none is saved. Vedha is no longer a backlog item.
+  - **Birth-details calculator + names (v44, app 2.5.0)**: Settings has a `birth-box` (per person:
+    `initBirthBox` in `initSettingsPanel`, ids `bbYou`/`bbPartner`) that takes date/time/place, geocodes
+    via Open-Meteo (`geocodePlaces`, ranks by extra comma tokens, picker if several), converts local→UTC
+    with the geocoder's IANA zone (`localToUtc`, 2-pass DST; historical LMT quirks ignored) and uses the
+    Transit engine (`trSiderealLon('Moon')`, `trLagnaLon`, `trDescribe`) in `computeBirthChart` to fill the
+    Moon/nakshatra/Asc selects. Unknown time → noon Moon, no Asc, warning if Moon changed sign that day.
+    Stored in `BIRTH_KEY='mindfulMoonBirth.v1'` (in `SAFE_KEYS`, so backed up). User name is `chart.name`
+    (≤20 chars, optional, `#inpUserName`; partner name `#inpPartnerName`, asked above its birth box);
+    names appear in Guide tab labels, a `.g-profile` "Guide for" card in `personBoxes`, `togetherBox` and
+    `taraLine`. Always `escHtml` names; old charts without `name` fall back to "You". Settings also has a
+    `.privacy-box` 🔒 note (all data stays on the phone, developer has no access; only place-name lookups
+    leave the device) — keep it accurate if network calls change.
+  - **Panchang lords & validity (v43, app 2.4.0)**: the Guide's "Panchang at a glance" box shows the
+    presiding lord (deity) of tithi/yoga/karana (`TITHI_LORDS`, `YOGA_LORDS`, `KARANA_LORDS`,
+    `tithiLord()`) and, via `panchangSpans(date)` + `spanText()`, the start → end time of the running
+    Moon sign, nakshatra, tithi, yoga and karana (15-min outward scan, then ~1 s bisection; blocks use
+    `.g-valid`). `getMoonPanchang()` now uses the Transit engine (`trSiderealLon` for Sun/Moon) when
+    astronomy-engine is loaded, falling back to the old mhah-style Moon/Sun series otherwise, so
+    tithi/yoga/karana boundaries are arcsecond-accurate and consistent everywhere. Also a shared UI
+    polish layer (gradient page titles, white cards with shadow, active-tab indicator, selected-day
+    lift) — see the "shared polish across tabs" CSS block. README.md was rewritten to describe all six tabs.
     Other open ideas: Capacitor/Play Store wrapper, generic default location (privacy item).
   - **Bottom-tab navigation (v38; Transit added in v41)**: the single long page is now 6 `.tab-page` sections
     switched by a fixed `#bottomNav` and `showTab(name)`: **Home** (`#tab-home`: now panel with
@@ -380,7 +403,7 @@ or apply that file's conventions here (e.g. `%USERPROFILE%\<Name>.ps1` external 
     same as TimeZync's icons) — a purple-gradient circle with a cream crescent moon and a
     yellow smiley face overlapping it. Regenerate the same way if the icon design changes.
   - **`service-worker.js`** — minimal cache-first service worker, same shape as TimeZync's.
-    `CACHE_NAME` is currently `mindful-moon-tracker-v41` (v41 = app 2.2.0: Transit tab with bundled astronomy-engine; v40 = app 2.1.0: Panchang-at-a-glance box with yoga/karana/lords/deity/navamsa, Chandrashtama alert, next-signs lookahead, 6 more moods on the main row with the rest behind ➕; v39: Tarabala; v38: bottom-tab navigation, see above;     v37: optional partner and Together tab;
+    `CACHE_NAME` is currently `mindful-moon-tracker-v44` (v44 = app 2.5.0: birth-details calculator, names, privacy note; v43 = app 2.4.0: Panchang lords + validity times, UI polish; v42 = app 2.3.0: Gochara & Vedha + Transit restyle; v41 = app 2.2.0: Transit tab with bundled astronomy-engine; v40 = app 2.1.0: Panchang-at-a-glance box with yoga/karana/lords/deity/navamsa, Chandrashtama alert, next-signs lookahead, 6 more moods on the main row with the rest behind ➕; v39: Tarabala; v38: bottom-tab navigation, see above;     v37: optional partner and Together tab;
     **VERSIONING (required on every release):** in `Mindful-Moon-Tracker.html` bump `APP_VERSION` (semver) and
     `APP_BUILD` (must equal the `CACHE_NAME` number) and add a line at the top of `APP_CHANGELOG`; they render at the
     bottom of the Settings tab ("Version x.y.z (build N)" + "What's new").
