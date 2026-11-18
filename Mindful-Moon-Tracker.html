@@ -669,6 +669,44 @@
     .nav-btn.on::before { background: linear-gradient(90deg, #67e8f9, #a78bfa, #e879f9); box-shadow: 0 0 12px rgba(167,139,250,.9); }
     .nav-btn.on .ni { filter: drop-shadow(0 0 8px rgba(167,139,250,.95)); }
     ::-webkit-scrollbar { width: 8px; height: 8px; } ::-webkit-scrollbar-thumb { background: rgba(167,139,250,.35); border-radius: 8px; }
+
+    /* ROYAL LUXE (v47): midnight black-navy with champagne-gold accents, serif headings, hairline gold borders */
+    :root { --gold1: #f3dfa2; --gold2: #d4af37; --gold3: #9a7b2c; --line: rgba(212,175,55,.20); --acc: #e6c76a; --glass: rgba(255,255,255,.045); --tx3: #9096bd; }
+    body { background-image: radial-gradient(900px 520px at 8% -6%, rgba(88,64,170,.30), transparent 62%), radial-gradient(800px 500px at 100% 20%, rgba(212,175,55,.10), transparent 62%), radial-gradient(900px 600px at 50% 112%, rgba(120,30,70,.22), transparent 62%), linear-gradient(180deg, #06081a, #0a0d26); }
+    .card { border: 1px solid rgba(212,175,55,.28); box-shadow: 0 18px 70px rgba(0,0,0,.65), 0 0 0 1px rgba(212,175,55,.06), inset 0 1px 0 rgba(243,223,162,.14); }
+    h1, .page-title, .settings-title, .mh-card .settings-title, body #tab-transit .settings-panel.tr-card .settings-title { font-family: Georgia, "Palatino Linotype", "Times New Roman", serif; }
+    h1 { background: linear-gradient(90deg, #fff6d6 0%, #e6c76a 55%, #b8923a 100%); -webkit-background-clip: text; background-clip: text; color: transparent; letter-spacing: .04em; }
+    .page-title { color: var(--gold1); letter-spacing: .04em; text-shadow: 0 0 20px rgba(212,175,55,.35); }
+    .page-title::after { background: linear-gradient(90deg, rgba(212,175,55,.75), rgba(212,175,55,.08), transparent); }
+    body #tab-transit .settings-panel.tr-card .settings-title, .mh-card .settings-title, .settings-panel .settings-title, .guide summary, .birth-head { color: var(--gold1); letter-spacing: .02em; }
+    #tab-transit .tr-card .settings-title::after { background: linear-gradient(90deg, rgba(212,175,55,.6), transparent); }
+    body .tab-page .settings-panel:not(.tr-hero):not(.mh-hero), body #tab-transit .settings-panel.tr-card, .tab-page .mh-card, .guide .g-box { border: 1px solid rgba(212,175,55,.20); background: linear-gradient(160deg, rgba(255,255,255,.06), rgba(255,255,255,.02)); box-shadow: 0 10px 30px rgba(0,0,0,.35), inset 0 1px 0 rgba(243,223,162,.10); }
+    body .tab-page .settings-panel.mh-hero, body #tab-transit .settings-panel.tr-hero { background: linear-gradient(135deg, #1a0f2e 0%, #2a1236 55%, #3a1a2c 100%) !important; border: 1px solid rgba(212,175,55,.55) !important; box-shadow: 0 10px 34px rgba(0,0,0,.5), 0 0 26px rgba(212,175,55,.16), inset 0 1px 0 rgba(243,223,162,.25) !important; color: #f6efdc !important; }
+    body .mh-hero .mh-vara, body .mh-hero .mh-suns span { color: #f6efdc; }
+    body .mh-hero .mh-suns span { background: rgba(212,175,55,.14); border: 1px solid rgba(212,175,55,.35); }
+    body .mh-hero .settings-hint, body #tab-transit .tr-hero .settings-hint { color: #d9cfb4 !important; }
+    body .mh-hero .tr-when input, body #tab-transit .tr-hero .tr-when input { background: rgba(0,0,0,.4) !important; color: #f6efdc !important; border: 1px solid rgba(212,175,55,.4) !important; }
+    body .mh-hero .tr-when button, body #tab-transit .tr-hero .tr-when button { background: rgba(212,175,55,.12) !important; border: 1px solid rgba(212,175,55,.45) !important; color: var(--gold1) !important; }
+    body .mh-hero .tr-when button#mhToday, body #tab-transit .tr-hero .tr-when button#trNow { background: linear-gradient(135deg, #f3dfa2, #c9a02f) !important; color: #2a1d05 !important; border: 0 !important; font-weight: 800; }
+    .mh-nowcard { background: linear-gradient(135deg, rgba(212,175,55,.16), rgba(124,92,255,.10)) !important; border-color: rgba(212,175,55,.5) !important; box-shadow: 0 0 28px rgba(212,175,55,.16) !important; }
+    .mh-row.cur { background: rgba(212,175,55,.15); box-shadow: 0 0 0 1.5px rgba(212,175,55,.8), 0 0 20px rgba(212,175,55,.25); }
+    .mh-now { background: linear-gradient(135deg, #f3dfa2, #c9a02f); color: #2a1d05; font-weight: 800; }
+    .mh-time { color: var(--gold1); }
+    .mh-k, .mh-sub { color: #c9b57a; }
+    .mh-mrow { display: flex; align-items: center; gap: 8px; padding: 6px 8px; border-radius: 10px; border-left: 3px solid var(--c); background: var(--glass); margin-bottom: 4px; }
+    .mh-mrow.cur { background: rgba(212,175,55,.15); box-shadow: 0 0 0 1.5px rgba(212,175,55,.8); }
+    .mh-mrow .mh-time { flex: 0 0 92px; font-size: 11px; }
+    .mh-mrow .mh-main { display: flex; flex-direction: column; gap: 3px; }
+    .mh-mrow .mh-name { font-size: 12.5px; }
+    .mh-mrow .mh-tags { margin: 0; gap: 3px; }
+    .mh-mrow .mh-tag { font-size: 10px; padding: 0 6px; }
+    .mh-mrow .mh-chip { flex: 0 0 auto; }
+    .nav-btn.on { color: var(--gold1); }
+    .nav-btn.on::before { background: linear-gradient(90deg, transparent, #f3dfa2, #d4af37, #f3dfa2, transparent); box-shadow: 0 0 12px rgba(212,175,55,.9); }
+    .nav-btn.on .ni { filter: drop-shadow(0 0 8px rgba(212,175,55,.9)); }
+    .bottom-nav { border-top: 1px solid rgba(212,175,55,.3); background: rgba(6,8,24,.88); }
+    .settings-row input:focus, .settings-row select:focus, .journal-textarea:focus, .birth-box input:focus, .birth-box select:focus, .tr-when input:focus { border-color: var(--gold2); box-shadow: 0 0 0 3px rgba(212,175,55,.25); }
+    ::-webkit-scrollbar-thumb { background: rgba(212,175,55,.35); }
 </style>
 </head>
 <body>
@@ -1547,9 +1585,10 @@ var TITHI_NAMES = ['Pratipada','Dwitiya','Tritiya','Chaturthi','Panchami','Shash
 // inauspicious ones are flagged bad.
 // VERSIONING: bump APP_VERSION + APP_BUILD (= service-worker CACHE_NAME number) and
 // add a line at the TOP of APP_CHANGELOG on every release.
-var APP_VERSION = '2.7.0';
-var APP_BUILD = 46;
+var APP_VERSION = '2.7.1';
+var APP_BUILD = 47;
 var APP_CHANGELOG = [
+    ['2.7.1', 'Royal Luxe look: midnight navy with champagne-gold accents and serif headings; Muhurta header readable again; compact Moon Tara/Chandra bala card (Sampat, Vipat…) moved right under "Right now".'],
     ['2.7.0', 'Cosmic Night redesign: deep indigo starfield theme, glass cards, glowing accents, live moon-phase orb on Home, smooth tab transitions and a new glass navigation bar.'],
     ['2.6.0', 'New Muhurta tab: Hora, Choghadiya, Rahu Kaal/Yamaganda/Gulika, Abhijit and Moon nakshatra windows with your Tarabala and Chandrabala. Panchang at a glance redesigned, now with the ruling planet of tithi, yoga and karana.'],
     ['2.5.0', 'Calculate your chart from date, time and place of birth (Moon sign, nakshatra, Ascendant), add your and your partner\'s names for a personalised Guide, and a privacy note in Settings.'],
@@ -2119,9 +2158,9 @@ function trSvg(rows) {
         (byHouse[h] = byHouse[h] || []).push(r);
     });
     var s = '<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="North Indian rashi chart" font-family="system-ui,sans-serif">' +
-        '<rect x="1" y="1" width="398" height="398" fill="#0f1438" stroke="#8f7cf0" stroke-width="2.5" rx="8"/>' +
-        '<g fill="#2a2f78" opacity=".7"><polygon points="100,100 200,1 300,100 200,200"/><polygon points="100,100 1,200 100,300 200,200"/><polygon points="100,300 200,399 300,300 200,200"/><polygon points="300,100 399,200 300,300 200,200"/></g>' +
-        '<path d="M1 1L399 399M399 1L1 399M200 1L399 200L200 399L1 200Z" fill="none" stroke="#8f7cf0" stroke-width="1.5"/>';
+        '<rect x="1" y="1" width="398" height="398" fill="#0b0d26" stroke="#c9a94f" stroke-width="2.5" rx="8"/>' +
+        '<g fill="#2a2440" opacity=".8"><polygon points="100,100 200,1 300,100 200,200"/><polygon points="100,100 1,200 100,300 200,200"/><polygon points="100,300 200,399 300,300 200,200"/><polygon points="300,100 399,200 300,300 200,200"/></g>' +
+        '<path d="M1 1L399 399M399 1L1 399M200 1L399 200L200 399L1 200Z" fill="none" stroke="#c9a94f" stroke-width="1.5"/>';
     for (var h = 1; h <= 12; h++) {
         var P = TR_HOUSE[h];
         var signNo = ((lagna.sign + h - 1) % 12) + 1;
@@ -2373,6 +2412,7 @@ function renderMuhurta() {
             (cc ? '<div><div class="mh-k">Choghadiya</div><span class="mh-chip ' + CHOG[cc.name].cls + '">' + cc.name + '</span><div class="mh-until">until ' + mhFmt(cc.end, tz, sun.d) + '</div><div class="mh-use">' + CHOG[cc.name].use + '</div></div>' : '') +
             '</div>' + (bad ? '<div class="mh-warn">⚠️ Inside Rahu Kaal / Yamaganda / Gulika right now: better not to begin anything important.</div>' : '') + '</div>';
     }
+    html += '<!--MOON-->';
 
     html += '<div class="settings-panel mh-card"><div class="settings-title">🚫 Avoid &amp; ✅ auspicious windows</div>' +
         mhRow(rng(rahu), showNow && inDay(rahu), MH_COLOR.bad, 'Rahu Kaal', 'bad', 'avoid', '', 'the best-known inauspicious window: avoid starting journeys, deals or ceremonies') +
@@ -2407,20 +2447,22 @@ function renderMuhurta() {
             var ta = taraInfo(uc.nakshatraIndex, s.nak), hs = houseFromReference(s.sign, uc.moonSignIndex);
             var fav = MOON_FAVORABLE_HOUSES.indexOf(hs) >= 0;
             score += (ta ? (ta.cls === 'good' ? 1 : -1) : 0) + (fav ? 1 : hs === 8 ? -2 : -1);
-            tags = (ta ? '<span class="mh-tag ' + (ta.cls === 'good' ? 'ok' : 'warn') + '">Tara: ' + ta.name + '</span>' : '') +
-                '<span class="mh-tag ' + (fav ? 'ok' : 'warn') + '">Chandrabala: ' + ordinal(hs) + ' house' + (hs === 8 ? ' · Chandrashtama' : '') + '</span>';
+            tags = (ta ? '<span class="mh-tag ' + (ta.cls === 'good' ? 'ok' : 'warn') + '" title="' + escHtml(ta.tone) + '">Tara ' + ta.n + ': ' + ta.name + '</span>' : '') +
+                '<span class="mh-tag ' + (fav ? 'ok' : 'warn') + '">Chandra ' + ordinal(hs) + (hs === 8 ? ' · ashtama' : '') + '</span>';
         }
         var v = score >= 1 ? 'good' : score === 0 ? 'mid' : 'bad';
         var vt = score >= 1 ? 'favourable' : score === 0 ? 'mixed' : 'careful';
-        return mhRow(rng(s), showNow && inDay(s), MH_COLOR[v], NAKSHATRA_NAMES[s.nak] + ' <small>Moon in ' + rashiShort(RASHI_NAMES[s.sign]) + '</small>', v, vt,
-            '<span class="mh-tag">' + cls.label + ' nakshatra</span>' + tags, cls.use);
+        var cur = showNow && inDay(s);
+        return '<div class="mh-mrow' + (cur ? ' cur' : '') + '" style="--c:' + MH_COLOR[v] + '"><div class="mh-time">' + rng(s) + (cur ? '<div class="mh-now">NOW</div>' : '') + '</div>' +
+            '<div class="mh-main"><div class="mh-name">' + NAKSHATRA_NAMES[s.nak] + ' <small>' + rashiShort(RASHI_NAMES[s.sign]) + ' · ' + cls.label + '</small></div>' +
+            (tags ? '<div class="mh-tags">' + tags + '</div>' : '') + '</div><span class="mh-chip ' + v + '">' + vt + '</span></div>';
     }).join('');
-    html += '<div class="settings-panel mh-card"><div class="settings-title">⭐ Moon · nakshatra windows</div>' + segHtml +
+    var moonCard = '<div class="settings-panel mh-card"><div class="settings-title">⭐ Moon · Tara &amp; Chandra bala</div>' + segHtml +
         '<div class="settings-hint">' + (uc && typeof uc.nakshatraIndex === 'number'
-            ? 'Verdict mixes the nakshatra\'s nature with your Tarabala (from your birth star) and Chandrabala (Moon in the 1st, 3rd, 6th, 7th, 10th or 11th from your Moon sign is good; the 8th is Chandrashtama).'
-            : 'Add your birth Moon sign and nakshatra in ⚙️ Settings to see your personal Tarabala and Chandrabala here. Until then the verdict is the nakshatra\'s general nature only.') +
-        ' Windows split whenever the Moon changes nakshatra or sign, from sunrise to next sunrise.</div></div>';
-
+            ? 'Tara = count from your birth star (Sampat, Kshema, Sadhana, Mitra, Parama Mitra good; Janma, Vipat, Pratyak, Naidhana careful). Chandra = Moon\'s house from your Moon sign (1, 3, 6, 7, 10, 11 good; 8th is Chandrashtama). Tap a Tara tag for its meaning.'
+            : 'Add your birth Moon sign and nakshatra in ⚙️ Settings to see your personal Tara (Sampat, Vipat…) and Chandrabala here.') +
+        ' Windows split when the Moon changes nakshatra or sign.</div></div>';
+    html = html.replace('<!--MOON-->', moonCard);
     html += '<div class="settings-panel mh-card"><div class="settings-hint">Sunrise and sunset use the upper limb of the Sun with standard refraction, like most panchangs; Rahu Kaal, Yamaganda, Gulika and Abhijit follow the usual weekday tables. These are traditional guides, not guarantees. Hora and Choghadiya systems vary a little by region.</div></div>';
     body.innerHTML = html;
 }
