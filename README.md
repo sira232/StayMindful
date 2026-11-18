@@ -19,8 +19,8 @@ your phone* below to add it to your home screen like a real app).
 
 ## The seven tabs (bottom bar)
 
-The app has a deep-indigo "Cosmic Night" look: starfield, glass cards, glowing
-accents and a live moon-phase orb on Home.
+The app has a clean ivory-and-gold look with serif headings, deep-plum hero
+panels and a live moon-phase orb on Home.
 
 - **🏠 Home** — the live Moon panel, mood buttons (8 main moods plus a second
   row; the rest behind ➕) and daily check-ins.
@@ -136,6 +136,8 @@ completely for Male. Defaults to Female.
   you reopen the app).
 
 ## Insights tab
+
+**Cosmic patterns** shows your best and tougher times from your own logs, by Tara, Chandra bala house, Tithi, Yoga, Karana (with ruling planets), Hora and Choghadiya. Tara and Chandra need your birth details saved in Settings.
 from your own logged history:
 
 - **This week's mood breakdown** — a "Most common this week: 😊 Happy (x5)"

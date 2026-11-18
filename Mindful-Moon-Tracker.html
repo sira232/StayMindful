@@ -500,112 +500,129 @@
     .guide .g-bar-fill { height: 100%; background: linear-gradient(90deg, #a78bfa, #6d28d9); }
 
     /* =====================================================================
-       LUXE DAY (v48): ivory & champagne-gold, serif display type, airy spacing.
-       Appended last so it overrides the base styles above.
+       CLEAN ELEGANT (v49): flat ivory, hairline borders, one ink colour and one
+       gold accent. Appended last so it overrides the base styles above.
        ===================================================================== */
-    :root { --ink: #1c1730; --ink2: #5d5670; --mute: #8c8372; --ivory: #fbf7ee; --paper: #fffdf8; --gold1: #ecd48f; --gold2: #c29b3d; --gold3: #8f6d1f; --hair: rgba(194,155,61,.28); --serif: "Cormorant Garamond", "Playfair Display", "Palatino Linotype", Georgia, serif; --sans: "Segoe UI Variable Text", "Segoe UI", system-ui, sans-serif; }
-    body { font-family: var(--sans); color: var(--ink); background: radial-gradient(900px 500px at 0% -5%, #f3e6c4 0%, transparent 60%), radial-gradient(700px 500px at 100% 105%, #eadff7 0%, transparent 60%), var(--ivory); background-attachment: fixed; padding-top: 22px; }
-    .card { background: var(--paper); border: 1px solid var(--hair); border-radius: 26px; padding: 26px 20px 30px; box-shadow: 0 30px 70px rgba(80,60,20,.14), 0 2px 0 rgba(255,255,255,.9) inset; }
-    .header { margin-bottom: 22px; padding-bottom: 16px; border-bottom: 1px solid var(--hair); gap: 12px; }
-    .header .icon { width: 46px; height: 46px; border-radius: 16px; background: linear-gradient(145deg, #2b1a3d, #1a1030); box-shadow: 0 6px 16px rgba(43,26,61,.35), 0 0 0 1.5px var(--gold2) inset; }
-    h1 { font-family: var(--serif); font-size: 27px; font-weight: 700; letter-spacing: .02em; background: linear-gradient(90deg, #1c1730, #6b4f12 60%, #b8893a); -webkit-background-clip: text; background-clip: text; color: transparent; }
-    .weather-badge { background: transparent; border: 1px solid var(--hair); border-radius: 14px; }
-    .weather-badge .weather-label { color: var(--gold3); letter-spacing: .08em; }
-    .page-title { font-family: var(--serif); font-size: 28px; font-weight: 700; color: var(--ink); margin: 2px 0 18px; letter-spacing: .01em; }
-    .page-title::after { height: 1px; background: linear-gradient(90deg, var(--gold2), transparent); }
+    :root { --ink: #1f1b2e; --ink2: #5f5a6e; --mute: #928c9c; --bg: #f7f5f0; --paper: #ffffff; --line: #ebe6da; --gold: #a9842f; --goldbg: #faf3e0; --serif: "Cormorant Garamond", "Playfair Display", Georgia, serif; --sans: "Segoe UI Variable Text", "Segoe UI", system-ui, sans-serif; }
+    body { font-family: var(--sans); color: var(--ink); background: var(--bg); padding: 16px 12px 92px; }
+    .card { background: var(--paper); border: 1px solid var(--line); border-radius: 22px; padding: 20px 16px 24px; box-shadow: 0 1px 2px rgba(31,27,46,.04), 0 12px 32px rgba(31,27,46,.05); }
+    .header { margin-bottom: 18px; padding-bottom: 14px; border-bottom: 1px solid var(--line); gap: 12px; }
+    .header .icon { width: 40px; height: 40px; border-radius: 12px; background: var(--ink); box-shadow: none; font-size: 21px; }
+    h1 { font-family: var(--serif); font-size: 26px; font-weight: 700; letter-spacing: .01em; color: var(--ink); background: none; -webkit-text-fill-color: var(--ink); }
+    .weather-badge { background: var(--bg); border: 0; border-radius: 12px; }
+    .weather-badge .weather-label { color: var(--ink2); letter-spacing: .06em; }
+    .page-title { font-family: var(--serif); font-size: 26px; font-weight: 700; color: var(--ink); margin: 0 0 14px; }
+    .page-title::after { height: 1px; background: var(--line); }
+    .section-title, .guide .g-sub, .pg-label, .mh-k, .mh-sub, .birth-head, .guide summary { font-family: var(--sans); font-size: 10.5px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--gold); }
 
-    /* panels */
-    .tab-page .settings-panel:not(.tr-hero):not(.mh-hero), #tab-transit .settings-panel.tr-card, .mh-card { background: #fff; border: 1px solid var(--hair); border-radius: 22px; padding: 18px 16px; margin-bottom: 18px; box-shadow: 0 10px 30px rgba(80,60,20,.07); }
-    .settings-panel .settings-title, .mh-card .settings-title, #tab-transit .tr-card .settings-title { font-family: var(--serif); font-size: 21px; font-weight: 700; color: var(--ink); letter-spacing: .01em; margin-bottom: 12px; }
-    #tab-transit .tr-card .settings-title::after { height: 1px; background: linear-gradient(90deg, var(--gold2), transparent); }
-    .section-title, .guide .g-sub, .pg-label, .mh-k, .mh-sub, .birth-head, .guide summary { font-family: var(--sans); font-size: 10.5px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--gold3); }
+    /* surfaces */
+    .tab-page .settings-panel:not(.tr-hero):not(.mh-hero), #tab-transit .settings-panel.tr-card, .mh-card, .guide .g-box, .guide .g-box.asc, .guide .g-box.moon { background: var(--paper); border: 1px solid var(--line); border-radius: 16px; padding: 14px; margin-bottom: 12px; box-shadow: none; }
+    .settings-panel .settings-title, .mh-card .settings-title, #tab-transit .tr-card .settings-title { font-family: var(--serif); font-size: 19px; font-weight: 700; color: var(--ink); margin-bottom: 8px; }
+    #tab-transit .tr-card .settings-title::after { height: 1px; background: var(--line); }
     .settings-hint { color: var(--mute); font-size: 12px; line-height: 1.5; }
 
-    /* deep hero panels */
-    .now-panel, body .mh-hero, body #tab-transit .tr-hero { background: radial-gradient(500px 220px at 90% 0%, rgba(194,155,61,.28), transparent 60%), linear-gradient(135deg, #1c1030 0%, #2e1a45 60%, #3b1f3a 100%) !important; border: 1px solid var(--gold2) !important; border-radius: 24px; color: #f7efdb; box-shadow: 0 18px 40px rgba(43,26,61,.35), inset 0 1px 0 rgba(236,212,143,.35) !important; }
-    .now-panel { padding: 22px 20px; position: relative; overflow: hidden; }
-    .now-panel .now-moon { font-family: var(--serif); font-size: 30px; font-weight: 700; color: #fff6dc; letter-spacing: .01em; }
-    .now-panel .now-time, .now-panel .now-sub, .now-panel .now-houses { color: #d9cdb0; }
-    .now-panel .now-houses b { color: var(--gold1); }
-    .now-orb { filter: drop-shadow(0 0 14px rgba(236,212,143,.55)); }
-    body .mh-hero .mh-vara { font-family: var(--serif); font-size: 26px; color: #fff6dc; }
-    body .mh-hero .mh-suns span { background: rgba(236,212,143,.12); border: 1px solid rgba(236,212,143,.4); color: #f7efdb; }
-    .mh-loc { font-size: 12px; color: #d9cdb0; margin-top: 10px; }
-    body .mh-hero .tr-when input, body #tab-transit .tr-hero .tr-when input { background: rgba(0,0,0,.35) !important; color: #fff6dc !important; border: 1px solid rgba(236,212,143,.45) !important; border-radius: 12px; }
-    body .mh-hero .tr-when button, body #tab-transit .tr-hero .tr-when button { background: transparent !important; border: 1px solid rgba(236,212,143,.5) !important; color: var(--gold1) !important; border-radius: 12px; }
-    body .mh-hero .tr-when button#mhToday, body #tab-transit .tr-hero .tr-when button#trNow { background: linear-gradient(135deg, #f3dfa2, #c29b3d) !important; color: #2a1d05 !important; border: 0 !important; font-weight: 800; }
-    body #tab-transit .tr-hero .settings-hint { color: #d9cdb0; }
+    /* hero: the one dark moment on each tab */
+    .now-panel, body .mh-hero, body #tab-transit .tr-hero { background: var(--ink) !important; border: 0 !important; border-radius: 18px; color: #f4efe2; box-shadow: none !important; }
+    .now-panel { padding: 20px 18px; }
+    .now-panel .now-moon { font-family: var(--serif); font-size: 30px; font-weight: 700; color: #fff; }
+    .now-panel .now-time, .now-panel .now-sub, .now-panel .now-houses { color: #cfc8b6; }
+    .now-panel .now-houses b { color: #e6c877; }
+    .now-orb { filter: none; }
+    body .mh-hero .mh-vara { font-family: var(--serif); font-size: 24px; color: #fff; }
+    body .mh-hero .mh-suns span { background: rgba(255,255,255,.1); border: 0; color: #f4efe2; }
+    .mh-loc { font-size: 12px; color: #cfc8b6; margin-top: 8px; }
+    body .mh-hero .tr-when input, body #tab-transit .tr-hero .tr-when input { background: rgba(255,255,255,.08) !important; color: #fff !important; border: 1px solid rgba(255,255,255,.25) !important; border-radius: 10px; }
+    body .mh-hero .tr-when button, body #tab-transit .tr-hero .tr-when button { background: transparent !important; border: 1px solid rgba(255,255,255,.3) !important; color: #f4efe2 !important; border-radius: 10px; }
+    body .mh-hero .tr-when button#mhToday, body #tab-transit .tr-hero .tr-when button#trNow { background: #e6c877 !important; color: #2a1d05 !important; border: 0 !important; font-weight: 700; }
+    body #tab-transit .tr-hero .settings-hint { color: #cfc8b6; }
 
     /* moods */
-    .mood-row { gap: 10px; }
-    .mood-btn { background: #fff; border: 1px solid var(--hair); border-radius: 18px; box-shadow: 0 6px 16px rgba(80,60,20,.06); padding: 12px 4px 10px; transition: transform .15s ease, box-shadow .15s ease; }
-    .mood-btn:hover, .mood-btn:active { transform: translateY(-2px); box-shadow: 0 10px 22px rgba(194,155,61,.25); border-color: var(--gold2); }
-    .mood-btn .label { color: var(--ink2); font-size: 11px; letter-spacing: .02em; }
-    .section-title { margin: 26px 0 12px; }
+    .mood-row { gap: 8px; }
+    .mood-btn { background: var(--paper); border: 1px solid var(--line); border-radius: 14px; box-shadow: none; padding: 10px 2px 8px; }
+    .mood-btn:active { background: var(--goldbg); border-color: var(--gold); transform: none; }
+    .mood-btn .label { color: var(--ink2); font-size: 11px; }
+    .section-title { margin: 22px 0 10px; }
 
     /* nav */
-    .bottom-nav { background: rgba(255,253,248,.92); -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px); border-top: 1px solid var(--hair); box-shadow: 0 -10px 30px rgba(80,60,20,.08); }
-    .nav-btn { color: var(--mute); letter-spacing: .03em; }
+    .bottom-nav { background: rgba(255,255,255,.95); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); border-top: 1px solid var(--line); box-shadow: none; }
+    .nav-btn { color: var(--mute); }
     .nav-btn.on { color: var(--ink); }
-    .nav-btn.on::before { left: 30%; right: 30%; height: 2px; background: linear-gradient(90deg, var(--gold1), var(--gold2), var(--gold1)); }
+    .nav-btn.on::before { left: 34%; right: 34%; height: 2px; background: var(--gold); }
+    .nav-btn.on .ni { transform: none; }
 
     /* inputs & buttons */
-    .settings-row input[type="text"], .settings-row select, .journal-textarea, .birth-box input, .birth-box select, .insight-range-row select { background: #fffcf5; border: 1px solid var(--hair); border-radius: 12px; color: var(--ink); }
-    .settings-row input:focus, .settings-row select:focus, .journal-textarea:focus, .birth-box input:focus, .birth-box select:focus { outline: none; border-color: var(--gold2); box-shadow: 0 0 0 3px rgba(194,155,61,.2); }
-    .tr-when input { border: 1px solid var(--hair); background: #fffcf5; }
-    .footer-btn { border: 1px solid var(--hair); background: #fff; color: var(--ink); border-radius: 12px; }
-    .footer-btn.primary { background: linear-gradient(135deg, #2b1a3d, #1a1030); color: var(--gold1); border: 1px solid var(--gold2); }
+    .settings-row input[type="text"], .settings-row select, .journal-textarea, .birth-box input, .birth-box select, .insight-range-row select, .tr-when input { background: #fff; border: 1px solid var(--line); border-radius: 10px; color: var(--ink); }
+    .settings-row input:focus, .settings-row select:focus, .journal-textarea:focus, .birth-box input:focus, .birth-box select:focus { outline: none; border-color: var(--gold); box-shadow: 0 0 0 3px rgba(169,132,47,.15); }
+    .footer-btn, .week-nav-btn { border: 1px solid var(--line); background: #fff; color: var(--ink); border-radius: 10px; }
+    .footer-btn.primary { background: var(--ink); color: #fff; border-color: var(--ink); }
+    .birth-box { background: var(--goldbg); border: 1px solid var(--line); border-radius: 14px; }
+    .birth-box label { color: var(--gold); }
 
     /* week & calendar */
-    .week-day { border-radius: 16px; border: 1px solid var(--hair); background: #fff; }
-    .week-day.is-selected { background: linear-gradient(160deg, #fff7de, #fff); box-shadow: 0 0 0 1.5px var(--gold2) inset, 0 8px 18px rgba(194,155,61,.25); }
+    .week-day { border-radius: 12px; border: 1px solid var(--line); background: #fff; }
+    .week-day.is-selected { background: var(--goldbg); box-shadow: 0 0 0 1.5px var(--gold) inset; transform: none; }
+    .guide .g-bar-fill { background: var(--gold); }
 
     /* guide */
-    .guide .g-box, .guide .g-box.asc, .guide .g-box.moon { background: #fff; border: 1px solid var(--hair); border-radius: 22px; padding: 18px 16px; margin-bottom: 16px; box-shadow: 0 10px 28px rgba(80,60,20,.07); }
-    .guide .g-box.moon { background: linear-gradient(160deg, #fff9e8, #fff); }
-    .guide .g-box.asc { background: linear-gradient(160deg, #f4f1fb, #fff); }
-    .guide .g-box.g-profile, .g-profile { background: linear-gradient(135deg, #1c1030, #2e1a45) !important; border: 1px solid var(--gold2) !important; color: #f7efdb; }
-    .g-profile .g-pname { font-family: var(--serif); font-size: 26px; color: #fff6dc; }
-    .g-profile .g-sub, .g-profile .g-line b { color: var(--gold1); }
-    .guide .g-tab { border: 1px solid var(--hair); background: #fff; border-radius: 14px; color: var(--ink2); }
-    .guide .g-tab.on { background: linear-gradient(135deg, #2b1a3d, #1a1030); color: var(--gold1); border-color: var(--gold2); }
-    .pg-row { padding: 14px 0; border-top: 1px solid var(--hair); }
-    .pg-ic { box-shadow: 0 0 0 1px var(--hair), 0 4px 10px rgba(80,60,20,.08); }
-    .pg-main { font-family: var(--serif); font-size: 22px; font-weight: 700; color: var(--ink); }
-    .pg-tag { background: #fffcf5; border-color: var(--hair); color: var(--ink2); }
-    .g-valid { background: transparent; color: var(--mute); padding: 0; font-size: 11.5px; }
-    .g-valid b { color: var(--ink); }
-    .guide .g-note, #tab-transit .tr-card > .settings-hint, #tab-transit #trVedha ~ .settings-hint, .tab-page#tab-transit .settings-hint:not(#trMeta) { display: none; }
+    .guide .g-box.moon { background: var(--goldbg); }
+    .guide .g-box.g-profile, .g-profile { background: var(--ink) !important; border: 0 !important; color: #f4efe2; }
+    .g-profile .g-pname { font-family: var(--serif); font-size: 24px; color: #fff; }
+    .g-profile .g-sub, .g-profile .g-line b { color: #e6c877; }
+    .guide .g-tab { border: 1px solid var(--line); background: #fff; border-radius: 12px; color: var(--ink2); }
+    .guide .g-tab.on { background: var(--ink); color: #fff; border-color: var(--ink); }
+    .guide .g-note, .tab-page#tab-transit .settings-hint:not(#trMeta), .mh-use { display: none; }
     .mh-need { font-size: 12px; color: var(--mute); padding: 4px 2px; }
 
-    /* muhurta rows */
-    .mh-row, .mh-mrow { background: #fffcf5; border-radius: 14px; padding: 10px 12px; margin-bottom: 8px; box-shadow: inset 0 0 0 1px rgba(194,155,61,.14); }
-    .mh-row.cur, .mh-mrow.cur { background: linear-gradient(135deg, #fff4d2, #fffaf0); box-shadow: 0 0 0 1.5px var(--gold2), 0 8px 20px rgba(194,155,61,.25); }
-    .mh-time { color: var(--ink); font-weight: 700; }
-    .mh-now { background: linear-gradient(135deg, #f3dfa2, #c29b3d); color: #2a1d05; font-weight: 800; letter-spacing: .06em; }
-    .mh-name { font-family: var(--serif); font-size: 18px; color: var(--ink); }
-    .mh-use { display: none; }
-    .mh-nowcard { background: linear-gradient(135deg, #fff7de, #fff) !important; border-color: var(--gold2) !important; }
+    /* compact panchang */
+    .pg-card { padding: 12px 14px 6px; }
+    .pg-row { display: grid; grid-template-columns: 62px 1fr auto; align-items: center; gap: 2px 8px; padding: 8px 0; border-top: 1px solid var(--line); }
+    .pg-card .pg-row:first-of-type { border-top: 0; }
+    .pg-label { font-size: 9.5px; }
+    .pg-main { font-family: var(--serif); font-size: 18px; font-weight: 700; line-height: 1.15; color: var(--ink); }
+    .pg-main small { font-family: var(--sans); font-size: 11px; font-weight: 600; color: var(--mute); }
+    .pg-chips { display: flex; flex-direction: column; align-items: flex-end; gap: 3px; }
+    .pg-end { font-size: 11px; color: var(--mute); }
+    .pg-end b { color: var(--ink2); font-weight: 600; }
+    .gr-chip { font-size: 10.5px; }
+    .pg-warn { font-size: 10px; font-weight: 700; color: #b4531a; }
+
+    /* muhurta */
+    .mh-row, .mh-mrow { background: var(--bg); border-radius: 12px; padding: 8px 10px; margin-bottom: 6px; box-shadow: none; }
+    .mh-row.cur, .mh-mrow.cur { background: var(--goldbg); box-shadow: 0 0 0 1.5px var(--gold); }
+    .mh-time { color: var(--ink); font-weight: 600; font-size: 11.5px; }
+    .mh-now { background: var(--gold); color: #fff; font-weight: 700; letter-spacing: .06em; }
+    .mh-name { font-family: var(--serif); font-size: 17px; color: var(--ink); }
+    .mh-nowcard { background: var(--goldbg) !important; border-color: #e8d9ae !important; }
     .mh-until { font-family: var(--serif); font-size: 18px; }
     .mh-mrow { display: flex; align-items: center; gap: 8px; border-left: 3px solid var(--c); }
-    .mh-mrow .mh-time { flex: 0 0 96px; font-size: 11.5px; }
-    .mh-mrow .mh-main { display: flex; flex-direction: column; gap: 4px; flex: 1; min-width: 0; }
+    .mh-mrow .mh-time { flex: 0 0 96px; }
+    .mh-mrow .mh-main { display: flex; flex-direction: column; gap: 3px; flex: 1; min-width: 0; }
     .mh-mrow .mh-tags { margin: 0; }
     .mh-mrow .mh-chip { flex: 0 0 auto; }
 
     /* transit */
-    #tab-transit .tr-chart { background: radial-gradient(circle at 50% 40%, #fffdf7, #f8efd8); border: 1px solid var(--hair); border-radius: 18px; }
-    #tab-transit .tr-table th { background: #f8efd8; color: var(--gold3); letter-spacing: .12em; }
-    #tab-transit .tr-table td { padding: 10px 5px; }
-    #tab-transit .tr-table tr:nth-child(even) td { background: #fffcf5; }
-    .tr-table td, .tr-table th { border-bottom-color: rgba(194,155,61,.15); }
-    .birth-box { background: linear-gradient(160deg, #fff9e8, #fff); border: 1px solid var(--hair); border-radius: 18px; }
-    .birth-box label { color: var(--gold3); }
-    .week-nav-btn { border: 1px solid var(--hair); background: #fff; color: var(--ink2); border-radius: 12px; }
-    .guide .g-bar-fill { background: linear-gradient(90deg, var(--gold1), var(--gold2)); }
-    .week-day.is-today .wd-date { color: var(--gold3); }
-    ::-webkit-scrollbar-thumb { background: rgba(194,155,61,.4); border-radius: 8px; }
-</style>
+    #tab-transit .tr-chart { background: var(--bg); border: 0; border-radius: 14px; }
+    #tab-transit .tr-table th { background: transparent; color: var(--gold); letter-spacing: .1em; border-bottom: 1px solid var(--line); }
+    #tab-transit .tr-table tr:nth-child(even) td { background: transparent; }
+    .tr-table td { border-bottom: 1px solid var(--line); padding: 8px 5px; }
+    /* cosmic patterns */
+    .ci-best { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 8px 0 12px; }
+    .ci-col { border-radius: 12px; padding: 10px; background: var(--bg); font-size: 12px; }
+    .ci-col.ok { background: #eef7f0; } .ci-col.bad { background: #fbf0ea; }
+    .ci-col b { display: block; font-size: 11px; margin-bottom: 6px; color: var(--ink); }
+    .ci-li { line-height: 1.35; margin-bottom: 4px; color: var(--ink); }
+    .ci-li span { font-size: 9.5px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--gold); display: block; }
+    .ci-li em { font-style: normal; color: var(--mute); font-size: 10.5px; margin-left: 4px; }
+    .ci-dims { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 6px; margin-bottom: 6px; }
+    .ci-dim { flex: 0 0 auto; border: 1px solid var(--line); background: #fff; color: var(--ink2); border-radius: 999px; padding: 5px 12px; font-size: 12px; cursor: pointer; }
+    .ci-dim.on { background: var(--ink); color: #fff; border-color: var(--ink); }
+    .ci-row { display: grid; grid-template-columns: 1.3fr 1fr 22px 22px; align-items: center; gap: 8px; padding: 7px 0; border-top: 1px solid var(--line); font-size: 12.5px; }
+    .ci-lab { color: var(--ink); line-height: 1.25; }
+    .ci-bar { height: 6px; border-radius: 6px; background: var(--bg); overflow: hidden; }
+    .ci-bar i { display: block; height: 100%; border-radius: 6px; }
+    .ci-top { text-align: center; font-size: 15px; }
+    .ci-n { color: var(--mute); font-size: 11px; text-align: right; }
+    ::-webkit-scrollbar-thumb { background: rgba(169,132,47,.35); border-radius: 8px; }</style>
 </head>
 <body>
 <div class="card">
@@ -802,6 +819,12 @@
                 <button class="week-nav-btn" id="btnInsightMonthNext">&rarr;</button>
             </div>
             <div class="insight-calendar" id="insightCalendar"></div>
+        </div>
+        <div class="insight-block">
+            <div class="insight-subtitle">Cosmic patterns</div>
+            <div id="cosmicBest"></div>
+            <div class="ci-dims" id="cosmicDims"></div>
+            <div id="cosmicRows"></div>
         </div>
         <div class="insight-block">
             <div class="insight-subtitle toggle" data-toggle="housePatternsBody">Mood patterns by house <span class="insight-caret collapsed">&#9660;</span></div>
@@ -1483,9 +1506,11 @@ var TITHI_NAMES = ['Pratipada','Dwitiya','Tritiya','Chaturthi','Panchami','Shash
 // inauspicious ones are flagged bad.
 // VERSIONING: bump APP_VERSION + APP_BUILD (= service-worker CACHE_NAME number) and
 // add a line at the TOP of APP_CHANGELOG on every release.
-var APP_VERSION = '2.8.0';
-var APP_BUILD = 48;
+var APP_VERSION = '2.10.0';
+var APP_BUILD = 50;
 var APP_CHANGELOG = [
+    ['2.10.0', 'Insights: new Cosmic patterns card shows your best and tougher times by Tara, Chandra bala, Tithi, Yoga, Karana (with ruling planets), Hora and Choghadiya, built from your own mood logs.'],
+    ['2.9.0', 'Clean redesign: flat ivory with a single ink and gold accent, and a compact Panchang card (one tidy row each for Moon sign, Nakshatra, Tithi, Yoga, Karana with ruling planet and end time).'],
     ['2.8.0', 'Luxe Day redesign: ivory & champagne-gold, serif display type, deep aubergine hero panels, airier cards, and far less explanatory text.'],
     ['2.7.1', 'Royal Luxe look: midnight navy with champagne-gold accents and serif headings; Muhurta header readable again; compact Moon Tara/Chandra bala card (Sampat, Vipat…) moved right under "Right now".'],
     ['2.7.0', 'Cosmic Night redesign: deep indigo starfield theme, glass cards, glowing accents, live moon-phase orb on Home, smooth tab transitions and a new glass navigation bar.'],
@@ -1613,11 +1638,9 @@ function tithiGraha(tithi) {
 function grahaChip(name) {
     return '<span class="gr-chip" style="background:' + TR_COLOR[name] + '"><i>' + TR_ABBR[name] + '</i>' + name + '</span>';
 }
-function pgRow(icon, label, main, tags, valid, note) {
-    return '<div class="pg-row"><div class="pg-ic">' + icon + '</div><div class="pg-body"><div class="pg-label">' + label + '</div>' +
-        '<div class="pg-main">' + main + '</div>' + (tags ? '<div class="pg-tags">' + tags + '</div>' : '') + (note || '') + (valid || '') + '</div></div>';
+function pgRow(label, main, chips, endHtml, tip) {
+    return '<div class="pg-row"><div class="pg-label">' + label + '</div><div title="' + (tip || '') + '"><div class="pg-main">' + main + '</div>' + (endHtml || '') + '</div><div class="pg-chips">' + chips + '</div></div>';
 }
-
 // Start/end of the tithi, yoga, karana, nakshatra and Moon sign that are running at `date`:
 // scans outward in 15-minute steps, then bisects each boundary to about a second.
 function panchangSpans(date) {
@@ -1661,6 +1684,12 @@ function spanText(span, ref) {
     return '<div class="g-valid">⏱ ' + (span.start ? fmt(span.start) : '…') + ' → <b>' + (span.end ? fmt(span.end) : '…') + '</b></div>';
 }
 
+function spanEnd(span, ref) {
+    if (!span || !span.end) { return ''; }
+    var sameDay = span.end.toDateString() === ref.toDateString();
+    var o = sameDay ? { hour: 'numeric', minute: '2-digit' } : { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' };
+    return '<div class="pg-end">until <b>' + span.end.toLocaleString(undefined, o) + '</b></div>';
+}
 // ---------------------------------------------------------------------------
 // App logic
 // ---------------------------------------------------------------------------
@@ -2874,22 +2903,15 @@ function renderMoonGuide(p, view, events) {
     var yoga = YOGAS[p.yogaIndex];
     var karana = karanaInfo(p.karanaIndex);
     var sp = panchangSpans(view.date);
-    var dTag = function (t) { return '<span class="pg-tag">🛕 ' + t + '</span>'; };
-    var qChip = function (bad, good, badTxt) { return '<span class="chip ' + (bad ? 'strained' : 'strong') + '">' + (bad ? badTxt : good) + '</span>'; };
-    html += '<div class="g-box moon pg-card"><div class="g-sub">Panchang at a glance</div>' +
-        pgRow('🌙', 'Moon sign', rashiShort(RASHI_NAMES[r]),
-            '<span class="pg-tag">' + SIGN_ELEMENT[r % 4] + ' · ' + SIGN_MODE[r % 3] + '</span>' + grahaChip(SIGN_LORD[r]), spanText(sp.rashi)) +
-        pgRow('⭐', 'Nakshatra', p.nakshatra + ' <small>pada ' + p.pada + '</small>',
-            dTag(NAK_DEITY[p.nakshatraIndex]) + grahaChip(nakLord), spanText(sp.nak),
-            '<div class="pg-sub">🔷 Navamsa of this pada: ' + rashiShort(RASHI_NAMES[navIdx]) + '</div>') +
-        pgRow('🌗', 'Tithi', p.tithi.paksha + ' ' + p.tithi.name,
-            dTag(tithiLord(p.tithi)) + grahaChip(tithiGraha(p.tithi)), spanText(sp.tithi)) +
-        pgRow(yoga.bad ? '⚠️' : '✨', 'Yoga', yoga.name,
-            dTag(YOGA_LORDS[p.yogaIndex]) + grahaChip(YOGA_GRAHA_CYCLE[p.yogaIndex % 9]) + qChip(yoga.bad, 'auspicious', 'inauspicious'), spanText(sp.yoga)) +
-        pgRow(karana.bad ? '⚠️' : '🔹', 'Karana', karana.name,
-            dTag(KARANA_LORDS[karana.name]) + grahaChip(KARANA_GRAHA[karana.name]) + (karana.bad ? '<span class="chip strained">avoid new starts</span>' : ''), spanText(sp.karana)) +
-        '<div class="g-note">🛕 = presiding deity (as Drik Panchang lists); coloured pill = ruling graha (planet) of that limb from the traditional tables, which differ slightly between sources. ⏱ = when each item started and ends, in your device time zone, from the same arcsecond-level Sun/Moon engine as the Transit tab. Vishti (Bhadra) and the nine inauspicious Yogas are the classic "avoid" ones. Tithi is the instantaneous one, not the sunrise-based tithi of the day.</div></div>';
-    html += '<div class="g-box"><div class="g-sub">Tithi &amp; Moon strength</div>' +
+    var warn = function (txt) { return '<span class="pg-warn">⚠ ' + txt + '</span>'; };
+    var vd = view.date;
+    html += '<div class="g-box moon pg-card"><div class="g-sub">Panchang</div>' +
+        pgRow('Moon sign', rashiShort(RASHI_NAMES[r]), grahaChip(SIGN_LORD[r]), spanEnd(sp.rashi, vd), SIGN_ELEMENT[r % 4] + ' · ' + SIGN_MODE[r % 3]) +
+        pgRow('Nakshatra', p.nakshatra + ' <small>pada ' + p.pada + '</small>', grahaChip(nakLord), spanEnd(sp.nak, vd), 'Deity: ' + NAK_DEITY[p.nakshatraIndex]) +
+        pgRow('Tithi', p.tithi.paksha + ' ' + p.tithi.name, grahaChip(tithiGraha(p.tithi)), spanEnd(sp.tithi, vd), 'Deity: ' + tithiLord(p.tithi)) +
+        pgRow('Yoga', yoga.name, grahaChip(YOGA_GRAHA_CYCLE[p.yogaIndex % 9]) + (yoga.bad ? warn('inauspicious') : ''), spanEnd(sp.yoga, vd), 'Deity: ' + YOGA_LORDS[p.yogaIndex]) +
+        pgRow('Karana', karana.name, grahaChip(KARANA_GRAHA[karana.name]) + (karana.bad ? warn('avoid starts') : ''), spanEnd(sp.karana, vd), 'Deity: ' + KARANA_LORDS[karana.name]) +
+        '</div>';    html += '<div class="g-box"><div class="g-sub">Tithi &amp; Moon strength</div>' +
         '<div class="g-head">' + p.tithi.paksha + ' ' + p.tithi.name + ' <span class="chip ' + (pct >= 75 ? 'strong' : pct >= 35 ? 'neutral' : 'strained') + '">' + strengthLabel + '</span></div>' +
         '<div class="g-bar"><div class="g-bar-fill" style="width:' + pct + '%"></div></div>' +
         '<div class="g-line"><b>Moon strength:</b> about ' + pct + '%</div>' +
@@ -3902,11 +3924,116 @@ function renderTithiPatterns() {
     document.getElementById('tithiPatterns').innerHTML = html;
 }
 
+// ---------------------------------------------------------------------------
+// Cosmic patterns: every logged mood is re-read against the day's Tara and
+// Chandra bala (from the saved birth chart), Tithi, Yoga, Karana (with ruling
+// graha), Hora and Choghadiya, all recomputed from the log timestamp.
+// ---------------------------------------------------------------------------
+var COSMIC_DIMS = [['tara', 'Tara'], ['chandra', 'Chandra'], ['tithi', 'Tithi'], ['yoga', 'Yoga'], ['karana', 'Karana'], ['hora', 'Hora'], ['chog', 'Choghadiya']];
+var cosmicDim = 'tara';
+var SENT_SCORE = { positive: 1, neutral: 0, negative: -1 };
+
+function cosmicFeatures(e, ctx) {
+    var d = new Date(e.ts), f = {}, p = getMoonPanchang(d);
+    if (ctx.uc && typeof ctx.uc.nakshatraIndex === 'number') { f.tara = taraInfo(ctx.uc.nakshatraIndex, p.nakshatraIndex).name; }
+    if (ctx.uc && typeof ctx.uc.moonSignIndex === 'number') { f.chandra = ordinal(houseFromReference(p.rashiIndex, ctx.uc.moonSignIndex)) + ' house'; }
+    f.tithi = p.tithi.paksha + ' ' + p.tithi.name + ' · ' + tithiGraha(p.tithi);
+    f.yoga = YOGAS[p.yogaIndex].name + ' · ' + YOGA_GRAHA_CYCLE[p.yogaIndex % 9];
+    var k = karanaInfo(p.karanaIndex);
+    f.karana = k.name + ' · ' + KARANA_GRAHA[k.name];
+    if (ctx.loc && ctx.loc.lat != null) {
+        var q = mhParts(d, ctx.tz), s = ctx.sun(q.y, q.m, q.d);
+        if (s && d < s.rise) { var yd = new Date(Date.UTC(q.y, q.m - 1, q.d) - 86400000); s = ctx.sun(yd.getUTCFullYear(), yd.getUTCMonth() + 1, yd.getUTCDate()); }
+        if (s && d >= s.rise && d < s.next) {
+            var t = d.getTime(), day = t < s.set.getTime(), i, ci;
+            if (day) {
+                var fr = (t - s.rise) / (s.set - s.rise);
+                i = Math.min(11, Math.floor(fr * 12)); ci = Math.min(7, Math.floor(fr * 8));
+                f.chog = CHOG_DAY_CYCLE[(CHOG_DAY_START[s.wd] + ci) % 7];
+            } else {
+                var fn = (t - s.set) / (s.next - s.set);
+                i = 12 + Math.min(11, Math.floor(fn * 12)); ci = Math.min(7, Math.floor(fn * 8));
+                f.chog = CHOG_NIGHT_CYCLE[(CHOG_NIGHT_START[s.wd] + ci) % 7];
+            }
+            f.hora = MH_HORA_ORDER[(MH_HORA_ORDER.indexOf(MH_VARA_LORD[s.wd]) + i) % 7];
+        }
+    }
+    return f;
+}
+
+function computeCosmic() {
+    var loc = getActiveLocation(), sunCache = {};
+    var ctx = {
+        uc: loadUserChart(), loc: loc, tz: mhTz(loc),
+        sun: function (y, m, d) { var key = y + '-' + m + '-' + d; if (!(key in sunCache)) { try { sunCache[key] = mhSunTimes(y, m, d, loc); } catch (err) { sunCache[key] = null; } } return sunCache[key]; }
+    };
+    var dims = {};
+    filterLogsByInsightRange(loadLogs()).forEach(function (e) {
+        if (!isMoodEntry(e)) { return; }
+        var f;
+        try { f = cosmicFeatures(e, ctx); } catch (err) { return; }
+        COSMIC_DIMS.forEach(function (dm) {
+            var label = f[dm[0]];
+            if (!label) { return; }
+            var g = (dims[dm[0]] = dims[dm[0]] || {});
+            var r = (g[label] = g[label] || { label: label, n: 0, sum: 0, moods: {} });
+            r.n++; r.sum += SENT_SCORE[MOOD_SENTIMENT[e.mood]];
+            var mk = e.mood + '|' + e.emoji;
+            r.moods[mk] = (r.moods[mk] || 0) + 1;
+        });
+    });
+    var out = {};
+    Object.keys(dims).forEach(function (k) {
+        out[k] = Object.keys(dims[k]).map(function (l) {
+            var r = dims[k][l], best = null, bc = 0;
+            Object.keys(r.moods).forEach(function (m) { if (r.moods[m] > bc) { bc = r.moods[m]; best = m; } });
+            r.avg = r.sum / r.n; r.top = best.split('|'); r.topCount = bc;
+            return r;
+        }).filter(function (r) { return r.n >= MIN_HOUSE_ENTRIES; }).sort(function (a, b) { return b.avg - a.avg; });
+    });
+    return out;
+}
+
+function renderCosmic() {
+    var bestEl = document.getElementById('cosmicBest'), dimsEl = document.getElementById('cosmicDims'), rowsEl = document.getElementById('cosmicRows');
+    if (!rowsEl) { return; }
+    var data;
+    try { data = computeCosmic(); } catch (err) { data = {}; }
+    dimsEl.innerHTML = COSMIC_DIMS.map(function (dm) {
+        return '<button type="button" class="ci-dim' + (dm[0] === cosmicDim ? ' on' : '') + '" data-dim="' + dm[0] + '">' + dm[1] + '</button>';
+    }).join('');
+    var all = [];
+    COSMIC_DIMS.forEach(function (dm) { (data[dm[0]] || []).forEach(function (r) { all.push({ dim: dm[1], r: r }); }); });
+    var good = all.filter(function (x) { return x.r.avg > 0.15; }).sort(function (a, b) { return b.r.avg - a.r.avg; }).slice(0, 3);
+    var hard = all.filter(function (x) { return x.r.avg < -0.15; }).sort(function (a, b) { return a.r.avg - b.r.avg; }).slice(0, 3);
+    var li = function (x) { return '<div class="ci-li"><span>' + x.dim + '</span> ' + escHtml(x.r.label) + '<em>' + x.r.n + ' logs</em></div>'; };
+    bestEl.innerHTML = (good.length || hard.length)
+        ? '<div class="ci-best"><div class="ci-col ok"><b>✨ Best for you</b>' + (good.map(li).join('') || '<div class="ci-li">—</div>') + '</div>' +
+          '<div class="ci-col bad"><b>🌧 Tougher</b>' + (hard.map(li).join('') || '<div class="ci-li">—</div>') + '</div></div>'
+        : '';
+    var rows = data[cosmicDim] || [];
+    if (!rows.length) {
+        var needChart = (cosmicDim === 'tara' || cosmicDim === 'chandra') && !loadUserChart();
+        rowsEl.innerHTML = '<div class="mh-need">' + (needChart ? 'Save your birth details in Settings to unlock this.' : 'Log at least ' + MIN_HOUSE_ENTRIES + ' moods in the same ' + COSMIC_DIMS.filter(function (d) { return d[0] === cosmicDim; })[0][1] + ' to see a pattern.') + '</div>';
+        return;
+    }
+    rowsEl.innerHTML = rows.map(function (r) {
+        var pct = Math.round((r.avg + 1) / 2 * 100);
+        var col = r.avg > 0.15 ? '#4caf7a' : r.avg < -0.15 ? '#e0805a' : '#c9b98a';
+        return '<div class="ci-row"><div class="ci-lab">' + escHtml(r.label) + '</div><div class="ci-bar"><i style="width:' + pct + '%;background:' + col + '"></i></div>' +
+            '<div class="ci-top" title="' + r.topCount + '/' + r.n + '">' + r.top[1] + '</div><div class="ci-n">' + r.n + '</div></div>';
+    }).join('');
+}
+document.addEventListener('click', function (ev) {
+    var b = ev.target.closest ? ev.target.closest('.ci-dim') : null;
+    if (b) { cosmicDim = b.getAttribute('data-dim'); renderCosmic(); }
+});
+
 function renderInsights() {
     renderWeekInsight();
     renderStreaksBlock();
     renderInsightCalendar();
-    renderHousePatterns();
+    renderCosmic();    renderHousePatterns();
     renderTithiPatterns();
 }
 
