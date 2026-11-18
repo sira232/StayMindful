@@ -19,7 +19,7 @@ your phone* below to add it to your home screen like a real app).
 
 ## The seven tabs (bottom bar)
 
-The app has a clean ivory-and-gold look with serif headings, deep-plum hero
+The app has a light ivory-and-champagne-gold look (no dark cards, floating tab bar) with serif headings, deep-plum hero
 panels and a live moon-phase orb on Home.
 
 - **🏠 Home** — the live Moon panel, mood buttons (8 main moods plus a second

@@ -219,7 +219,6 @@
     .settings-actions { display: flex; gap: 8px; margin-top: 4px; }
     .g-profile { background: linear-gradient(135deg, #5b4b9a 0%, #8a74d6 100%); color: #fff; border: 0; }
     .g-profile .g-sub { color: #e4dcff; }
-    .g-profile .g-pname { font-size: 18px; font-weight: 800; margin: 2px 0 8px; }
     .g-profile .g-pchips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
     .g-profile .g-pchips span { background: rgba(255,255,255,.18); border-radius: 999px; padding: 3px 10px; font-size: 12px; }
     .g-profile .g-line { color: #f4f0ff; }
@@ -522,19 +521,8 @@
     .settings-hint { color: var(--mute); font-size: 12px; line-height: 1.5; }
 
     /* hero: the one dark moment on each tab */
-    .now-panel, body .mh-hero, body #tab-transit .tr-hero { background: var(--ink) !important; border: 0 !important; border-radius: 18px; color: #f4efe2; box-shadow: none !important; }
     .now-panel { padding: 20px 18px; }
-    .now-panel .now-moon { font-family: var(--serif); font-size: 30px; font-weight: 700; color: #fff; }
-    .now-panel .now-time, .now-panel .now-sub, .now-panel .now-houses { color: #cfc8b6; }
-    .now-panel .now-houses b { color: #e6c877; }
     .now-orb { filter: none; }
-    body .mh-hero .mh-vara { font-family: var(--serif); font-size: 24px; color: #fff; }
-    body .mh-hero .mh-suns span { background: rgba(255,255,255,.1); border: 0; color: #f4efe2; }
-    .mh-loc { font-size: 12px; color: #cfc8b6; margin-top: 8px; }
-    body .mh-hero .tr-when input, body #tab-transit .tr-hero .tr-when input { background: rgba(255,255,255,.08) !important; color: #fff !important; border: 1px solid rgba(255,255,255,.25) !important; border-radius: 10px; }
-    body .mh-hero .tr-when button, body #tab-transit .tr-hero .tr-when button { background: transparent !important; border: 1px solid rgba(255,255,255,.3) !important; color: #f4efe2 !important; border-radius: 10px; }
-    body .mh-hero .tr-when button#mhToday, body #tab-transit .tr-hero .tr-when button#trNow { background: #e6c877 !important; color: #2a1d05 !important; border: 0 !important; font-weight: 700; }
-    body #tab-transit .tr-hero .settings-hint { color: #cfc8b6; }
 
     /* moods */
     .mood-row { gap: 8px; }
@@ -565,9 +553,6 @@
 
     /* guide */
     .guide .g-box.moon { background: var(--goldbg); }
-    .guide .g-box.g-profile, .g-profile { background: var(--ink) !important; border: 0 !important; color: #f4efe2; }
-    .g-profile .g-pname { font-family: var(--serif); font-size: 24px; color: #fff; }
-    .g-profile .g-sub, .g-profile .g-line b { color: #e6c877; }
     .guide .g-tab { border: 1px solid var(--line); background: #fff; border-radius: 12px; color: var(--ink2); }
     .guide .g-tab.on { background: var(--ink); color: #fff; border-color: var(--ink); }
     .guide .g-note, .tab-page#tab-transit .settings-hint:not(#trMeta), .mh-use { display: none; }
@@ -584,6 +569,9 @@
     .pg-end { font-size: 11px; color: var(--mute); }
     .pg-end b { color: var(--ink2); font-weight: 600; }
     .gr-chip { font-size: 10.5px; }
+    .pg-end, .pg-lord { display: inline; }
+    .pg-lord { font-size: 11px; color: var(--gold); margin-left: 8px; font-weight: 600; }
+    .pg-lord::before { content: "·"; color: var(--mute); margin-right: 8px; }
     .pg-warn { font-size: 10px; font-weight: 700; color: #b4531a; }
 
     /* muhurta */
@@ -622,12 +610,75 @@
     .ci-bar i { display: block; height: 100%; border-radius: 6px; }
     .ci-top { text-align: center; font-size: 15px; }
     .ci-n { color: var(--mute); font-size: 11px; text-align: right; }
-    ::-webkit-scrollbar-thumb { background: rgba(169,132,47,.35); border-radius: 8px; }</style>
+    ::-webkit-scrollbar-thumb { background: rgba(169,132,47,.35); border-radius: 8px; }
+    /* =====================================================================
+       PURE LIGHT PREMIUM (v51): no dark surfaces anywhere. Warm ivory page,
+       white cards, champagne-gold heroes, deep-gold accents, floating nav.
+       ===================================================================== */
+    :root { --ink: #2a2433; --ink2: #6a6275; --mute: #9a93a4; --bg: #f8f4ec; --line: #ece4d2; --gold: #8f6d1f; --gold2: #c9a24a; --goldbg: #fbf4e1; }
+    body { background: linear-gradient(180deg, #fbf8f1 0%, #f4eee1 100%) fixed; padding-bottom: 104px; }
+    .card { border: 1px solid var(--line); box-shadow: 0 2px 4px rgba(143,109,31,.04), 0 18px 40px rgba(143,109,31,.07); }
+    .header .icon { background: linear-gradient(145deg, #fff8e3, #f1dfae); border: 1px solid #e8d49a; box-shadow: 0 2px 8px rgba(201,162,74,.25); }
+    h1, .page-title, .settings-panel .settings-title { color: var(--ink); -webkit-text-fill-color: var(--ink); }
+
+    /* heroes: soft champagne, ink text */
+    .now-panel, body .mh-hero, body #tab-transit .tr-hero, .guide .g-box.g-profile, .g-profile {
+        background: linear-gradient(145deg, #fffdf7 0%, #fbf1d6 100%) !important; border: 1px solid #ecdcae !important; border-radius: 20px !important;
+        color: var(--ink) !important; box-shadow: 0 8px 24px rgba(201,162,74,.14) !important; }
+    .now-panel { padding: 18px; display: flex; flex-wrap: wrap; align-items: center; gap: 4px 14px; }
+    .now-panel .now-moon, body .mh-hero .mh-vara, .g-profile .g-pname { font-family: var(--serif); font-size: 28px; font-weight: 700; color: var(--ink); }
+    .now-panel .now-time, .now-panel .now-sub, .now-panel .now-houses, body #tab-transit .tr-hero .settings-hint, .mh-loc, .g-profile .g-line { color: var(--ink2); opacity: 1; }
+    .now-panel .now-houses { border-top: 1px solid #ecdcae; }
+    .now-panel .now-houses b, .g-profile .g-sub, .g-profile .g-line b { color: var(--gold); }
+    .g-profile .g-pchips span, body .mh-hero .mh-suns span { background: #fff; border: 1px solid #ecdcae; color: var(--ink2); }
+    body .mh-hero .tr-when input, body #tab-transit .tr-hero .tr-when input { background: #fff !important; color: var(--ink) !important; border: 1px solid #e6d8b0 !important; border-radius: 10px; }
+    body .mh-hero .tr-when button, body #tab-transit .tr-hero .tr-when button { background: #fff !important; border: 1px solid #e6d8b0 !important; color: var(--gold) !important; border-radius: 10px; font-weight: 600; }
+    body .mh-hero .tr-when button#mhToday, body #tab-transit .tr-hero .tr-when button#trNow { background: linear-gradient(135deg, #d8b35a, #b88d2c) !important; color: #fff !important; border: 0 !important; }
+    .mh-loc { font-size: 12px; margin-top: 8px; }
+    .now-orb { display: none; }
+    .now-panel { display: block; padding: 16px 18px; }
+    .home-when { margin: 22px 0 4px; text-align: center; font-size: 12px; color: var(--mute); opacity: 1; }
+
+    /* every former dark control becomes gold-tint */
+    .footer-btn.primary, .guide .g-tab.on, .ci-dim.on { background: linear-gradient(135deg, #d8b35a, #b88d2c); color: #fff; border-color: transparent; box-shadow: 0 4px 12px rgba(184,141,44,.28); }
+    .guide .g-tab, .ci-dim { background: #fff; color: var(--ink2); }
+    .mood-btn:active { background: var(--goldbg); border-color: var(--gold2); }
+    .mh-name, .mh-until { color: var(--ink); }
+    .week-day.is-selected { background: var(--goldbg); box-shadow: 0 0 0 1.5px var(--gold2) inset; }
+
+    /* floating pill navigation with a clearly selected tab */
+    .bottom-nav { background: transparent; border: 0; padding: 0 10px calc(10px + env(safe-area-inset-bottom)); pointer-events: none; }
+    .bottom-nav .inner { pointer-events: auto; background: rgba(255,255,255,.94); -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px); border: 1px solid var(--line); border-radius: 24px; padding: 5px; gap: 2px; box-shadow: 0 10px 30px rgba(143,109,31,.18); }
+    .nav-btn { color: var(--ink2); font-weight: 600; font-size: 10.5px; padding: 7px 0 6px; border-radius: 18px; transition: background .2s, color .2s; }
+    .nav-btn .ni { filter: none; opacity: .9; transition: filter .2s, transform .2s; }
+    .nav-btn.on { color: var(--gold); font-weight: 700; background: linear-gradient(180deg, #fff6dc, #f6e5b3); box-shadow: inset 0 0 0 1px #e6cf8d, 0 3px 8px rgba(201,162,74,.25); }
+    .nav-btn.on .ni { opacity: 1; transform: translateY(-1px) scale(1.12); }
+    .nav-btn.on::before { display: none; }
+
+    /* =====================================================================
+       TYPE SYSTEM (v56): one sans family, one scale, on every tab.
+       hero 22 / page 20 / card title 15 / item 15 / body 13 / small 11.5 / label 10.5
+       ===================================================================== */
+    :root { --serif: var(--sans); }
+    body { font-size: 14px; line-height: 1.45; -webkit-font-smoothing: antialiased; }
+    .header .icon { width: 40px; height: 40px; padding: 0; border-radius: 50%; object-fit: contain; background: none; border: 0; box-shadow: none; display: block; }
+    body .mh-hero .mh-vara { font-size: 18px; display: flex; align-items: center; flex-wrap: wrap; gap: 6px; }
+    .mh-rb { font-size: 12.5px; font-weight: 500; color: var(--ink2); }
+    body .mh-hero .gr-chip { font-size: 11.5px; }
+    h1, .page-title { font-size: 20px; font-weight: 700; letter-spacing: -.01em; }
+    .settings-panel .settings-title, .mh-card .settings-title, #tab-transit .tr-card .settings-title { font-size: 15px; font-weight: 700; letter-spacing: -.005em; }
+    .now-panel .now-moon, body .mh-hero .mh-vara, .g-profile .g-pname { font-size: 22px; font-weight: 700; letter-spacing: -.01em; }
+    .pg-main, .mh-name, .mh-until { font-size: 15px; font-weight: 600; letter-spacing: 0; }
+    .pg-main small { font-size: 11.5px; }
+    .settings-hint, .guide .g-line, .guide .g-box, .tr-table td, .mh-time, .ci-row, .ci-col { font-size: 13px; }
+    .pg-end, .pg-lord, .week-day, .mood-btn .label, .mh-mrow .mh-tags, .ci-n { font-size: 11.5px; }
+    .tr-table td, .tr-table th { font-size: 12px; }
+    .nav-btn.on::after { content: ""; width: 4px; height: 4px; border-radius: 50%; background: var(--gold); margin-top: 1px; }</style>
 </head>
 <body>
 <div class="card">
     <div class="header">
-        <div class="icon">🌙</div>
+        <img class="icon" src="icons/icon-192.png" alt="">
         <h1>Stay Mindful</h1>
         <div class="weather-badge" id="weatherBadge" title="Mount Hope, Hamilton, ON">
             <div class="weather-icon" id="weatherIcon">⏳</div>
@@ -642,9 +693,9 @@
     </div>
 
     <div class="tab-page" id="tab-settings">
-    <div class="page-title">⚙️ Settings</div>
+    <div class="page-title">Settings</div>
     <div class="settings-panel">
-        <div class="settings-title">📍 Location</div>
+        <div class="settings-title">Location</div>
         
         <div class="settings-row">
             <label for="inpLocation">City, Region, Country</label>
@@ -654,7 +705,7 @@
 
     </div>
     <div class="settings-panel">
-        <div class="settings-title">🪐 Your chart</div>
+        <div class="settings-title">Your chart</div>
         <div class="settings-hint">Your Moon sign and Ascendant decide which houses the Moon transits for you. Don't know them? Calculate them from your birth details, or pick them manually.</div>
         <div class="settings-row">
             <label for="inpUserName">Your name (optional)</label>
@@ -686,7 +737,7 @@
 
     </div>
     <div class="settings-panel">
-        <div class="settings-title">💞 Partner (optional)</div>
+        <div class="settings-title">Partner (optional)</div>
         <div class="settings-row">
             <label for="chkPartner">Track my partner too</label>
             <input type="checkbox" id="chkPartner">
@@ -726,7 +777,7 @@
         </ul>
     </div>
     <div class="settings-panel">
-        <div class="settings-title">💾 Backup &amp; Restore</div>
+        <div class="settings-title">Backup &amp; Restore</div>
         <div class="settings-hint">Your data lives only on this phone. Save a backup file now and then.</div>
         <div class="settings-actions">
             <button class="footer-btn" id="btnExport">💾 Save backup to phone</button>
@@ -742,12 +793,12 @@
         <div class="settings-title">ℹ️ About</div>
         <div class="settings-hint">Stay Mindful logs your mood alongside the Moon's sign, nakshatra and tithi (Lahiri sidereal). The guidance is general awareness based on classical Vedic ideas, not prediction or medical advice. Transit-tab planet positions use the MIT-licensed astronomy-engine library.</div>
         <div class="settings-hint" id="appVersion" style="margin-top:8px;font-weight:600"></div>
-        <details style="margin-top:6px"><summary class="settings-hint" style="cursor:pointer">What's new</summary><div class="settings-hint" id="appChangelog"></div></details>
+        <div class="settings-hint" style="margin-top:6px"><b>What's new</b></div><div class="settings-hint" id="appChangelog"></div>
     </div>
     </div>
 
     <div class="tab-page" id="tab-muhurta">
-    <div class="page-title">🕉️ Muhurta</div>
+    <div class="page-title">Muhurta</div>
     <div class="settings-panel mh-hero">
         <div class="tr-when">
             <button type="button" id="mhPrev" title="Previous day">◀</button>
@@ -761,7 +812,7 @@
     </div>
 
     <div class="tab-page" id="tab-transit">
-    <div class="page-title">🪐 Transit</div>
+    <div class="page-title">Transit</div>
     <div class="settings-panel tr-hero">
         <div class="tr-when">
             <button type="button" id="trPrev" title="Previous day">◀</button>
@@ -772,17 +823,17 @@
         <div class="settings-hint" id="trMeta" style="margin-top:8px"></div>
     </div>
     <div class="settings-panel tr-card">
-        <div class="settings-title">🪐 Rashi chart · North Indian</div>
+        <div class="settings-title">Rashi chart</div>
         <div class="tr-chart" id="trChart"></div>
         <div class="settings-hint">Houses run anticlockwise from the top diamond (house 1 = Lagna). Small numbers are the rashi (1 Mesha … 12 Meena). Red R = retrograde.</div>
     </div>
     <div class="settings-panel tr-card">
-        <div class="settings-title">📍 Graha positions &amp; next change</div>
+        <div class="settings-title">Graha positions &amp; next change</div>
         <div class="tr-scroll"><table class="tr-table" id="trTable"></table></div>
         <div class="settings-hint">Sidereal (Lahiri), geocentric, nine grahas. Rahu/Ketu are the <b>mean</b> node (Drik Panchang's default). Lagna uses your location from Settings. Times are in your device's time zone. Planet positions agree with Swiss Ephemeris to within about 10 arcseconds and Lagna to within about 2; degrees are truncated, as in most panchangs. Own caveat: a planet sitting almost exactly on a boundary (or stationary there) can flip in the last few seconds.</div>
     </div>
     <div class="settings-panel tr-card">
-        <div class="settings-title">🛡️ Gochara &amp; Vedha · from your Moon sign</div>
+        <div class="settings-title">Gochara &amp; Vedha · from your Moon sign</div>
         <div class="settings-hint" style="margin-bottom:6px">Vedha = a planet in a favorable house is blocked (its good result reduced) when another planet sits in its paired "obstruction" house.</div>
         <div id="trVedha"></div>
         <div class="settings-hint">Classical Gochara per BPHS (ch. 65-66): Sun, Moon, Mars, Mercury, Jupiter, Venus, Saturn counted from the natal Moon. Sun-Saturn and Moon-Mercury do not obstruct each other. Rahu/Ketu are not part of the classical table. Whole-sign houses; the wording of each line is a simple summary.</div>
@@ -790,7 +841,7 @@
     </div>
 
     <div class="tab-page" id="tab-insights">
-    <div class="page-title">📊 Insights</div>
+    <div class="page-title">Insights</div>
     <div class="settings-panel">
         <div class="settings-title">Your patterns</div>
         <div class="insight-range-row">
@@ -847,8 +898,7 @@
 
     <div class="tab-page active" id="tab-home">
     <div class="now-panel" id="nowPanel">
-        <div class="now-orb" id="nowOrb"></div>
-        <div class="now-time" id="nowTime">—</div>
+        <div class="now-orb" id="nowOrb" hidden></div>
         <div class="now-moon" id="nowMoon">Loading moon position…</div>
         <div class="now-sub" id="nowSub"></div>
         <div class="now-sub" id="nowTithi"></div>
@@ -982,12 +1032,14 @@
         </button>
     </div>
 
+    <div class="now-time home-when" id="nowTime">—</div>
+
     </div>
 
     <div class="toast" id="toast"></div>
 
     <div class="tab-page" id="tab-journal">
-    <div class="page-title">📓 Journal</div>
+    <div class="page-title">Journal</div>
     <div class="week-nav">
         <button class="week-nav-btn" id="btnWeekPrev">&larr; Prev</button>
         <span class="week-range" id="weekRange"></span>
@@ -1506,9 +1558,16 @@ var TITHI_NAMES = ['Pratipada','Dwitiya','Tritiya','Chaturthi','Panchami','Shash
 // inauspicious ones are flagged bad.
 // VERSIONING: bump APP_VERSION + APP_BUILD (= service-worker CACHE_NAME number) and
 // add a line at the TOP of APP_CHANGELOG on every release.
-var APP_VERSION = '2.10.0';
-var APP_BUILD = 50;
+var APP_VERSION = '2.12.1';
+var APP_BUILD = 57;
 var APP_CHANGELOG = [
+    ['2.12.1', 'Header logo now sits flush as a clean circle, and the Muhurta weekday line is sized to match the rest of the app.'],
+    ['2.12.0', 'Consistent look: the original app icon is back in the header, one clean font and size scale on every tab, and calmer titles without emoji.'],
+    ['2.11.4', 'Transit: the chart card is now simply titled Rashi chart.'],
+    ['2.11.3', 'Navigation bar: unselected tabs now have full-colour icons and darker labels so every tab is easy to read.'],
+    ['2.11.2', 'Cleaner Home: the moon icon is gone and the date, time and place now sit quietly at the bottom.'],
+    ['2.11.1', 'Panchang at a glance shows the presiding lord (deity) of nakshatra, tithi, yoga and karana again, alongside the ruling planet, in the compact layout.'],
+    ['2.11.0', 'Pure light redesign: no dark cards anywhere, champagne-gold heroes, a golden moon orb, and a floating navigation bar with a clearly highlighted tab. About now shows only the latest release.'],
     ['2.10.0', 'Insights: new Cosmic patterns card shows your best and tougher times by Tara, Chandra bala, Tithi, Yoga, Karana (with ruling planets), Hora and Choghadiya, built from your own mood logs.'],
     ['2.9.0', 'Clean redesign: flat ivory with a single ink and gold accent, and a compact Panchang card (one tidy row each for Moon sign, Nakshatra, Tithi, Yoga, Karana with ruling planet and end time).'],
     ['2.8.0', 'Luxe Day redesign: ivory & champagne-gold, serif display type, deep aubergine hero panels, airier cards, and far less explanatory text.'],
@@ -1526,7 +1585,7 @@ var APP_CHANGELOG = [
     var v = document.getElementById('appVersion');
     if (v) { v.textContent = 'Version ' + APP_VERSION + ' (build ' + APP_BUILD + ')'; }
     var c = document.getElementById('appChangelog');
-    if (c) { c.innerHTML = APP_CHANGELOG.map(function (e) { return '<div><b>' + e[0] + '</b> — ' + e[1] + '</div>'; }).join(''); }
+    if (c) { c.innerHTML = '<div><b>' + APP_CHANGELOG[0][0] + '</b> — ' + APP_CHANGELOG[0][1] + '</div>'; }
 })();
 
 var YOGAS = [['Vishkambha',1],['Priti',0],['Ayushman',0],['Saubhagya',0],['Shobhana',0],['Atiganda',1],['Sukarma',0],['Dhriti',0],['Shula',1],['Ganda',1],['Vriddhi',0],['Dhruva',0],['Vyaghata',1],['Harshana',0],['Vajra',1],['Siddhi',0],['Vyatipata',1],['Variyana',0],['Parigha',1],['Shiva',0],['Siddha',0],['Sadhya',0],['Shubha',0],['Shukla',0],['Brahma',0],['Indra',0],['Vaidhriti',1]].map(function (y) { return { name: y[0], bad: !!y[1] }; });
@@ -1639,7 +1698,7 @@ function grahaChip(name) {
     return '<span class="gr-chip" style="background:' + TR_COLOR[name] + '"><i>' + TR_ABBR[name] + '</i>' + name + '</span>';
 }
 function pgRow(label, main, chips, endHtml, tip) {
-    return '<div class="pg-row"><div class="pg-label">' + label + '</div><div title="' + (tip || '') + '"><div class="pg-main">' + main + '</div>' + (endHtml || '') + '</div><div class="pg-chips">' + chips + '</div></div>';
+    return '<div class="pg-row"><div class="pg-label">' + label + '</div><div><div class="pg-main">' + main + '</div>' + (endHtml || '') + (tip ? '<span class="pg-lord">' + tip + '</span>' : '') + '</div><div class="pg-chips">' + chips + '</div></div>';
 }
 // Start/end of the tithi, yoga, karana, nakshatra and Moon sign that are running at `date`:
 // scans outward in 15-minute steps, then bisects each boundary to about a second.
@@ -2316,7 +2375,7 @@ function renderMuhurta() {
     var vara = sun.wd;
     var pr = getMoonPanchang(sun.rise);
     document.getElementById('mhMeta').innerHTML =
-        '<div class="mh-vara">' + MH_VARA[vara] + ' · ruled by ' + grahaChip(MH_VARA_LORD[vara]) + '</div>' +
+        '<div class="mh-vara">' + MH_VARA[vara] + ' <span class="mh-rb">ruled by</span> ' + grahaChip(MH_VARA_LORD[vara]) + '</div>' +
         '<div class="mh-suns"><span>🌅 ' + mhFmt(sun.rise, tz) + '</span><span>🌇 ' + mhFmt(sun.set, tz) + '</span><span>☀️ ' + hm(dayLen) + '</span><span>🌙 ' + hm(nightLen) + '</span></div>' +
         '<div class="mh-loc">📍 ' + escHtml(loc.name || 'Your location') + ' · ' + pr.tithi.paksha + ' ' + pr.tithi.name + ' · ' + pr.nakshatra + '</div>';
 
@@ -2335,14 +2394,14 @@ function renderMuhurta() {
     if (showNow) {
         var ch = horas.filter(inDay)[0], cc = chogs.filter(inDay)[0];
         var bad = [rahu, yama, gul].some(inDay);
-        html += '<div class="settings-panel mh-card mh-nowcard"><div class="settings-title">⏳ Right now</div><div class="mh-nowgrid">' +
+        html += '<div class="settings-panel mh-card mh-nowcard"><div class="settings-title">Right now</div><div class="mh-nowgrid">' +
             (ch ? '<div><div class="mh-k">Hora</div>' + grahaChip(ch.lord) + '<div class="mh-until">until ' + mhFmt(ch.end, tz, sun.d) + '</div><div class="mh-use">' + MH_HORA[ch.lord].use + '</div></div>' : '') +
             (cc ? '<div><div class="mh-k">Choghadiya</div><span class="mh-chip ' + CHOG[cc.name].cls + '">' + cc.name + '</span><div class="mh-until">until ' + mhFmt(cc.end, tz, sun.d) + '</div><div class="mh-use">' + CHOG[cc.name].use + '</div></div>' : '') +
             '</div>' + (bad ? '<div class="mh-warn">⚠️ Inside Rahu Kaal / Yamaganda / Gulika right now: better not to begin anything important.</div>' : '') + '</div>';
     }
     html += '<!--MOON-->';
 
-    html += '<div class="settings-panel mh-card"><div class="settings-title">🚫 Avoid &amp; ✅ auspicious windows</div>' +
+    html += '<div class="settings-panel mh-card"><div class="settings-title">Avoid &amp; auspicious windows</div>' +
         mhRow(rng(rahu), showNow && inDay(rahu), MH_COLOR.bad, 'Rahu Kaal', 'bad', 'avoid', '', 'the best-known inauspicious window: avoid starting journeys, deals or ceremonies') +
         mhRow(rng(yama), showNow && inDay(yama), MH_COLOR.bad, 'Yamaganda', 'bad', 'avoid', '', 'a Yama-ruled window: avoid auspicious starts') +
         mhRow(rng(gul), showNow && inDay(gul), MH_COLOR.mid, 'Gulika Kaal', 'mid', 'caution', '', 'Saturn\'s son: whatever starts here tends to repeat, so fine for things you want repeated, bad for new risks') +
@@ -2353,7 +2412,7 @@ function renderMuhurta() {
         var h = MH_HORA[s.lord];
         return mhRow(rng(s), showNow && inDay(s), TR_COLOR[s.lord], grahaChip(s.lord), h.cls, MH_LABEL[h.cls], '', h.use);
     };
-    html += '<div class="settings-panel mh-card"><div class="settings-title">🪐 Hora · planetary hours</div>' +
+    html += '<div class="settings-panel mh-card"><div class="settings-title">Hora · planetary hours</div>' +
         '<div class="mh-sub">☀️ Day horas (' + hm(dayLen / 12) + ' each)</div>' + horas.slice(0, 12).map(hRow).join('') +
         '<div class="mh-sub">🌙 Night horas (' + hm(nightLen / 12) + ' each)</div>' + horas.slice(12).map(hRow).join('') +
         '<div class="settings-hint">Each hora is 1/12 of the daytime or night, so it is not exactly 60 minutes. The first hora of the day belongs to the weekday lord, then the order is Sun, Venus, Mercury, Moon, Saturn, Jupiter, Mars.</div></div>';
@@ -2363,7 +2422,7 @@ function renderMuhurta() {
         var clash = (c.cls === 'good' && [rahu, yama].some(function (w) { return mhOverlap(s, w); })) ? '<span class="mh-tag warn">overlaps Rahu Kaal / Yamaganda</span>' : '';
         return mhRow(rng(s), showNow && inDay(s), MH_COLOR[c.cls], s.name, c.cls, MH_LABEL[c.cls], clash, c.use);
     };
-    html += '<div class="settings-panel mh-card"><div class="settings-title">🕰️ Choghadiya</div>' +
+    html += '<div class="settings-panel mh-card"><div class="settings-title">Choghadiya</div>' +
         '<div class="mh-sub">☀️ Day</div>' + chogs.slice(0, 8).map(cRow).join('') +
         '<div class="mh-sub">🌙 Night</div>' + chogs.slice(8).map(cRow).join('') +
         '<div class="settings-hint">Day and night are each cut into 8 equal parts. Amrit, Shubh and Labh are good; Chal is neutral (good for travel); Udveg, Rog and Kaal are best avoided for new starts.</div></div>';
@@ -2385,7 +2444,7 @@ function renderMuhurta() {
             '<div class="mh-main"><div class="mh-name">' + NAKSHATRA_NAMES[s.nak] + ' <small>' + rashiShort(RASHI_NAMES[s.sign]) + ' · ' + cls.label + '</small></div>' +
             (tags ? '<div class="mh-tags">' + tags + '</div>' : '') + '</div><span class="mh-chip ' + v + '">' + vt + '</span></div>';
     }).join('');
-    var moonCard = '<div class="settings-panel mh-card"><div class="settings-title">⭐ Moon · Tara &amp; Chandra bala</div>' + segHtml +
+    var moonCard = '<div class="settings-panel mh-card"><div class="settings-title">Moon · Tara &amp; Chandra bala</div>' + segHtml +
         ((uc && typeof uc.nakshatraIndex === 'number') ? '' : '<div class="mh-need">Add your birth star in ⚙️ Settings to see your Tara (Sampat, Vipat…) and Chandra bala.</div>') + '</div>';
     html = html.replace('<!--MOON-->', moonCard);
     body.innerHTML = html;
@@ -2907,10 +2966,10 @@ function renderMoonGuide(p, view, events) {
     var vd = view.date;
     html += '<div class="g-box moon pg-card"><div class="g-sub">Panchang</div>' +
         pgRow('Moon sign', rashiShort(RASHI_NAMES[r]), grahaChip(SIGN_LORD[r]), spanEnd(sp.rashi, vd), SIGN_ELEMENT[r % 4] + ' · ' + SIGN_MODE[r % 3]) +
-        pgRow('Nakshatra', p.nakshatra + ' <small>pada ' + p.pada + '</small>', grahaChip(nakLord), spanEnd(sp.nak, vd), 'Deity: ' + NAK_DEITY[p.nakshatraIndex]) +
-        pgRow('Tithi', p.tithi.paksha + ' ' + p.tithi.name, grahaChip(tithiGraha(p.tithi)), spanEnd(sp.tithi, vd), 'Deity: ' + tithiLord(p.tithi)) +
-        pgRow('Yoga', yoga.name, grahaChip(YOGA_GRAHA_CYCLE[p.yogaIndex % 9]) + (yoga.bad ? warn('inauspicious') : ''), spanEnd(sp.yoga, vd), 'Deity: ' + YOGA_LORDS[p.yogaIndex]) +
-        pgRow('Karana', karana.name, grahaChip(KARANA_GRAHA[karana.name]) + (karana.bad ? warn('avoid starts') : ''), spanEnd(sp.karana, vd), 'Deity: ' + KARANA_LORDS[karana.name]) +
+        pgRow('Nakshatra', p.nakshatra + ' <small>pada ' + p.pada + '</small>', grahaChip(nakLord), spanEnd(sp.nak, vd), 'Lord: ' + NAK_DEITY[p.nakshatraIndex]) +
+        pgRow('Tithi', p.tithi.paksha + ' ' + p.tithi.name, grahaChip(tithiGraha(p.tithi)), spanEnd(sp.tithi, vd), 'Lord: ' + tithiLord(p.tithi)) +
+        pgRow('Yoga', yoga.name, grahaChip(YOGA_GRAHA_CYCLE[p.yogaIndex % 9]) + (yoga.bad ? warn('inauspicious') : ''), spanEnd(sp.yoga, vd), 'Lord: ' + YOGA_LORDS[p.yogaIndex]) +
+        pgRow('Karana', karana.name, grahaChip(KARANA_GRAHA[karana.name]) + (karana.bad ? warn('avoid starts') : ''), spanEnd(sp.karana, vd), 'Lord: ' + KARANA_LORDS[karana.name]) +
         '</div>';    html += '<div class="g-box"><div class="g-sub">Tithi &amp; Moon strength</div>' +
         '<div class="g-head">' + p.tithi.paksha + ' ' + p.tithi.name + ' <span class="chip ' + (pct >= 75 ? 'strong' : pct >= 35 ? 'neutral' : 'strained') + '">' + strengthLabel + '</span></div>' +
         '<div class="g-bar"><div class="g-bar-fill" style="width:' + pct + '%"></div></div>' +
@@ -3067,11 +3126,11 @@ function moonOrbSvg(tithi) {
     var path = 'M' + cx + ' ' + (cy - r) + ' A' + r + ' ' + r + ' 0 0 1 ' + cx + ' ' + (cy + r) +
         ' A' + Math.max(0.01, Math.abs(c) * r).toFixed(2) + ' ' + r + ' 0 0 ' + (c > 0 ? 0 : 1) + ' ' + cx + ' ' + (cy - r) + 'Z';
     return '<svg viewBox="0 0 70 70" width="70" height="70" aria-hidden="true"><defs>' +
-        '<radialGradient id="orbLit" cx="40%" cy="35%" r="75%"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#cfd5f5"/></radialGradient>' +
-        '<radialGradient id="orbDark" cx="50%" cy="50%" r="60%"><stop offset="0" stop-color="#2b3170"/><stop offset="1" stop-color="#141945"/></radialGradient></defs>' +
-        '<circle cx="35" cy="35" r="33" fill="url(#orbDark)" stroke="rgba(255,255,255,.35)" stroke-width="1"/>' +
+        '<radialGradient id="orbLit" cx="40%" cy="35%" r="75%"><stop offset="0" stop-color="#fff3c4"/><stop offset="1" stop-color="#e2b84f"/></radialGradient>' +
+        '<radialGradient id="orbDark" cx="50%" cy="50%" r="60%"><stop offset="0" stop-color="#f4effa"/><stop offset="1" stop-color="#dcd4ea"/></radialGradient></defs>' +
+        '<circle cx="35" cy="35" r="33" fill="url(#orbDark)" stroke="#e6cf8d" stroke-width="1"/>' +
         '<path d="' + path + '" fill="url(#orbLit)"' + (waning ? ' transform="translate(70 0) scale(-1 1)"' : '') + '/>' +
-        '<circle cx="28" cy="27" r="4" fill="rgba(120,130,190,.25)"/><circle cx="42" cy="42" r="5" fill="rgba(120,130,190,.2)"/></svg>';
+        '<circle cx="28" cy="27" r="4" fill="rgba(143,109,31,.12)"/><circle cx="42" cy="42" r="5" fill="rgba(143,109,31,.1)"/></svg>';
 }
 
 function updateNowPanel() {
