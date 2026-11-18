@@ -92,6 +92,7 @@
         margin-bottom: 16px;
     }
     .settings-panel.open, .tab-page .settings-panel { display: block; }
+    .tab-page #moreMoodsPanel:not(.open) { display: none; }
     .settings-panel .settings-title { font-size: 12.5px; font-weight: 700; color: #374151; margin-bottom: 8px; }
     .settings-row { margin-bottom: 10px; }
     .settings-row label { display: block; font-size: 11.5px; color: #6b7280; margin-bottom: 4px; font-weight: 600; }
@@ -473,6 +474,8 @@
     <div class="settings-panel">
         <div class="settings-title">ℹ️ About</div>
         <div class="settings-hint">Stay Mindful logs your mood alongside the Moon's sign, nakshatra and tithi (Lahiri sidereal). The guidance is general awareness based on classical Vedic ideas, not prediction or medical advice.</div>
+        <div class="settings-hint" id="appVersion" style="margin-top:8px;font-weight:600"></div>
+        <details style="margin-top:6px"><summary class="settings-hint" style="cursor:pointer">What's new</summary><div class="settings-hint" id="appChangelog"></div></details>
     </div>
     </div>
 
@@ -563,6 +566,24 @@
         <button class="mood-btn" data-mood="tired" data-emoji="🥱" data-label="Tired">
             <span class="emoji">🥱</span><span class="label">Tired</span>
         </button>
+        <button class="mood-btn" data-mood="calm" data-emoji="😌" data-label="Calm">
+            <span class="emoji">😌</span><span class="label">Calm</span>
+        </button>
+        <button class="mood-btn" data-mood="grateful" data-emoji="🙏" data-label="Grateful">
+            <span class="emoji">🙏</span><span class="label">Grateful</span>
+        </button>
+        <button class="mood-btn" data-mood="excited" data-emoji="🤩" data-label="Excited">
+            <span class="emoji">🤩</span><span class="label">Excited</span>
+        </button>
+        <button class="mood-btn" data-mood="loved" data-emoji="🥰" data-label="Loved">
+            <span class="emoji">🥰</span><span class="label">Loved</span>
+        </button>
+        <button class="mood-btn" data-mood="anxious" data-emoji="😰" data-label="Anxious">
+            <span class="emoji">😰</span><span class="label">Anxious</span>
+        </button>
+        <button class="mood-btn" data-mood="stressed" data-emoji="😖" data-label="Stressed">
+            <span class="emoji">😖</span><span class="label">Stressed</span>
+        </button>
         <button class="mood-btn" id="btnMoreMoods" type="button">
             <span class="emoji">➕</span><span class="label">More</span>
         </button>
@@ -571,35 +592,17 @@
     <div class="settings-panel" id="moreMoodsPanel">
         <div class="settings-title">More moods</div>
         <div class="mood-row">
-            <button class="mood-btn" data-mood="calm" data-emoji="😌" data-label="Calm">
-                <span class="emoji">😌</span><span class="label">Calm</span>
-            </button>
-            <button class="mood-btn" data-mood="grateful" data-emoji="🙏" data-label="Grateful">
-                <span class="emoji">🙏</span><span class="label">Grateful</span>
-            </button>
-            <button class="mood-btn" data-mood="excited" data-emoji="🤩" data-label="Excited">
-                <span class="emoji">🤩</span><span class="label">Excited</span>
-            </button>
             <button class="mood-btn" data-mood="content" data-emoji="😇" data-label="Content">
                 <span class="emoji">😇</span><span class="label">Content</span>
             </button>
             <button class="mood-btn" data-mood="relaxed" data-emoji="😎" data-label="Relaxed">
                 <span class="emoji">😎</span><span class="label">Relaxed</span>
             </button>
-            <button class="mood-btn" data-mood="loved" data-emoji="🥰" data-label="Loved">
-                <span class="emoji">🥰</span><span class="label">Loved</span>
-            </button>
             <button class="mood-btn" data-mood="motivated" data-emoji="💪" data-label="Motivated">
                 <span class="emoji">💪</span><span class="label">Motivated</span>
             </button>
             <button class="mood-btn" data-mood="proud" data-emoji="🫡" data-label="Proud">
                 <span class="emoji">🫡</span><span class="label">Proud</span>
-            </button>
-            <button class="mood-btn" data-mood="anxious" data-emoji="😰" data-label="Anxious">
-                <span class="emoji">😰</span><span class="label">Anxious</span>
-            </button>
-            <button class="mood-btn" data-mood="stressed" data-emoji="😖" data-label="Stressed">
-                <span class="emoji">😖</span><span class="label">Stressed</span>
             </button>
             <button class="mood-btn" data-mood="overwhelmed" data-emoji="🥵" data-label="Overwhelmed">
                 <span class="emoji">🥵</span><span class="label">Overwhelmed</span>
@@ -919,6 +922,36 @@ function sunTropicalLongitude(jd) {
 
 var TITHI_NAMES = ['Pratipada','Dwitiya','Tritiya','Chaturthi','Panchami','Shashthi','Saptami','Ashtami','Navami','Dashami','Ekadashi','Dwadashi','Trayodashi','Chaturdashi'];
 
+// Nitya Yoga (27): (sidereal Sun + sidereal Moon) / 13°20'. The 9 classically
+// inauspicious ones are flagged bad.
+// VERSIONING: bump APP_VERSION + APP_BUILD (= service-worker CACHE_NAME number) and
+// add a line at the TOP of APP_CHANGELOG on every release.
+var APP_VERSION = '2.1.0';
+var APP_BUILD = 40;
+var APP_CHANGELOG = [
+    ['2.1.0', 'Panchang at a glance (yoga, karana, lords, deity, navamsa), Chandrashtama alert, next-signs lookahead, more moods on main page, version display'],
+    ['2.0.0', 'Bottom tabs, partner tracking, Tarabala, selected-day Moon view, Moon Guide, backup & restore']
+];
+(function () {
+    var v = document.getElementById('appVersion');
+    if (v) { v.textContent = 'Version ' + APP_VERSION + ' (build ' + APP_BUILD + ')'; }
+    var c = document.getElementById('appChangelog');
+    if (c) { c.innerHTML = APP_CHANGELOG.map(function (e) { return '<div><b>' + e[0] + '</b> — ' + e[1] + '</div>'; }).join(''); }
+})();
+
+var YOGAS = [['Vishkambha',1],['Priti',0],['Ayushman',0],['Saubhagya',0],['Shobhana',0],['Atiganda',1],['Sukarma',0],['Dhriti',0],['Shula',1],['Ganda',1],['Vriddhi',0],['Dhruva',0],['Vyaghata',1],['Harshana',0],['Vajra',1],['Siddhi',0],['Vyatipata',1],['Variyana',0],['Parigha',1],['Shiva',0],['Siddha',0],['Sadhya',0],['Shubha',0],['Shukla',0],['Brahma',0],['Indra',0],['Vaidhriti',1]].map(function (y) { return { name: y[0], bad: !!y[1] }; });
+
+// Karana (60 half-tithis): 1 fixed at start, 7 movable cycling 8 times, 3 fixed at end.
+var KARANA_MOVABLE = ['Bava','Balava','Kaulava','Taitila','Gara','Vanija','Vishti'];
+function karanaInfo(i) {
+    if (i === 0) return { name: 'Kimstughna', bad: false };
+    if (i === 57) return { name: 'Shakuni', bad: false };
+    if (i === 58) return { name: 'Chatushpada', bad: false };
+    if (i === 59) return { name: 'Naga', bad: false };
+    var n = KARANA_MOVABLE[(i - 1) % 7];
+    return { name: n === 'Vishti' ? 'Vishti (Bhadra)' : n, bad: n === 'Vishti' };
+}
+
 // Tithi (lunar day) = angle between Moon and Sun, split into 30 segments of
 // 12°. Computed from tropical longitudes directly — ayanamsa cancels out in
 // the Moon-minus-Sun difference, so this is geocentric/instantaneous just
@@ -972,13 +1005,18 @@ function getMoonPanchang(date) {
     var rashiIndex = Math.min(11, Math.floor(sidereal / 30));
     var sunLon = sunTropicalLongitude(jd);
     var tithi = getTithiInfo(moonLon, sunLon);
+    var elong = fix360(moonLon - sunLon);
+    var sunSidereal = fix360(sunLon + ayanamsa);
     return {
         nakshatra: NAKSHATRA_NAMES[nakIndex],
         nakshatraIndex: nakIndex,
         pada: pada,
         rashi: RASHI_NAMES[rashiIndex],
         rashiIndex: rashiIndex,
-        tithi: tithi
+        tithi: tithi,
+        elongation: elong,
+        yogaIndex: Math.min(26, Math.floor(fix360(sidereal + sunSidereal) / nakWidth)),
+        karanaIndex: Math.min(59, Math.floor(elong / 6))
     };
 }
 
@@ -1314,6 +1352,11 @@ var HOUSE_FROM_ASC = [null,
     { area: 'rest, expenses, retreat, sleep', good: 'meditation, rest, solitude, charity', watch: 'overspending, isolation' }
 ];
 var HOUSE_FROM_MOON = [null, 'comfort, good food, wellbeing', 'money loss or worry, sharp words', 'gains, motivated, brave', 'health issues, restless, unsettled', 'setbacks in plans, overthinking', 'gains, overcomes obstacles', 'good gains, social, agreeable', 'fear, anxiety, sensitive, go slow', 'trouble with authority, doubt, delays', 'happiness, comfort, achievement', 'gains, support, optimistic', 'expenses or losses, drained, withdrawn'];
+var SIGN_LORD = ['Mars','Venus','Mercury','Moon','Sun','Mercury','Venus','Mars','Jupiter','Saturn','Saturn','Jupiter'];
+var SIGN_ELEMENT = ['Fire','Earth','Air','Water'];
+var SIGN_MODE = ['Movable','Fixed','Dual'];
+var NAK_LORDS = ['Ketu','Venus','Sun','Moon','Mars','Rahu','Jupiter','Saturn','Mercury'];
+var NAK_DEITY = ['Ashwini Kumaras','Yama','Agni','Brahma','Soma','Rudra','Aditi','Brihaspati','Nagas','Pitris','Bhaga','Aryaman','Savitar','Tvashtar','Vayu','Indra-Agni','Mitra','Indra','Nirriti','Apas','Vishvadevas','Vishnu','Vasus','Varuna','Aja Ekapada','Ahir Budhnya','Pushan'];
 var NAK_TONE = ['swift, healing, fresh starts', 'intense, transformative, responsible', 'sharp, purifying, critical', 'growth, beauty, sensual', 'searching, curious, gentle', 'stormy, emotional release, change', 'renewal, optimistic, returning home', 'nourishing, supportive, auspicious', 'clingy, psychological, sharp-minded', 'regal, ancestral, status-minded', 'pleasure, creativity, leisure', 'reliable, helpful, partnerships', 'skilled, practical, crafty', 'artistic, striking, design-minded', 'independent, flexible, trade', 'determined, goal-driven, competitive', 'devoted, friendly, loyal', 'protective, authoritative, tense', 'uprooting, investigative, truth-seeking', 'invigorating, persuasive, confident', 'principled, patient, lasting success', 'listening, learning, connecting', 'rhythmic, ambitious, wealth-minded', 'healing, secretive, solitary', 'intense, fiery, idealistic', 'deep, calm, wise', 'gentle, caring, safe journeys'];
 var DIGNITY_NOTE = {
     strong: 'The Moon is strong here: emotions feel steadier and the positives below are amplified.',
@@ -1415,7 +1458,12 @@ function personBoxes(chart, who, r, dignity, pct, strengthLabel, nIdx) {
         taraBox(chart, '', nIdx) +
         '<div class="g-box"><div class="g-sub">Overall outlook</div>' +
         '<div class="g-head"><span class="chip ' + o.cls + '" style="margin-left:0">' + o.text + '</span></div>' +
-        '<div class="g-line">Moon-sign house is ' + (favorable ? 'favorable' : 'challenging') + ' (' + ordinal(hMoon) + ') and the Moon is ' + dignity + ' in ' + rashiShort(RASHI_NAMES[r]) + ' with ' + strengthLabel + ' strength (' + pct + '%).</div></div>';
+        '<div class="g-line">Moon-sign house is ' + (favorable ? 'favorable' : 'challenging') + ' (' + ordinal(hMoon) + ') and the Moon is ' + dignity + ' in ' + rashiShort(RASHI_NAMES[r]) + ' with ' + strengthLabel + ' strength (' + pct + '%).</div>' +
+        (hMoon === 8 ? '<div class="g-line">⚠️ <b>Chandrashtama:</b> the Moon is in your 8th from natal Moon, the classically most-avoided Moon position. Postpone big starts, signings and travel if you can; stay calm and low-key.</div>' : '') +
+        '<div class="g-line"><b>🔮 Next signs for you:</b> ' + [1, 2, 3, 4].map(function (k) {
+            var s = (r + k) % 12, h = houseFromReference(s, chart.moonSignIndex);
+            return rashiShort(RASHI_NAMES[s]) + ' (' + ordinal(h) + ') ' + (MOON_FAVORABLE_HOUSES.indexOf(h) >= 0 ? '✅' : h === 8 ? '⛔' : '⚠️');
+        }).join(' → ') + '</div></div>';
 }
 
 function togetherBox(chart, partner, r, dignity, pct, nIdx) {
@@ -1466,7 +1514,7 @@ function renderMoonGuide(p, view, events) {
     document.getElementById('guideTitle').textContent = view.live
         ? '🌙 Moon Guide — Today'
         : '🌙 Moon Guide — ' + view.day.toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' }) + ' (preview)';
-    var sig = view.day.getTime() + '|' + view.live + '|' + p.rashiIndex + '|' + p.nakshatraIndex + '|' + p.tithi.paksha + p.tithi.dayInPaksha + '|' +     (chart ? chart.moonSignIndex + ',' + chart.ascSignIndex + ',' + chart.nakshatraIndex : '-') +
+    var sig = view.day.getTime() + '|' + view.live + '|' + p.rashiIndex + '|' + p.nakshatraIndex + '|' + p.tithi.paksha + p.tithi.dayInPaksha + '|' + p.yogaIndex + '|' + p.karanaIndex + '|' + p.pada + '|' + (chart ? chart.moonSignIndex + ',' + chart.ascSignIndex + ',' + chart.nakshatraIndex : '-') +
             '|' + (partner ? partner.name + ',' + partner.moonSignIndex + ',' + partner.ascSignIndex + ',' + partner.nakshatraIndex : '-') + '|' + guideTab;
     if (sig === guideSig) { return; }
     guideSig = sig;
@@ -1483,6 +1531,18 @@ function renderMoonGuide(p, view, events) {
         ? (p.tithi.paksha === 'Shukla' ? 'Full Moon: emotions and energy run high, so go easy on big reactions.' : 'New Moon: inward, quiet and low-energy, so rest and reflect.')
         : (p.tithi.paksha === 'Shukla' ? 'Waxing Moon: energy and mood tend to build.' : 'Waning Moon: energy tends to wind down; classically the Moon is weaker, so supportive cues below are milder.');
     var html = '';
+    var nakLord = NAK_LORDS[p.nakshatraIndex % 9];
+    var navIdx = (p.nakshatraIndex * 4 + p.pada - 1) % 12;
+    var yoga = YOGAS[p.yogaIndex];
+    var karana = karanaInfo(p.karanaIndex);
+    html += '<div class="g-box moon"><div class="g-sub">Panchang at a glance</div>' +
+        '<div class="g-line">🌙 <b>Sign:</b> ' + rashiShort(RASHI_NAMES[r]) + ' · ' + SIGN_ELEMENT[r % 4] + ' · ' + SIGN_MODE[r % 3] + ' · ruled by ' + SIGN_LORD[r] + '</div>' +
+        '<div class="g-line">⭐ <b>Nakshatra:</b> ' + p.nakshatra + ', pada ' + p.pada + ' · lord ' + nakLord + ' · deity ' + NAK_DEITY[p.nakshatraIndex] + '</div>' +
+        '<div class="g-line">🔷 <b>Navamsa of this pada:</b> ' + rashiShort(RASHI_NAMES[navIdx]) + '</div>' +
+        '<div class="g-line">🌗 <b>Tithi:</b> ' + p.tithi.paksha + ' ' + p.tithi.name + '</div>' +
+        '<div class="g-line">' + (yoga.bad ? '⚠️' : '✨') + ' <b>Yoga:</b> ' + yoga.name + ' <span class="chip ' + (yoga.bad ? 'strained' : 'strong') + '">' + (yoga.bad ? 'inauspicious' : 'auspicious') + '</span></div>' +
+        '<div class="g-line">' + (karana.bad ? '⚠️' : '🔹') + ' <b>Karana:</b> ' + karana.name + (karana.bad ? ' <span class="chip strained">avoid starting new things</span>' : '') + '</div>' +
+        '<div class="g-note">Sign lord, nakshatra lord (Vimshottari order), deity and the 27 Yogas / 60 Karanas are standard classical tables. Yoga uses sidereal Sun + Moon; Karana is a half-tithi. Vishti (Bhadra) and the nine inauspicious Yogas are the traditional "avoid" ones.</div></div>';
     html += '<div class="g-box"><div class="g-sub">Tithi &amp; Moon strength</div>' +
         '<div class="g-head">' + p.tithi.paksha + ' ' + p.tithi.name + ' <span class="chip ' + (pct >= 75 ? 'strong' : pct >= 35 ? 'neutral' : 'strained') + '">' + strengthLabel + '</span></div>' +
         '<div class="g-bar"><div class="g-bar-fill" style="width:' + pct + '%"></div></div>' +
@@ -1589,7 +1649,7 @@ function getViewMoment() {
 }
 
 function panchangKey(p) {
-    return p.rashiIndex + '|' + p.nakshatraIndex + '|' + p.tithi.paksha + p.tithi.dayInPaksha;
+    return p.rashiIndex + '|' + p.nakshatraIndex + '|' + p.tithi.paksha + p.tithi.dayInPaksha + '|' + p.yogaIndex + '|' + p.karanaIndex;
 }
 
 // Scans the day in 10-minute steps, then bisects each change to ~40 seconds.
@@ -1618,6 +1678,12 @@ function moonEventsForDay(day) {
             }
             if (cur.tithi.paksha !== prev.tithi.paksha || cur.tithi.dayInPaksha !== prev.tithi.dayInPaksha) {
                 events.push({ at: at, kind: 'tithi', text: 'Tithi ' + prev.tithi.name + ' → ' + cur.tithi.name });
+            }
+            if (cur.yogaIndex !== prev.yogaIndex) {
+                events.push({ at: at, kind: 'yoga', text: 'Yoga ' + YOGAS[prev.yogaIndex].name + ' → ' + YOGAS[cur.yogaIndex].name });
+            }
+            if (cur.karanaIndex !== prev.karanaIndex) {
+                events.push({ at: at, kind: 'karana', text: 'Karana ' + karanaInfo(prev.karanaIndex).name + ' → ' + karanaInfo(cur.karanaIndex).name });
             }
         }
         prev = cur;

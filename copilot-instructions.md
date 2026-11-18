@@ -361,7 +361,10 @@ or apply that file's conventions here (e.g. `%USERPROFILE%\<Name>.ps1` external 
     same as TimeZync's icons) — a purple-gradient circle with a cream crescent moon and a
     yellow smiley face overlapping it. Regenerate the same way if the icon design changes.
   - **`service-worker.js`** — minimal cache-first service worker, same shape as TimeZync's.
-    `CACHE_NAME` is currently `mindful-moon-tracker-v39` (v39: Tarabala; v38: bottom-tab navigation, see above; v37: optional partner and Together tab;
+    `CACHE_NAME` is currently `mindful-moon-tracker-v40` (v40 = app 2.1.0: Panchang-at-a-glance box with yoga/karana/lords/deity/navamsa, Chandrashtama alert, next-signs lookahead, 6 more moods on the main row with the rest behind ➕; v39: Tarabala; v38: bottom-tab navigation, see above; v37: optional partner and Together tab;
+    **VERSIONING (required on every release):** in `Mindful-Moon-Tracker.html` bump `APP_VERSION` (semver) and
+    `APP_BUILD` (must equal the `CACHE_NAME` number) and add a line at the top of `APP_CHANGELOG`; they render at the
+    bottom of the Settings tab ("Version x.y.z (build N)" + "What's new").
     v36: Moon panel/guide follow the selected day; see the bullets above)
     (v29-v35: data-safety/backup
     features, Moon Guide at the bottom, BPHS-aligned Moon-house wording and the waning-Moon
