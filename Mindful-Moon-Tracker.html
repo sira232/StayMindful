@@ -18,7 +18,7 @@
         font-family: "Segoe UI", Arial, sans-serif;
         background: linear-gradient(160deg, #ede6fb 0%, #f4f6f8 45%);
         margin: 0;
-        padding: 20px 14px 40px;
+        padding: 20px 14px 96px;
         min-height: 100vh;
     }
     .card {
@@ -65,6 +65,24 @@
         display: flex; align-items: center; justify-content: center;
     }
     .settings-btn:active { background: #f0ecfb; }
+    .tab-page { display: none; }
+    .tab-page.active { display: block; }
+    .page-title { font-size: 16px; font-weight: 700; color: #1f2937; margin: 0 0 12px; }
+    .save-bar { margin-bottom: 16px; }
+    .footer-btn.primary { background: #5b4b9a; color: #fff; border-color: #5b4b9a; }
+    .bottom-nav {
+        position: fixed; left: 0; right: 0; bottom: 0; z-index: 50;
+        background: #fff; border-top: 1px solid #e2e5eb;
+        padding-bottom: env(safe-area-inset-bottom);
+    }
+    .bottom-nav .inner { display: flex; max-width: 480px; margin: 0 auto; }
+    .nav-btn {
+        flex: 1; border: 0; background: none; cursor: pointer;
+        padding: 8px 2px 7px; font-size: 10.5px; color: #6b7280;
+        display: flex; flex-direction: column; align-items: center; gap: 2px;
+    }
+    .nav-btn .ni { font-size: 20px; line-height: 1; }
+    .nav-btn.on { color: #5b4b9a; font-weight: 700; }
     .settings-panel {
         display: none;
         background: #f7f5fc;
@@ -73,7 +91,7 @@
         padding: 12px 14px;
         margin-bottom: 16px;
     }
-    .settings-panel.open { display: block; }
+    .settings-panel.open, .tab-page .settings-panel { display: block; }
     .settings-panel .settings-title { font-size: 12.5px; font-weight: 700; color: #374151; margin-bottom: 8px; }
     .settings-row { margin-bottom: 10px; }
     .settings-row label { display: block; font-size: 11.5px; color: #6b7280; margin-bottom: 4px; font-weight: 600; }
@@ -363,7 +381,6 @@
             <div class="weather-icon" id="weatherIcon">⏳</div>
             <div class="weather-label" id="weatherLabel">—</div>
         </div>
-        <button class="settings-btn" id="btnSettings" title="Your chart settings">⚙️</button>
     </div>
 
     <div class="safe-banner" id="safeBanner" style="display:none">
@@ -372,19 +389,30 @@
         <button class="footer-btn" id="btnBannerLater">Later</button>
     </div>
 
-    <div class="settings-panel" id="settingsPanel">
-        <div class="settings-title">Your Location (for weather &amp; local time)</div>
+    <div class="tab-page" id="tab-settings">
+    <div class="page-title">⚙️ Settings</div>
+    <div class="settings-panel">
+        <div class="settings-title">📍 Location</div>
+        <div class="settings-hint">Used for the weather badge and your local time.</div>
         <div class="settings-row">
             <label for="inpLocation">City, Region, Country</label>
             <input type="text" id="inpLocation" placeholder="e.g. Mount Hope, Hamilton, ON, Canada">
         </div>
         <div class="settings-hint" id="locationStatus"></div>
 
-        <div class="settings-title">Your Birth Chart (for house positions)</div>
+    </div>
+    <div class="settings-panel">
+        <div class="settings-title">🪐 Your chart</div>
+        <div class="settings-hint">Your Moon sign and Ascendant decide which houses the Moon transits for you.</div>
         <div class="settings-row">
             <label for="selMoonSign">Your Moon Sign (Rashi)</label>
             <select id="selMoonSign"></select>
         </div>
+        <div class="settings-row">
+            <label for="selNak">Your Birth Nakshatra (optional)</label>
+            <select id="selNak"></select>
+        </div>
+        <div class="settings-hint">Adds Tarabala (nakshatra-based strength of the day) to your guide. Only nakshatras inside your Moon sign are listed.</div>
         <div class="settings-row">
             <label for="selAscSign">Your Ascendant (Lagna)</label>
             <select id="selAscSign"></select>
@@ -398,7 +426,9 @@
         </div>
         <div class="settings-hint">Shows the 🩸 Period activity button only for Female</div>
 
-        <div class="settings-title">Partner (optional)</div>
+    </div>
+    <div class="settings-panel">
+        <div class="settings-title">💞 Partner (optional)</div>
         <div class="settings-row">
             <label for="chkPartner">Track my partner too</label>
             <input type="checkbox" id="chkPartner">
@@ -413,16 +443,23 @@
                 <select id="selPartnerMoon"></select>
             </div>
             <div class="settings-row">
+                <label for="selPartnerNak">Partner's Birth Nakshatra (optional)</label>
+                <select id="selPartnerNak"></select>
+            </div>
+            <div class="settings-row">
                 <label for="selPartnerAsc">Partner's Ascendant (Lagna)</label>
                 <select id="selPartnerAsc"></select>
             </div>
             <div class="settings-hint">Adds a Partner and Together view to the Moon Guide. Stored only on this phone.</div>
         </div>
-        <div class="settings-actions">
-            <button class="footer-btn" id="btnSaveChart">Save</button>
-            <button class="footer-btn" id="btnCloseSettings">Close</button>
-        </div>
-        <div class="settings-title">Backup &amp; Restore</div>
+    </div>
+    <div class="settings-actions save-bar">
+        <button class="footer-btn primary" id="btnSaveChart">Save settings</button>
+        <button class="footer-btn" id="btnCloseSettings">Cancel</button>
+    </div>
+    <div class="settings-panel">
+        <div class="settings-title">💾 Backup &amp; Restore</div>
+        <div class="settings-hint">Your data lives only on this phone. Save a backup file now and then.</div>
         <div class="settings-actions">
             <button class="footer-btn" id="btnExport">💾 Save backup to phone</button>
             <button class="footer-btn" id="btnShareBackup" style="display:none">📤 Share</button>
@@ -432,8 +469,17 @@
             <input type="file" id="fileImport" accept=".json,application/json" style="display:none">
         </div>
         <div class="settings-hint" id="safeStatus"></div>
+    </div>
+    <div class="settings-panel">
+        <div class="settings-title">ℹ️ About</div>
+        <div class="settings-hint">Stay Mindful logs your mood alongside the Moon's sign, nakshatra and tithi (Lahiri sidereal). The guidance is general awareness based on classical Vedic ideas, not prediction or medical advice.</div>
+    </div>
+    </div>
 
-        <div class="settings-title">Insights</div>
+    <div class="tab-page" id="tab-insights">
+    <div class="page-title">📊 Insights</div>
+    <div class="settings-panel">
+        <div class="settings-title">Your patterns</div>
         <div class="insight-range-row">
             <label for="selInsightRange">Patterns range</label>
             <select id="selInsightRange">
@@ -478,7 +524,9 @@
             </div>
         </div>
     </div>
+    </div>
 
+    <div class="tab-page active" id="tab-home">
     <div class="now-panel" id="nowPanel">
         <div class="now-time" id="nowTime">—</div>
         <div class="now-moon" id="nowMoon">Loading moon position…</div>
@@ -486,6 +534,7 @@
         <div class="now-sub" id="nowTithi"></div>
         <div class="now-sub" id="nowChange"></div>
         <div class="now-houses" id="nowHouses"></div>
+        <button class="footer-btn" id="btnBackToday" style="display:none;margin-top:8px">↩ Back to today</button>
     </div>
 
     <div class="section-title">How are you feeling right now?</div>
@@ -613,8 +662,12 @@
         </button>
     </div>
 
+    </div>
+
     <div class="toast" id="toast"></div>
 
+    <div class="tab-page" id="tab-journal">
+    <div class="page-title">📓 Journal</div>
     <div class="week-nav">
         <button class="week-nav-btn" id="btnWeekPrev">&larr; Prev</button>
         <span class="week-range" id="weekRange"></span>
@@ -634,11 +687,23 @@
         <span class="settings-hint ok" id="journalStatus"></span>
     </div>
 
+    </div>
+
+    <div class="tab-page" id="tab-guide">
     <div class="guide" id="moonGuide">
         <div class="section-title" id="guideTitle">🌙 Moon Guide</div>
         <div id="guideBody"></div>
     </div>
+    </div>
 </div>
+
+<nav class="bottom-nav" id="bottomNav"><div class="inner">
+    <button type="button" class="nav-btn on" data-tab="home"><span class="ni">🏠</span>Home</button>
+    <button type="button" class="nav-btn" data-tab="journal"><span class="ni">📓</span>Journal</button>
+    <button type="button" class="nav-btn" data-tab="guide"><span class="ni">🌙</span>Guide</button>
+    <button type="button" class="nav-btn" data-tab="insights"><span class="ni">📊</span>Insights</button>
+    <button type="button" class="nav-btn" data-tab="settings"><span class="ni">⚙️</span>Settings</button>
+</div></nav>
 
 <script>
 // ---------------------------------------------------------------------------
@@ -1055,6 +1120,65 @@ function geocodeLocation(query) {
     });
 }
 
+// Nakshatras whose span (13°20' each) overlaps the given sign (30° each).
+function nakshatrasInSign(signIdx) {
+    var span = 360 / 27, out = [];
+    for (var i = 0; i < 27; i++) {
+        if (i * span < signIdx * 30 + 30 - 1e-9 && (i + 1) * span > signIdx * 30 + 1e-9) { out.push(i); }
+    }
+    return out;
+}
+
+function fillNakSelect(sel, signIdx, keep) {
+    sel.innerHTML = '<option value="">Not set</option>';
+    nakshatrasInSign(signIdx).forEach(function (i) {
+        var o = document.createElement('option');
+        o.value = i;
+        o.textContent = NAKSHATRA_NAMES[i];
+        sel.appendChild(o);
+    });
+    sel.value = typeof keep === 'number' ? String(keep) : '';
+    if (sel.value !== (typeof keep === 'number' ? String(keep) : '')) { sel.value = ''; }
+}
+
+function readNak(sel) {
+    return sel.value === '' ? null : Number(sel.value);
+}
+
+// Tarabala: count from the birth nakshatra to the transiting Moon's nakshatra,
+// then cycle through the 9 Taras. Good: 2,4,6,8,9. Avoid: 3,5,7. Janma (1) is mixed.
+var TARA = [null,
+    { name: 'Janma', cls: 'gentle', tone: 'sensitive day: take care of health and emotions, avoid fresh big starts' },
+    { name: 'Sampat', cls: 'good', tone: 'wealth and prosperity: good for money matters and building things' },
+    { name: 'Vipat', cls: 'gentle', tone: 'obstacles or danger: avoid risks and important starts' },
+    { name: 'Kshema', cls: 'good', tone: 'well-being and safety: steady, supportive, good for health and home' },
+    { name: 'Pratyak', cls: 'gentle', tone: 'setbacks or opposition: expect friction, do not force things' },
+    { name: 'Sadhana', cls: 'good', tone: 'achievement: good for effort, goals and finishing work' },
+    { name: 'Naidhana', cls: 'gentle', tone: 'loss or hardship: the least favorable, keep it quiet and careful' },
+    { name: 'Mitra', cls: 'good', tone: 'friendly: supportive people and easy cooperation' },
+    { name: 'Parama Mitra', cls: 'good', tone: 'very friendly: the most supportive, good for almost everything' }
+];
+
+function taraInfo(birthNak, transitNak) {
+    if (typeof birthNak !== 'number') { return null; }
+    var count = ((transitNak - birthNak + 27) % 27) + 1;
+    var n = ((count - 1) % 9) + 1;
+    var t = TARA[n];
+    return { n: n, count: count, name: t.name, cls: t.cls, tone: t.tone };
+}
+
+function showTab(name) {
+    document.querySelectorAll('.tab-page').forEach(function (p) {
+        p.classList.toggle('active', p.id === 'tab-' + name);
+    });
+    document.querySelectorAll('.nav-btn').forEach(function (b) {
+        b.classList.toggle('on', b.getAttribute('data-tab') === name);
+    });
+    if (name === 'insights') { renderInsights(); }
+    if (name === 'settings') { updateSafeStatus(); }
+    window.scrollTo(0, 0);
+}
+
 function initSettingsPanel() {
     var selMoon = document.getElementById('selMoonSign');
     var selAsc = document.getElementById('selAscSign');
@@ -1065,10 +1189,14 @@ function initSettingsPanel() {
         selMoon.value = chart.moonSignIndex;
         selAsc.value = chart.ascSignIndex;
     }
+    var selNak = document.getElementById('selNak');
+    fillNakSelect(selNak, Number(selMoon.value), chart ? chart.nakshatraIndex : null);
+    selMoon.addEventListener('change', function () { fillNakSelect(selNak, Number(selMoon.value), null); });
 
     var chkPartner = document.getElementById('chkPartner');
     var selPMoon = document.getElementById('selPartnerMoon');
     var selPAsc = document.getElementById('selPartnerAsc');
+    var selPNak = document.getElementById('selPartnerNak');
     populateSignSelect(selPMoon);
     populateSignSelect(selPAsc);
     var partner = loadPartner();
@@ -1078,6 +1206,8 @@ function initSettingsPanel() {
         selPMoon.value = partner.moonSignIndex;
         selPAsc.value = partner.ascSignIndex;
     }
+    fillNakSelect(selPNak, Number(selPMoon.value), partner ? partner.nakshatraIndex : null);
+    selPMoon.addEventListener('change', function () { fillNakSelect(selPNak, Number(selPMoon.value), null); });
     document.getElementById('partnerFields').style.display = chkPartner.checked ? '' : 'none';
     chkPartner.addEventListener('change', function () {
         document.getElementById('partnerFields').style.display = chkPartner.checked ? '' : 'none';
@@ -1112,25 +1242,32 @@ function initSettingsPanel() {
         });
     });
 
-    document.getElementById('btnSettings').addEventListener('click', function () {
-        document.getElementById('settingsPanel').classList.toggle('open');
-        renderInsights();
+    document.querySelectorAll('.nav-btn').forEach(function (b) {
+        b.addEventListener('click', function () { showTab(b.getAttribute('data-tab')); });
+    });
+    document.getElementById('btnBackToday').addEventListener('click', function () {
+        selectedHistoryDate = startOfDay(new Date());
+        weekOffset = 0;
+        renderWeekView();
+        renderHistory();
+        renderJournal();
     });
     document.getElementById('btnCloseSettings').addEventListener('click', function () {
-        document.getElementById('settingsPanel').classList.remove('open');
+        showTab('home');
     });
     document.getElementById('btnSaveChart').addEventListener('click', function () {
-        saveUserChart({ moonSignIndex: Number(selMoon.value), ascSignIndex: Number(selAsc.value) });
+        saveUserChart({ moonSignIndex: Number(selMoon.value), ascSignIndex: Number(selAsc.value), nakshatraIndex: readNak(selNak) });
         savePartner(chkPartner.checked ? {
             name: document.getElementById('inpPartnerName').value.trim().slice(0, 20),
             moonSignIndex: Number(selPMoon.value),
-            ascSignIndex: Number(selPAsc.value)
+            ascSignIndex: Number(selPAsc.value),
+            nakshatraIndex: readNak(selPNak)
         } : null);
         if (!chkPartner.checked) { guideTab = 'you'; }
 
         var query = inpLocation.value.trim();
         var finish = function () {
-            document.getElementById('settingsPanel').classList.remove('open');
+            showTab('home');
             updateNowPanel();
         };
         if (!query) { finish(); return; }
@@ -1247,7 +1384,20 @@ var MOON_PAIR = {
 
 var guideTab = 'you'; // 'you' | 'partner' | 'together'
 
-function personBoxes(chart, who, r, dignity, pct, strengthLabel) {
+function taraLine(ref, label, nIdx) {
+    var t = taraInfo(ref.nakshatraIndex, nIdx);
+    return t ? '<div class="g-line"><b>Tarabala · ' + label + ':</b> ' + t.name + ' <span class="chip ' + t.cls + '">' + (t.cls === 'good' ? 'favorable' : 'careful') + '</span></div>' : '';
+}
+
+function taraBox(ref, who, nIdx) {
+    var t = taraInfo(ref.nakshatraIndex, nIdx);
+    if (!t) { return ''; }
+    return '<div class="g-box"><div class="g-sub">Tarabala' + (who ? ' — ' + who : '') + '</div>' +
+        '<div class="g-head">' + t.name + ' tara <span class="chip ' + t.cls + '">' + (t.cls === 'good' ? 'favorable' : 'careful') + '</span></div>' +
+        '<div class="g-line">Birth star ' + NAKSHATRA_NAMES[ref.nakshatraIndex] + ' → today\'s ' + NAKSHATRA_NAMES[nIdx] + ' is star #' + t.count + ' (tara ' + t.n + ' of 9): ' + t.tone + '.</div></div>';
+}
+
+function personBoxes(chart, who, r, dignity, pct, strengthLabel, nIdx) {
     var hMoon = houseFromReference(r, chart.moonSignIndex);
     var hAsc = houseFromReference(r, chart.ascSignIndex);
     var favorable = MOON_FAVORABLE_HOUSES.indexOf(hMoon) >= 0;
@@ -1262,12 +1412,13 @@ function personBoxes(chart, who, r, dignity, pct, strengthLabel) {
         '<div class="g-line"><b>Area activated:</b> ' + a.area + '</div>' +
         '<div class="g-line"><b>Good for:</b> ' + a.good + '</div>' +
         '<div class="g-line"><b>Watch:</b> ' + a.watch + '</div></div>' +
+        taraBox(chart, '', nIdx) +
         '<div class="g-box"><div class="g-sub">Overall outlook</div>' +
         '<div class="g-head"><span class="chip ' + o.cls + '" style="margin-left:0">' + o.text + '</span></div>' +
         '<div class="g-line">Moon-sign house is ' + (favorable ? 'favorable' : 'challenging') + ' (' + ordinal(hMoon) + ') and the Moon is ' + dignity + ' in ' + rashiShort(RASHI_NAMES[r]) + ' with ' + strengthLabel + ' strength (' + pct + '%).</div></div>';
 }
 
-function togetherBox(chart, partner, r, dignity, pct) {
+function togetherBox(chart, partner, r, dignity, pct, nIdx) {
     var pname = escHtml(partner.name || 'Partner');
     var yM = houseFromReference(r, chart.moonSignIndex), yA = houseFromReference(r, chart.ascSignIndex);
     var pM = houseFromReference(r, partner.moonSignIndex), pA = houseFromReference(r, partner.ascSignIndex);
@@ -1284,7 +1435,7 @@ function togetherBox(chart, partner, r, dignity, pct) {
         '<div class="g-line"><b>' + pname + ':</b> Moon sign - ' + ordinal(pM) + ' house <span class="chip ' + (pFav ? 'good' : 'gentle') + '">' + (pFav ? 'favorable' : 'challenging') + '</span> · Asc - ' + ordinal(pA) + ' house<br>' + HOUSE_FROM_MOON[pM] + '</div></div>';
     html += '<div class="g-box moon"><div class="g-sub">Together today</div>' +
         '<div class="g-line">' + verdict + '</div>' +
-        '<div class="g-line"><b>Outlook:</b> you ' + yO.text + ' · ' + pname + ' ' + pO.text + '</div></div>';
+        '<div class="g-line"><b>Outlook:</b> you ' + yO.text + ' · ' + pname + ' ' + pO.text + '</div>' + taraLine(chart, 'You', nIdx) + taraLine(partner, pname, nIdx) + '</div>';
     html += '<div class="g-box asc"><div class="g-sub">Areas in focus</div>' +
         '<div class="g-line"><b>You (' + ordinal(yA) + ' house):</b> ' + HOUSE_FROM_ASC[yA].area + '<br><b>Good for:</b> ' + HOUSE_FROM_ASC[yA].good + '<br><b>Watch:</b> ' + HOUSE_FROM_ASC[yA].watch + '</div>' +
         '<div class="g-line"><b>' + pname + ' (' + ordinal(pA) + ' house):</b> ' + HOUSE_FROM_ASC[pA].area + '<br><b>Good for:</b> ' + HOUSE_FROM_ASC[pA].good + '<br><b>Watch:</b> ' + HOUSE_FROM_ASC[pA].watch + '</div></div>';
@@ -1315,8 +1466,8 @@ function renderMoonGuide(p, view, events) {
     document.getElementById('guideTitle').textContent = view.live
         ? '🌙 Moon Guide — Today'
         : '🌙 Moon Guide — ' + view.day.toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' }) + ' (preview)';
-    var sig = view.day.getTime() + '|' + view.live + '|' + p.rashiIndex + '|' + p.nakshatraIndex + '|' + p.tithi.paksha + p.tithi.dayInPaksha + '|' + (chart ? chart.moonSignIndex + ',' + chart.ascSignIndex : '-') +
-        '|' + (partner ? partner.name + ',' + partner.moonSignIndex + ',' + partner.ascSignIndex : '-') + '|' + guideTab;
+    var sig = view.day.getTime() + '|' + view.live + '|' + p.rashiIndex + '|' + p.nakshatraIndex + '|' + p.tithi.paksha + p.tithi.dayInPaksha + '|' +     (chart ? chart.moonSignIndex + ',' + chart.ascSignIndex + ',' + chart.nakshatraIndex : '-') +
+            '|' + (partner ? partner.name + ',' + partner.moonSignIndex + ',' + partner.ascSignIndex + ',' + partner.nakshatraIndex : '-') + '|' + guideTab;
     if (sig === guideSig) { return; }
     guideSig = sig;
 
@@ -1365,11 +1516,11 @@ function renderMoonGuide(p, view, events) {
         }
         var strengthTxt = strengthLabel;
         if (guideTab === 'together' && partner) {
-            html += togetherBox(chart, partner, r, dignity, pct);
+            html += togetherBox(chart, partner, r, dignity, pct, p.nakshatraIndex);
         } else if (guideTab === 'partner' && partner) {
-            html += personBoxes(partner, partner.name || 'Partner', r, dignity, pct, strengthTxt);
+            html += personBoxes(partner, partner.name || 'Partner', r, dignity, pct, strengthTxt, p.nakshatraIndex);
         } else {
-            html += personBoxes(chart, 'you', r, dignity, pct, strengthTxt);
+            html += personBoxes(chart, 'you', r, dignity, pct, strengthTxt, p.nakshatraIndex);
         }
     } else {
         html += '<div class="g-box"><div class="g-line">Set your Moon sign &amp; Ascendant in ⚙️ Settings to see the house-based guidance for you.</div></div>';
@@ -1483,6 +1634,7 @@ function updateNowPanel() {
         ? now.toLocaleString(undefined, { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit', timeZone: loc.timezone }) + ' (' + loc.name + ')'
         : now.toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' }) + ' · ' + formatTime(now) + ' (preview — tap today for live)';
     document.getElementById('nowTime').textContent = timeText;
+    document.getElementById('btnBackToday').style.display = view.live ? 'none' : '';
     document.getElementById('nowMoon').textContent = 'Moon in ' + rashiShort(p.rashi);
     document.getElementById('nowSub').textContent = p.nakshatra + ' nakshatra · Pada ' + p.pada;
     document.getElementById('nowTithi').textContent = p.tithi.paksha + ' Paksha, ' + p.tithi.name + ' (Tithi ' + p.tithi.dayInPaksha + ')';
@@ -1961,7 +2113,7 @@ document.getElementById('fileImport').addEventListener('change', function (ev) {
     reader.readAsText(f);
 });
 
-document.getElementById('btnSettings').addEventListener('click', updateSafeStatus);
+// updateSafeStatus() is refreshed by showTab('settings').
 
 // Browsers only allow downloads from a user gesture, so "automatic" backup piggybacks
 // on the first tap of the day after AUTO_BACKUP_DAYS without a saved file. Chrome may
@@ -1993,7 +2145,7 @@ updateBackupBanner();
 // logging/mood streaks, a monthly mood-sentiment calendar heatmap, and
 // Moon-sign/Asc house correlation patterns. All computed from existing
 // localStorage logs, read-only, recomputed each time the Settings panel is
-// opened (see btnSettings click handler above).
+// opened (see showTab('insights')).
 // ---------------------------------------------------------------------------
 var MOOD_SENTIMENT = {
     great: 'positive', happy: 'positive', calm: 'positive', grateful: 'positive',
@@ -2201,7 +2353,7 @@ function renderInsightCalendar() {
             var wsToday = getWeekStart(0);
             var wsTarget = getWeekStartForDate(date);
             weekOffset = Math.round((wsTarget - wsToday) / (7 * 24 * 3600 * 1000));
-            document.getElementById('settingsPanel').classList.remove('open');
+            showTab('journal');
             renderWeekView();
             renderHistory();
             renderJournal();

@@ -215,7 +215,31 @@ or apply that file's conventions here (e.g. `%USERPROFILE%\<Name>.ps1` external 
     Virgo + Ascendant Sagittarius + transiting Moon in Virgo example). If no chart is saved yet, shows a hint
     pointing at the ⚙️ Settings button instead. Recomputed every `updateNowPanel()` tick
     (60s) and immediately after Save.
-  - **Selected-day view (v36)**: `updateNowPanel()` uses `getViewMoment()`, so tapping a day
+  - **Tarabala (v39)**: optional **birth nakshatra** for you (`selNak`) and the partner
+    (`selPartnerNak`), stored as `nakshatraIndex` (0-26 or null) inside `mindfulMoonUserChart.v1`
+    / `mindfulMoonPartner.v1`; the dropdown lists only nakshatras overlapping the chosen Moon
+    sign (`nakshatrasInSign()`, `fillNakSelect()`). `taraInfo(birthNak, transitNak)`: count
+    from birth star to the transiting Moon's star, `tara = ((count-1) % 9) + 1`, names/tones in
+    `TARA` (favorable 2 Sampat, 4 Kshema, 6 Sadhana, 8 Mitra, 9 Parama Mitra; careful 1 Janma,
+    3 Vipat, 5 Pratyak, 7 Naidhana). Shown as a Tarabala box in You/Partner tabs and a line per
+    person in Together; hidden when no nakshatra is set. It is informational and does **not**
+    change the Overall score. Standard Muhurta/Jyotish tradition rather than BPHS verbatim.
+  - **BACKLOG — REMIND THE USER: Vedha (Gochar obstruction)**. Classical Chandra Gochar says a
+    good Moon transit house can be cancelled/obstructed when another planet occupies its
+    paired Vedha house (and vice versa). Not implemented because it needs the other planets'
+    sidereal positions (Sun, Mars, Mercury, Jupiter, Venus, Saturn, Rahu/Ketu); the app only
+    computes the Moon today. When the user returns to this project, remind them this is pending.
+    Other open ideas: Capacitor/Play Store wrapper, generic default location (privacy item).
+  - **Bottom-tab navigation (v38)**: the single long page is now 5 `.tab-page` sections
+    switched by a fixed `#bottomNav` and `showTab(name)`: **Home** (`#tab-home`: now panel with
+    "↩ Back to today" `#btnBackToday`, mood rows, daily check-ins), **Journal** (`#tab-journal`:
+    week grid, history, notes), **Guide** (`#tab-guide`: Moon Guide), **Insights**
+    (`#tab-insights`, rendered on show), **Settings** (`#tab-settings`, split into Location /
+    Your chart / Partner cards, a Save bar, Backup & Restore and About; `updateSafeStatus()` runs
+    on show). There is no longer a ⚙️ header button or `#settingsPanel`/`.open` toggle; Save
+    returns to Home, and a heatmap day click jumps to Journal. All element IDs were kept so
+    existing logic is unchanged; new pages must be direct children of `.card`.
+ `updateNowPanel()` uses `getViewMoment()`, so tapping a day
     in the week grid (or the calendar heatmap) updates both the top panel and the Moon Guide.
     Today = live current time; any other day = local-noon preview (labelled "preview"). A
     "Changes this day" guide box lists Moon sign / nakshatra / tithi change times from
@@ -337,7 +361,7 @@ or apply that file's conventions here (e.g. `%USERPROFILE%\<Name>.ps1` external 
     same as TimeZync's icons) — a purple-gradient circle with a cream crescent moon and a
     yellow smiley face overlapping it. Regenerate the same way if the icon design changes.
   - **`service-worker.js`** — minimal cache-first service worker, same shape as TimeZync's.
-    `CACHE_NAME` is currently `mindful-moon-tracker-v37` (v37: optional partner and Together tab;
+    `CACHE_NAME` is currently `mindful-moon-tracker-v39` (v39: Tarabala; v38: bottom-tab navigation, see above; v37: optional partner and Together tab;
     v36: Moon panel/guide follow the selected day; see the bullets above)
     (v29-v35: data-safety/backup
     features, Moon Guide at the bottom, BPHS-aligned Moon-house wording and the waning-Moon
