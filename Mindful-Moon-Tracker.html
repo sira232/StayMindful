@@ -1567,9 +1567,10 @@ var TITHI_NAMES = ['Pratipada','Dwitiya','Tritiya','Chaturthi','Panchami','Shash
 // inauspicious ones are flagged bad.
 // VERSIONING: bump APP_VERSION + APP_BUILD (= service-worker CACHE_NAME number) and
 // add a line at the TOP of APP_CHANGELOG on every release.
-var APP_VERSION = '2.15.1';
-var APP_BUILD = 64;
+var APP_VERSION = '2.15.2';
+var APP_BUILD = 65;
 var APP_CHANGELOG = [
+    ['2.15.2', 'Weather is fetched fresh on every open (no stale cache), refreshes every 10 minutes, and shows Offline instead of a cloud if it cannot load.'],
     ['2.15.1', 'Birth place now has live suggestions; pick one and the chart is calculated right away.'],
     ['2.15.0', 'Checks for a newer version every time you open the app and updates itself right away.'],
     ['2.14.3', 'Picking a place from the suggestions saves it instantly, no need to press Save.'],
@@ -1887,7 +1888,8 @@ function saveUserLocation(loc) {
 }
 
 function getActiveLocation() {
-    return loadUserLocation() || DEFAULT_LOCATION;
+    var l = loadUserLocation();
+    return l && isFinite(parseFloat(l.lat)) && isFinite(parseFloat(l.lon)) ? l : DEFAULT_LOCATION;
 }
 
 function geocodeLocation(query) {
@@ -3216,45 +3218,48 @@ function weatherCodeToDisplay(code, cloud, isDay) {
     return { icon: '⛅', label: 'Partly Sunny' };
 }
 
-function renderWeather(display) {
+function renderWeather(display, detail) {
     var iconEl = document.getElementById('weatherIcon');
     var labelEl = document.getElementById('weatherLabel');
     if (!iconEl || !labelEl) return;
     iconEl.textContent = display.icon;
     labelEl.textContent = display.label;
     var badge = document.getElementById('weatherBadge');
-    if (badge) badge.title = getActiveLocation().name;
+    if (badge) badge.title = getActiveLocation().name + (detail ? ' · ' + detail : '');
 }
 
+// Always asks the weather service for a fresh reading (bypassing every cache);
+// the saved reading is only shown instantly while the fresh one loads, or when offline.
 function updateWeather(force) {
-    try {
-        var cached = JSON.parse(localStorage.getItem(WEATHER_CACHE_KEY) || 'null');
-        var lc = getActiveLocation();
-        if (!force && cached && cached.at === lc.lat + ',' + lc.lon && (Date.now() - cached.ts) < WEATHER_TTL_MS) {
-            renderWeather(cached.display);
-            return;
-        }
-    } catch (e) { /* ignore, fetch fresh */ }
-
     var loc = getActiveLocation();
-    var url = 'https://api.open-meteo.com/v1/forecast?latitude=' + loc.lat +
-        '&longitude=' + loc.lon + '&current=weather_code,cloud_cover,is_day&timezone=auto';
-    fetch(url).then(function (res) { return res.json(); }).then(function (data) {
+    var key = loc.lat + ',' + loc.lon;
+    var cached = null;
+    try { cached = JSON.parse(localStorage.getItem(WEATHER_CACHE_KEY) || 'null'); } catch (e) { cached = null; }
+    var usable = cached && cached.at === key && (Date.now() - cached.ts) < 60 * 60 * 1000;
+    if (usable) { renderWeather(cached.display, cached.detail); }
+
+    var url = 'https://api.open-meteo.com/v1/forecast?latitude=' + loc.lat + '&longitude=' + loc.lon +
+        '&current=weather_code,cloud_cover,is_day,temperature_2m&timezone=auto&_=' + Date.now();
+    var tryFetch = function (n) {
+        return fetch(url, { cache: 'no-store' }).then(function (res) {
+            if (!res.ok) { throw new Error('http ' + res.status); }
+            return res.json();
+        }).catch(function (e) {
+            if (n > 0) { return new Promise(function (r) { setTimeout(r, 1500); }).then(function () { return tryFetch(n - 1); }); }
+            throw e;
+        });
+    };
+    tryFetch(2).then(function (data) {
         var cur = data && data.current ? data.current : null;
-        var display = weatherCodeToDisplay(cur ? cur.weather_code : null, cur ? cur.cloud_cover : null, cur ? cur.is_day : 1);
-        renderWeather(display);
-        try {
-            localStorage.setItem(WEATHER_CACHE_KEY, JSON.stringify({ ts: Date.now(), at: loc.lat + ',' + loc.lon, display: display }));
-        } catch (e) { /* ignore storage errors */ }
+        if (!cur) { throw new Error('no data'); }
+        var display = weatherCodeToDisplay(cur.weather_code, cur.cloud_cover, cur.is_day);
+        var detail = Math.round(cur.temperature_2m) + '°C, ' + cur.cloud_cover + '% cloud';
+        renderWeather(display, detail);
+        try { localStorage.setItem(WEATHER_CACHE_KEY, JSON.stringify({ ts: Date.now(), at: key, display: display, detail: detail })); } catch (e) { /* ignore storage errors */ }
     }).catch(function () {
-        try {
-            var cached = JSON.parse(localStorage.getItem(WEATHER_CACHE_KEY) || 'null');
-            if (cached && cached.at === loc.lat + ',' + loc.lon) { renderWeather(cached.display); return; }
-        } catch (e) { /* ignore */ }
-        renderWeather({ icon: '⛅', label: '—' });
+        if (!usable) { renderWeather({ icon: '🌐', label: 'Offline' }); }
     });
 }
-
 var DAY_LABELS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 var weekOffset = 0; // 0 = week containing today, -1 = previous week, etc.
 
@@ -4148,6 +4153,7 @@ initSettingsPanel();
 renderHistory();
 renderWeekView();
 setInterval(updateNowPanel, 60000);
+setInterval(updateWeather, 10 * 60 * 1000);
 
 // Android/browsers pause JS timers while the app/tab is backgrounded, so the
 // 60s interval above can't be relied on to refresh things while hidden.
