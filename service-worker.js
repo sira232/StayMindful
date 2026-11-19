@@ -1,6 +1,6 @@
 // Minimal service worker so the app installs as a standalone PWA and keeps
 // working offline once it has been opened at least once.
-const CACHE_NAME = 'mindful-moon-tracker-v62';
+const CACHE_NAME = 'mindful-moon-tracker-v64';
 const ASSETS = [
     './Mindful-Moon-Tracker.html',
     './manifest.json',
@@ -30,10 +30,16 @@ self.addEventListener('activate', function (event) {
     self.clients.claim();
 });
 
+// Network-first: always try the newest files, fall back to the cache offline.
 self.addEventListener('fetch', function (event) {
+    if (event.request.method !== 'GET' || new URL(event.request.url).origin !== self.location.origin) { return; }
     event.respondWith(
-        caches.match(event.request).then(function (cached) {
-            return cached || fetch(event.request);
+        fetch(event.request, { cache: 'no-cache' }).then(function (res) {
+            var copy = res.clone();
+            if (res.ok) { caches.open(CACHE_NAME).then(function (c) { c.put(event.request, copy); }); }
+            return res;
+        }).catch(function () {
+            return caches.match(event.request, { ignoreSearch: true });
         })
     );
 });

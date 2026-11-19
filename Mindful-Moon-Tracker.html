@@ -1567,9 +1567,11 @@ var TITHI_NAMES = ['Pratipada','Dwitiya','Tritiya','Chaturthi','Panchami','Shash
 // inauspicious ones are flagged bad.
 // VERSIONING: bump APP_VERSION + APP_BUILD (= service-worker CACHE_NAME number) and
 // add a line at the TOP of APP_CHANGELOG on every release.
-var APP_VERSION = '2.14.3';
-var APP_BUILD = 62;
+var APP_VERSION = '2.15.1';
+var APP_BUILD = 64;
 var APP_CHANGELOG = [
+    ['2.15.1', 'Birth place now has live suggestions; pick one and the chart is calculated right away.'],
+    ['2.15.0', 'Checks for a newer version every time you open the app and updates itself right away.'],
     ['2.14.3', 'Picking a place from the suggestions saves it instantly, no need to press Save.'],
     ['2.14.2', 'Weather refreshes more often, and tapping the weather badge fetches it fresh.'],
     ['2.14.1', 'Guide and Transit times now follow your saved location time zone, same as Muhurta and Home.'],
@@ -2556,8 +2558,7 @@ function birthBoxHtml(id, whose) {
         '<div class="birth-grid"><div class="birth-field"><label for="' + id + 'Date">📅 Date of birth</label><input type="date" id="' + id + 'Date"></div>' +
         '<div class="birth-field"><label for="' + id + 'Time">🕐 Time of birth</label><input type="time" id="' + id + 'Time"></div></div>' +
         '<label class="birth-chk"><input type="checkbox" id="' + id + 'Unk"> I don\'t know the exact birth time</label>' +
-        '<div class="birth-field"><label for="' + id + 'Place">📍 Place of birth</label><input type="text" id="' + id + 'Place" placeholder="City, State/Region, Country"></div>' +
-        '<div class="birth-field" id="' + id + 'PickWrap" style="display:none"><label for="' + id + 'Pick">Which one is it?</label><select id="' + id + 'Pick"></select></div>' +
+        '<div class="birth-field"><label for="' + id + 'Place">📍 Place of birth</label><input type="text" id="' + id + 'Place"         placeholder="Start typing a city…" autocomplete="off"><div class="loc-list" id="' + id + 'List"></div></div>' +
         '<button type="button" class="footer-btn primary" id="' + id + 'Go">✨ Calculate chart</button>' +
         '<div class="birth-msg" id="' + id + 'Msg"></div><div id="' + id + 'Out"></div></div>';
 }
@@ -2575,8 +2576,29 @@ function initBirthBox(host, id, who, whose, cfg) {
     }
     $('Time').disabled = $('Unk').checked;
     $('Unk').addEventListener('change', function () { $('Time').disabled = $('Unk').checked; });
-    var picks = [];
-    $('Place').addEventListener('input', function () { picks = []; $('PickWrap').style.display = 'none'; });
+    var chosen = null, listTimer = null, list = $('List');
+    $('Place').addEventListener('input', function () {
+        chosen = null;
+        clearTimeout(listTimer);
+        var q = $('Place').value.trim();
+        if (q.length < 2) { list.innerHTML = ''; return; }
+        listTimer = setTimeout(function () {
+            geocodePlaces(q).then(function (items) {
+                if ($('Place').value.trim() !== q) { return; }
+                list._items = items;
+                list.innerHTML = items.map(function (l, i) { return '<button type="button" class="loc-opt" data-i="' + i + '">' + escHtml(l.name) + '</button>'; }).join('');
+            }).catch(function () { list.innerHTML = '<div class="loc-none">No matches</div>'; });
+        }, 300);
+    });
+    list.addEventListener('click', function (ev) {
+        var b = ev.target.closest ? ev.target.closest('.loc-opt') : null;
+        if (!b) { return; }
+        chosen = list._items[+b.getAttribute('data-i')];
+        $('Place').value = chosen.name;
+        list.innerHTML = '';
+        if ($('Date').value && ($('Unk').checked || $('Time').value)) { finish(chosen); }
+        else { msg('Place selected. Fill in the date and time, then tap Calculate.', 'ok'); }
+    });
     var msg = function (text, cls) { $('Msg').textContent = text; $('Msg').className = 'birth-msg settings-hint ' + (cls || ''); };
 
     function finish(place) {
@@ -2606,20 +2628,14 @@ function initBirthBox(host, id, who, whose, cfg) {
         if (!$('Unk').checked && !$('Time').value) { msg('Please enter the time of birth, or tick "I don\'t know the exact birth time".', 'error'); return; }
         var q = $('Place').value.trim();
         if (!q) { msg('Please enter the place of birth.', 'error'); return; }
-        if (picks.length) { finish(picks[Number($('Pick').value)]); return; }
+        if (chosen) { finish(chosen); return; }
         if (saved && saved.place && saved.place.name === q) { finish(saved.place); return; }
         msg('Finding the place…');
-        geocodePlaces(q).then(function (list) {
-            if (list.length > 1) {
-                picks = list;
-                $('Pick').innerHTML = list.map(function (p, i) { return '<option value="' + i + '">' + escHtml(p.name) + '</option>'; }).join('');
-                $('PickWrap').style.display = '';
-                msg('Pick the right place above, then tap Calculate again.', 'ok');
-            } else {
-                finish(list[0]);
-            }
+        geocodePlaces(q).then(function (items) {
+            list.innerHTML = '';
+            finish(items[0]);
         }).catch(function () {
-            msg('Could not find that place (it needs an internet connection). Try "City, Country", or choose the signs manually below.', 'error');
+            msg('Could not find that place (it needs an internet connection). Pick one from the suggestions, or choose the signs manually below.', 'error');
         });
     });
 }
@@ -4149,7 +4165,20 @@ document.addEventListener('visibilitychange', function () {
 // standalone PWA (Android "Add to Home Screen" / Chrome install prompt).
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', function () {
-        navigator.serviceWorker.register('service-worker.js').catch(function () {});
+        navigator.serviceWorker.register('service-worker.js').then(function (reg) {
+            var check = function () { try { reg.update(); } catch (e) { /* offline */ } };
+            check();
+            document.addEventListener('visibilitychange', function () { if (!document.hidden) { check(); } });
+        }).catch(function () {});
+    });
+    // A newer service worker means a newer app: reload once so the fresh
+    // version is shown right away (data lives in localStorage, nothing is lost).
+    var hadController = !!navigator.serviceWorker.controller, reloaded = false;
+    navigator.serviceWorker.addEventListener('controllerchange', function () {
+        if (!hadController) { hadController = true; return; }
+        if (reloaded) { return; }
+        reloaded = true;
+        location.reload();
     });
 }
 </script>
