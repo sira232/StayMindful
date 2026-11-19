@@ -570,6 +570,12 @@
     .pg-end b { color: var(--ink2); font-weight: 600; }
     .gr-chip { font-size: 10.5px; }
     .pg-end, .pg-lord { display: inline; }
+    .settings-row { position: relative; }
+    .loc-list { margin-top: 6px; border: 1px solid var(--line); border-radius: 12px; background: #fff; overflow: hidden; }
+    .loc-list:empty { display: none; }
+    .loc-opt { display: block; width: 100%; text-align: left; border: 0; border-top: 1px solid var(--line); background: #fff; padding: 11px 12px; font: inherit; font-size: 13px; color: var(--ink); cursor: pointer; }
+    .loc-opt:first-child { border-top: 0; } .loc-opt:active { background: var(--goldbg); }
+    .loc-none { padding: 10px 12px; font-size: 12.5px; color: var(--mute); }
     .pg-then { font-size: 11.5px; color: var(--ink2); margin-top: 1px; }
     .pg-then b { font-weight: 600; color: var(--ink); }
     .pg-lord { font-size: 11px; color: var(--gold); margin-left: 8px; font-weight: 600; }
@@ -682,7 +688,7 @@
     <div class="header">
         <img class="icon" src="icons/icon-192.png" alt="">
         <h1>Stay Mindful</h1>
-        <div class="weather-badge" id="weatherBadge" title="Mount Hope, Hamilton, ON">
+        <div class="weather-badge" id="weatherBadge" title="Toronto, Ontario, Canada">
             <div class="weather-icon" id="weatherIcon">⏳</div>
             <div class="weather-label" id="weatherLabel">—</div>
         </div>
@@ -701,7 +707,8 @@
         
         <div class="settings-row">
             <label for="inpLocation">City, Region, Country</label>
-            <input type="text" id="inpLocation" placeholder="e.g. Mount Hope, Hamilton, ON, Canada">
+            <input type="text" id="inpLocation" placeholder="Start typing a city…" autocomplete="off">
+            <div class="loc-list" id="locList"></div>
         </div>
         <div class="settings-hint" id="locationStatus"></div>
 
@@ -1560,9 +1567,11 @@ var TITHI_NAMES = ['Pratipada','Dwitiya','Tritiya','Chaturthi','Panchami','Shash
 // inauspicious ones are flagged bad.
 // VERSIONING: bump APP_VERSION + APP_BUILD (= service-worker CACHE_NAME number) and
 // add a line at the TOP of APP_CHANGELOG on every release.
-var APP_VERSION = '2.13.0';
-var APP_BUILD = 58;
+var APP_VERSION = '2.14.1';
+var APP_BUILD = 60;
 var APP_CHANGELOG = [
+    ['2.14.1', 'Guide and Transit times now follow your saved location time zone, same as Muhurta and Home.'],
+    ['2.14.0', 'Location: default is now Toronto, Ontario, Canada; type a place and pick from live suggestions (fixes Toronto not saving). Weather now follows the saved location and distinguishes clear, partly cloudy and cloudy.'],
     ['2.13.0', 'Times always show in 12-hour AM/PM. Guide: each Panchang row now shows what it changes to next (so the separate Changes this day card is gone).'],
     ['2.12.1', 'Header logo now sits flush as a clean circle, and the Muhurta weekday line is sized to match the rest of the app.'],
     ['2.12.0', 'Consistent look: the original app icon is back in the header, one clean font and size scale on every tab, and calmer titles without emoji.'],
@@ -1740,7 +1749,7 @@ function panchangSpans(date) {
 
 function spanText(span, ref) {
     var fmt = function (d) {
-        var o = { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit', hour12: true };
+        var o = { timeZone: mhTz(getActiveLocation()), month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit', hour12: true };
         return d.toLocaleString(undefined, o);
     };
     return '<div class="g-valid">⏱ ' + (span.start ? fmt(span.start) : '…') + ' → <b>' + (span.end ? fmt(span.end) : '…') + '</b></div>';
@@ -1748,8 +1757,9 @@ function spanText(span, ref) {
 
 function spanEnd(span, ref) {
     if (!span || !span.end) { return ''; }
-    var sameDay = span.end.toDateString() === ref.toDateString();
-    var o = sameDay ? { hour: 'numeric', minute: '2-digit', hour12: true } : { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit', hour12: true };
+    var tzo = { timeZone: mhTz(getActiveLocation()), year: 'numeric', month: 'numeric', day: 'numeric' };
+    var sameDay = span.end.toLocaleDateString('en-US', tzo) === ref.toLocaleDateString('en-US', tzo);
+    var o = sameDay ? { timeZone: mhTz(getActiveLocation()), hour: 'numeric', minute: '2-digit', hour12: true } : { timeZone: mhTz(getActiveLocation()), month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit', hour12: true };
     return '<div class="pg-end">until <b>' + span.end.toLocaleString(undefined, o) + '</b></div>';
 }
 
@@ -1858,7 +1868,7 @@ function populateSignSelect(selectEl) {
 // affects weather + displayed local time, not the Panchang values.
 // ---------------------------------------------------------------------------
 var USER_LOCATION_KEY = 'mindfulMoonUserLocation.v1';
-var DEFAULT_LOCATION = { name: 'Mount Hope, Hamilton, ON, Canada', lat: 43.1727, lon: -79.9358, timezone: 'America/Toronto' };
+var DEFAULT_LOCATION = { name: 'Toronto, Ontario, Canada', lat: 43.70011, lon: -79.4163, timezone: 'America/Toronto' };
 
 function loadUserLocation() {
     try {
@@ -1877,22 +1887,7 @@ function getActiveLocation() {
 }
 
 function geocodeLocation(query) {
-    var url = 'https://geocoding-api.open-meteo.com/v1/search?name=' + encodeURIComponent(query) + '&count=1&language=en&format=json';
-    return fetch(url).then(function (res) { return res.json(); }).then(function (data) {
-        if (!data || !data.results || !data.results.length) {
-            throw new Error('Location not found');
-        }
-        var r = data.results[0];
-        var parts = [r.name];
-        if (r.admin1) parts.push(r.admin1);
-        if (r.country) parts.push(r.country);
-        return {
-            name: parts.join(', '),
-            lat: r.latitude,
-            lon: r.longitude,
-            timezone: r.timezone || 'UTC'
-        };
-    });
+    return geocodePlaces(query).then(function (l) { return { name: l[0].name, lat: l[0].lat, lon: l[0].lon, timezone: l[0].timezone }; });
 }
 
 // Nakshatras whose span (13°20' each) overlaps the given sign (30° each).
@@ -2178,7 +2173,7 @@ function trSvg(rows) {
 }
 
 function trFmtWhen(d, now) {
-    var o = { day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit', hour12: true };
+    var o = { timeZone: mhTz(getActiveLocation()), day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit', hour12: true };
     if (d.getFullYear() !== now.getFullYear()) { o.year = 'numeric'; }
     return d.toLocaleString(undefined, o);
 }
@@ -2215,7 +2210,7 @@ function renderTransit() {
     var rows = trCompute(when, loc);
     var ay = trAyanamsa(toJulianDay(when));
     var ayD = Math.floor(ay), ayM = Math.floor((ay - ayD) * 60), ayS = Math.floor(((ay - ayD) * 60 - ayM) * 60);
-    document.getElementById('trMeta').innerHTML = (trCustom ? '🕑 ' : '🟢 Live · ') + '<b>' + when.toLocaleString(undefined, { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric', hour: 'numeric', minute: '2-digit', hour12: true }) + '</b>' +
+    document.getElementById('trMeta').innerHTML = (trCustom ? '🕑 ' : '🟢 Live · ') + '<b>' + when.toLocaleString(undefined, { timeZone: mhTz(getActiveLocation()), weekday: 'short', day: 'numeric', month: 'short', year: 'numeric', hour: 'numeric', minute: '2-digit', hour12: true }) + '</b>' +
         '<br>📍 ' + escHtml(loc.name || 'Your location') + ' · Lahiri ayanamsa ' + ayD + '°' + ayM + '′' + ayS + '″';
     chartEl.innerHTML = trSvg(rows);
     var html = '<tr><th>Graha</th><th>Position</th><th>Nakshatra</th><th>Next change</th></tr>';
@@ -2688,6 +2683,27 @@ function initSettingsPanel() {
     var inpLocation = document.getElementById('inpLocation');
     var locationStatus = document.getElementById('locationStatus');
     inpLocation.value = getActiveLocation().name;
+    var pickedLoc = null, locTimer = null, locList = document.getElementById('locList');
+    inpLocation.addEventListener('input', function () {
+        pickedLoc = null;
+        clearTimeout(locTimer);
+        var q = inpLocation.value.trim();
+        if (q.length < 2) { locList.innerHTML = ''; return; }
+        locTimer = setTimeout(function () {
+            geocodePlaces(q).then(function (list) {
+                if (inpLocation.value.trim() !== q) { return; }
+                locList.innerHTML = list.map(function (l, i) { return '<button type="button" class="loc-opt" data-i="' + i + '">' + escHtml(l.name) + '</button>'; }).join('');
+                locList._items = list;
+            }).catch(function () { locList.innerHTML = '<div class="loc-none">No matches</div>'; });
+        }, 300);
+    });
+    locList.addEventListener('click', function (ev) {
+        var b = ev.target.closest ? ev.target.closest('.loc-opt') : null;
+        if (!b) { return; }
+        pickedLoc = locList._items[+b.getAttribute('data-i')];
+        inpLocation.value = pickedLoc.name;
+        locList.innerHTML = '';
+    });
 
     var selRange = document.getElementById('selInsightRange');
     selRange.value = loadInsightRangeDays();
@@ -2738,7 +2754,7 @@ function initSettingsPanel() {
 
         locationStatus.textContent = 'Finding location…';
         locationStatus.className = 'settings-hint';
-        geocodeLocation(query).then(function (loc) {
+        (pickedLoc ? Promise.resolve(pickedLoc) : geocodeLocation(query)).then(function (loc) {
             saveUserLocation(loc);
             locationStatus.textContent = 'Saved: ' + loc.name;
             locationStatus.className = 'settings-hint ok';
@@ -3160,15 +3176,16 @@ function updateNowPanel() {
 
 // ---------------------------------------------------------------------------
 // Weather (top-right badge) — free Open-Meteo API, no key required.
-// Uses the user's saved location (Settings), falling back to Mount Hope,
-// Hamilton, Ontario, Canada if none has been set yet.
+// Uses the user's saved location (Settings), falling back to Toronto,
+// Ontario, Canada if none has been set yet.
 // ---------------------------------------------------------------------------
 var WEATHER_CACHE_KEY = 'mindfulMoonWeatherCache.v1';
 var WEATHER_TTL_MS = 20 * 60 * 1000; // 20 minutes
 
-function weatherCodeToDisplay(code) {
-    if (code === 0 || code === 1) return { icon: '☀️', label: 'Sunny' };
-    if (code === 2) return { icon: '⛅', label: 'Partly Sunny' };
+function weatherCodeToDisplay(code, cloud, isDay) {
+    var day = isDay !== 0;
+    if (code === 0 || code === 1 || (code === 2 && cloud != null && cloud < 25)) return day ? { icon: '☀️', label: 'Sunny' } : { icon: '🌙', label: 'Clear' };
+    if (code === 2) return { icon: day ? '⛅' : '☁️', label: day ? 'Partly Sunny' : 'Partly Cloudy' };
     if (code === 3 || code === 45 || code === 48) return { icon: '☁️', label: 'Cloudy' };
     if ([51, 53, 55, 56, 57, 61, 63, 65, 66, 67, 80, 81, 82, 95, 96, 99].indexOf(code) !== -1) return { icon: '🌧️', label: 'Rain' };
     if ([71, 73, 75, 77, 85, 86].indexOf(code) !== -1) return { icon: '❄️', label: 'Snow' };
@@ -3188,7 +3205,8 @@ function renderWeather(display) {
 function updateWeather() {
     try {
         var cached = JSON.parse(localStorage.getItem(WEATHER_CACHE_KEY) || 'null');
-        if (cached && (Date.now() - cached.ts) < WEATHER_TTL_MS) {
+        var lc = getActiveLocation();
+        if (cached && cached.at === lc.lat + ',' + lc.lon && (Date.now() - cached.ts) < WEATHER_TTL_MS) {
             renderWeather(cached.display);
             return;
         }
@@ -3196,18 +3214,18 @@ function updateWeather() {
 
     var loc = getActiveLocation();
     var url = 'https://api.open-meteo.com/v1/forecast?latitude=' + loc.lat +
-        '&longitude=' + loc.lon + '&current_weather=true';
+        '&longitude=' + loc.lon + '&current=weather_code,cloud_cover,is_day&timezone=auto';
     fetch(url).then(function (res) { return res.json(); }).then(function (data) {
-        var code = data && data.current_weather ? data.current_weather.weathercode : null;
-        var display = weatherCodeToDisplay(code);
+        var cur = data && data.current ? data.current : null;
+        var display = weatherCodeToDisplay(cur ? cur.weather_code : null, cur ? cur.cloud_cover : null, cur ? cur.is_day : 1);
         renderWeather(display);
         try {
-            localStorage.setItem(WEATHER_CACHE_KEY, JSON.stringify({ ts: Date.now(), display: display }));
+            localStorage.setItem(WEATHER_CACHE_KEY, JSON.stringify({ ts: Date.now(), at: loc.lat + ',' + loc.lon, display: display }));
         } catch (e) { /* ignore storage errors */ }
     }).catch(function () {
         try {
             var cached = JSON.parse(localStorage.getItem(WEATHER_CACHE_KEY) || 'null');
-            if (cached) { renderWeather(cached.display); return; }
+            if (cached && cached.at === loc.lat + ',' + loc.lon) { renderWeather(cached.display); return; }
         } catch (e) { /* ignore */ }
         renderWeather({ icon: '⛅', label: '—' });
     });

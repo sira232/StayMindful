@@ -309,11 +309,11 @@ or apply that file's conventions here (e.g. `%USERPROFILE%\<Name>.ps1` external 
     "needs care" per bhakoot; sign-only, not full Ashta-koota). Partner name is user text,
     so always pass it through `escHtml()`.
   - **Location setting** (same ⚙️ Settings panel, above the chart fields): a plain text
-    input (`#inpLocation`, e.g. "Mount Hope, Hamilton, ON, Canada") that's geocoded on Save
+    input (`#inpLocation`, e.g. "Toronto, Hamilton, ON, Canada") that's geocoded on Save
     via the free **Open-Meteo Geocoding API** (`geocoding-api.open-meteo.com/v1/search`, no
     key required) in `geocodeLocation()`, returning `{name, lat, lon, timezone}`. Saved to
     `localStorage` key `mindfulMoonUserLocation.v1`; `getActiveLocation()` returns this or
-    falls back to `DEFAULT_LOCATION` (Mount Hope, Hamilton, ON ≈ 43.1727, -79.9358,
+    falls back to `DEFAULT_LOCATION` (Toronto, Hamilton, ON ≈ 43.1727, -79.9358,
     `America/Toronto`) if nothing is saved yet. On successful geocode the weather cache is
     cleared and re-fetched immediately; on failure a `.settings-hint.error` message is shown
     and the previous location is kept. **Important — this location only drives weather and
@@ -412,7 +412,7 @@ or apply that file's conventions here (e.g. `%USERPROFILE%\<Name>.ps1` external 
     same as TimeZync's icons) — a purple-gradient circle with a cream crescent moon and a
     yellow smiley face overlapping it. Regenerate the same way if the icon design changes.
   - **`service-worker.js`** — minimal cache-first service worker, same shape as TimeZync's.
-    `CACHE_NAME` is currently `mindful-moon-tracker-v58` (v48 = app 2.8.0: Luxe Day theme replaces the dark themes; v47 = app 2.7.1: Royal Luxe gold/navy skin, compact Tara/Chandra card under "Right now"; v46 = app 2.7.0: Cosmic Night dark theme + moon orb; v45 = app 2.6.0: Muhurta tab + graha lords; v44 = app 2.5.0: birth-details calculator, names, privacy note; v43 = app 2.4.0: Panchang lords + validity times, UI polish; v42 = app 2.3.0: Gochara & Vedha + Transit restyle; v41 = app 2.2.0: Transit tab with bundled astronomy-engine; v40 = app 2.1.0: Panchang-at-a-glance box with yoga/karana/lords/deity/navamsa, Chandrashtama alert, next-signs lookahead, 6 more moods on the main row with the rest behind ➕; v39: Tarabala; v38: bottom-tab navigation, see above;     v37: optional partner and Together tab;
+    `CACHE_NAME` is currently `mindful-moon-tracker-v60` (v48 = app 2.8.0: Luxe Day theme replaces the dark themes; v47 = app 2.7.1: Royal Luxe gold/navy skin, compact Tara/Chandra card under "Right now"; v46 = app 2.7.0: Cosmic Night dark theme + moon orb; v45 = app 2.6.0: Muhurta tab + graha lords; v44 = app 2.5.0: birth-details calculator, names, privacy note; v43 = app 2.4.0: Panchang lords + validity times, UI polish; v42 = app 2.3.0: Gochara & Vedha + Transit restyle; v41 = app 2.2.0: Transit tab with bundled astronomy-engine; v40 = app 2.1.0: Panchang-at-a-glance box with yoga/karana/lords/deity/navamsa, Chandrashtama alert, next-signs lookahead, 6 more moods on the main row with the rest behind ➕; v39: Tarabala; v38: bottom-tab navigation, see above;     v37: optional partner and Together tab;
     **VERSIONING (required on every release):** in `Mindful-Moon-Tracker.html` bump `APP_VERSION` (semver) and
     `APP_BUILD` (must equal the `CACHE_NAME` number) and add a line at the top of `APP_CHANGELOG`; they render at the
     bottom of the Settings tab ("Version x.y.z (build N)" + "What's new").
@@ -465,3 +465,5 @@ or apply that file's conventions here (e.g. `%USERPROFILE%\<Name>.ps1` external 
 - If/when a desktop `.hta` twin or GitHub Pages deployment is added, mirror the structure
   TimeZync uses (dual HTA+HTML kept in sync, deployment/QR-code notes) and update this file
   accordingly.
+
+- **Location (v59, app 2.14.0):** DEFAULT_LOCATION is Toronto, Ontario, Canada. The Settings location input shows live Open-Meteo suggestions (geocodePlaces + #locList); the saved location comes from the tapped suggestion or the best match. Open-Meteo geocoding matches the city name only, so never send a full comma string to it (that was the old Toronto bug). Weather cache is keyed by lat,lon.
