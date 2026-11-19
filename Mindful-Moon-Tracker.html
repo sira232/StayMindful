@@ -1567,9 +1567,11 @@ var TITHI_NAMES = ['Pratipada','Dwitiya','Tritiya','Chaturthi','Panchami','Shash
 // inauspicious ones are flagged bad.
 // VERSIONING: bump APP_VERSION + APP_BUILD (= service-worker CACHE_NAME number) and
 // add a line at the TOP of APP_CHANGELOG on every release.
-var APP_VERSION = '2.14.1';
-var APP_BUILD = 60;
+var APP_VERSION = '2.14.3';
+var APP_BUILD = 62;
 var APP_CHANGELOG = [
+    ['2.14.3', 'Picking a place from the suggestions saves it instantly, no need to press Save.'],
+    ['2.14.2', 'Weather refreshes more often, and tapping the weather badge fetches it fresh.'],
     ['2.14.1', 'Guide and Transit times now follow your saved location time zone, same as Muhurta and Home.'],
     ['2.14.0', 'Location: default is now Toronto, Ontario, Canada; type a place and pick from live suggestions (fixes Toronto not saving). Weather now follows the saved location and distinguishes clear, partly cloudy and cloudy.'],
     ['2.13.0', 'Times always show in 12-hour AM/PM. Guide: each Panchang row now shows what it changes to next (so the separate Changes this day card is gone).'],
@@ -2703,6 +2705,12 @@ function initSettingsPanel() {
         pickedLoc = locList._items[+b.getAttribute('data-i')];
         inpLocation.value = pickedLoc.name;
         locList.innerHTML = '';
+        saveUserLocation(pickedLoc);
+        locationStatus.textContent = 'Saved: ' + pickedLoc.name;
+        locationStatus.className = 'settings-hint ok';
+        localStorage.removeItem(WEATHER_CACHE_KEY);
+        updateWeather();
+        updateNowPanel();
     });
 
     var selRange = document.getElementById('selInsightRange');
@@ -3180,7 +3188,7 @@ function updateNowPanel() {
 // Ontario, Canada if none has been set yet.
 // ---------------------------------------------------------------------------
 var WEATHER_CACHE_KEY = 'mindfulMoonWeatherCache.v1';
-var WEATHER_TTL_MS = 20 * 60 * 1000; // 20 minutes
+var WEATHER_TTL_MS = 10 * 60 * 1000; // 10 minutes
 
 function weatherCodeToDisplay(code, cloud, isDay) {
     var day = isDay !== 0;
@@ -3202,11 +3210,11 @@ function renderWeather(display) {
     if (badge) badge.title = getActiveLocation().name;
 }
 
-function updateWeather() {
+function updateWeather(force) {
     try {
         var cached = JSON.parse(localStorage.getItem(WEATHER_CACHE_KEY) || 'null');
         var lc = getActiveLocation();
-        if (cached && cached.at === lc.lat + ',' + lc.lon && (Date.now() - cached.ts) < WEATHER_TTL_MS) {
+        if (!force && cached && cached.at === lc.lat + ',' + lc.lon && (Date.now() - cached.ts) < WEATHER_TTL_MS) {
             renderWeather(cached.display);
             return;
         }
@@ -4119,6 +4127,7 @@ function renderInsights() {
 
 updateNowPanel();
 updateWeather();
+(function () { var b = document.getElementById('weatherBadge'); if (b) b.addEventListener('click', function () { updateWeather(true); }); })();
 initSettingsPanel();
 renderHistory();
 renderWeekView();
